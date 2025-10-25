@@ -36,46 +36,6 @@ export const useHarmonicSound = () => {
     return audioContextRef.current;
   }, []);
 
-  // Create impulse excitation (simulates hand strike on metal)
-  const createImpulse = useCallback((audioContext: AudioContext) => {
-    const impulseLength = 0.01; // 10ms impulse
-    const sampleRate = audioContext.sampleRate;
-    const bufferSize = Math.floor(sampleRate * impulseLength);
-    const buffer = audioContext.createBuffer(1, bufferSize, sampleRate);
-    const data = buffer.getChannelData(0);
-
-    // Decaying white noise burst (simulates physical impact)
-    for (let i = 0; i < bufferSize; i++) {
-      const decay = Math.exp(-i / (bufferSize * 0.3));
-      data[i] = (Math.random() * 2 - 1) * decay * 0.08;
-    }
-
-    const source = audioContext.createBufferSource();
-    source.buffer = buffer;
-    return source;
-  }, []);
-
-  // Create IIR resonator for modal synthesis
-  const createResonator = useCallback((
-    audioContext: AudioContext,
-    frequency: number,
-    bandwidth: number,
-    amplitude: number
-  ) => {
-    const sampleRate = audioContext.sampleRate;
-    const r = Math.exp(-Math.PI * bandwidth / sampleRate);
-    
-    // IIR filter coefficients for resonator (from paper)
-    const feedforward = [amplitude * (1 - r * r), 0, 0];
-    const feedback = [
-      1,
-      -2 * r * Math.cos(2 * Math.PI * frequency / sampleRate),
-      r * r
-    ];
-
-    return audioContext.createIIRFilter(feedforward, feedback);
-  }, []);
-
   const playNote = useCallback((note: NoteName, duration: number = 1.5) => {
     // Check if audio is muted
     const isMuted = localStorage.getItem('audio-muted') === 'true';
@@ -90,6 +50,46 @@ export const useHarmonicSound = () => {
       const audioContext = getAudioContext();
       const baseFreq = NOTES[note];
       const currentTime = audioContext.currentTime;
+
+      // Helper: Create impulse excitation (simulates hand strike on metal)
+      const createImpulse = (ctx: AudioContext) => {
+        const impulseLength = 0.01; // 10ms impulse
+        const sampleRate = ctx.sampleRate;
+        const bufferSize = Math.floor(sampleRate * impulseLength);
+        const buffer = ctx.createBuffer(1, bufferSize, sampleRate);
+        const data = buffer.getChannelData(0);
+
+        // Decaying white noise burst (simulates physical impact)
+        for (let i = 0; i < bufferSize; i++) {
+          const decay = Math.exp(-i / (bufferSize * 0.3));
+          data[i] = (Math.random() * 2 - 1) * decay * 0.08;
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        return source;
+      };
+
+      // Helper: Create IIR resonator for modal synthesis
+      const createResonator = (
+        ctx: AudioContext,
+        frequency: number,
+        bandwidth: number,
+        amplitude: number
+      ) => {
+        const sampleRate = ctx.sampleRate;
+        const r = Math.exp(-Math.PI * bandwidth / sampleRate);
+        
+        // IIR filter coefficients for resonator (from paper)
+        const feedforward = [amplitude * (1 - r * r), 0, 0];
+        const feedback = [
+          1,
+          -2 * r * Math.cos(2 * Math.PI * frequency / sampleRate),
+          r * r
+        ];
+
+        return ctx.createIIRFilter(feedforward, feedback);
+      };
 
       // Master output chain
       const masterGain = audioContext.createGain();
@@ -145,7 +145,7 @@ export const useHarmonicSound = () => {
     } catch (error) {
       console.error('Error playing note:', error);
     }
-  }, [getAudioContext, createImpulse, createResonator]);
+  }, [getAudioContext]);
 
   const playArpeggio = useCallback((notes: NoteName[], interval: number = 0.15) => {
     notes.forEach((note, index) => {
