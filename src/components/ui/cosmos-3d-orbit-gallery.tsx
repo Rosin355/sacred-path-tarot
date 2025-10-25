@@ -33,41 +33,61 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
 
   useEffect(() => {
     const canvas = gl.domElement
+    
+    // Make canvas take full pointer events
+    canvas.style.touchAction = 'none'
+    canvas.style.cursor = 'grab'
 
-    const handlePointerDown = (e: PointerEvent) => {
+    const handlePointerDown = (e: PointerEvent | TouchEvent) => {
+      e.preventDefault()
       setIsDragging(true)
-      previousMousePosition.current = { x: e.clientX, y: e.clientY }
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+      previousMousePosition.current = { x: clientX, y: clientY }
       canvas.style.cursor = 'grabbing'
     }
 
-    const handlePointerMove = (e: PointerEvent) => {
+    const handlePointerMove = (e: PointerEvent | TouchEvent) => {
       if (!isDragging) return
+      e.preventDefault()
       
-      const deltaX = e.clientX - previousMousePosition.current.x
-      const deltaY = e.clientY - previousMousePosition.current.y
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+      
+      const deltaX = clientX - previousMousePosition.current.x
+      const deltaY = clientY - previousMousePosition.current.y
       
       setRotation(prev => ({
         x: prev.x + deltaY * 0.01,
         y: prev.y + deltaX * 0.01
       }))
       
-      previousMousePosition.current = { x: e.clientX, y: e.clientY }
+      previousMousePosition.current = { x: clientX, y: clientY }
     }
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: PointerEvent | TouchEvent) => {
+      e.preventDefault()
       setIsDragging(false)
       canvas.style.cursor = 'grab'
     }
 
-    canvas.style.cursor = 'grab'
-    canvas.addEventListener('pointerdown', handlePointerDown)
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
+    // Add both pointer and touch events for better compatibility
+    canvas.addEventListener('pointerdown', handlePointerDown as any)
+    canvas.addEventListener('touchstart', handlePointerDown as any, { passive: false })
+    window.addEventListener('pointermove', handlePointerMove as any)
+    window.addEventListener('touchmove', handlePointerMove as any, { passive: false })
+    window.addEventListener('pointerup', handlePointerUp as any)
+    window.addEventListener('touchend', handlePointerUp as any)
+    canvas.addEventListener('pointerleave', handlePointerUp as any)
 
     return () => {
-      canvas.removeEventListener('pointerdown', handlePointerDown)
-      window.removeEventListener('pointermove', handlePointerMove)
-      window.removeEventListener('pointerup', handlePointerUp)
+      canvas.removeEventListener('pointerdown', handlePointerDown as any)
+      canvas.removeEventListener('touchstart', handlePointerDown as any)
+      window.removeEventListener('pointermove', handlePointerMove as any)
+      window.removeEventListener('touchmove', handlePointerMove as any)
+      window.removeEventListener('pointerup', handlePointerUp as any)
+      window.removeEventListener('touchend', handlePointerUp as any)
+      canvas.removeEventListener('pointerleave', handlePointerUp as any)
     }
   }, [isDragging, gl.domElement])
 
@@ -119,6 +139,9 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       const matrix = new THREE.Matrix4()
       matrix.lookAt(position, position.clone().add(outwardDirection), new THREE.Vector3(0, 1, 0))
       euler.setFromRotationMatrix(matrix)
+      
+      // Add 180-degree rotation to flip the cards upright
+      euler.z += Math.PI
 
       images.push({
         position: [x, y, z],
