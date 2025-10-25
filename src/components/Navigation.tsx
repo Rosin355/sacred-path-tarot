@@ -1,78 +1,76 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-primary/20">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-border/50">
+      <nav className="container mx-auto px-6 lg:px-12 py-6">
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-accent animate-glow-pulse" />
-            <span className="text-xl font-bold gold-gradient">
-              Tarocchi per Illuminarsi
-            </span>
-          </div>
+          <a href="/" className="text-xl font-display font-bold tracking-tight hover:text-accent transition-colors">
+            TAROCCHI PER ILLUMINARSI
+          </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#home" className="text-muted-foreground hover:text-accent transition-colors">
-              Home
+          <div className="hidden md:flex items-center gap-12">
+            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
+              Metodo
             </a>
-            <a href="#metodo" className="text-muted-foreground hover:text-accent transition-colors">
-              Il Metodo
-            </a>
-            <a href="#lettura" className="text-muted-foreground hover:text-accent transition-colors">
+            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Consultazione
             </a>
-            <a href="#percorso" className="text-muted-foreground hover:text-accent transition-colors">
+            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Percorso
             </a>
-          </div>
-
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button className="mystic-gradient border border-accent/30">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Inizia Ora
+            <Button variant="outline" size="sm" className="minimal-border hover-lift">
+              Inizia
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2"
-            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-foreground p-2 minimal-border bg-card/30"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
-            <Menu className="w-6 h-6 text-accent" />
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden py-4 space-y-4 animate-fade-in">
-            <a href="#home" className="block text-muted-foreground hover:text-accent transition-colors">
-              Home
+        {isMenuOpen && (
+          <div className="md:hidden mt-8 pt-8 border-t border-border space-y-6 animate-fade-in">
+            <a 
+              href="#metodo" 
+              className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Metodo
             </a>
-            <a href="#metodo" className="block text-muted-foreground hover:text-accent transition-colors">
-              Il Metodo
-            </a>
-            <a href="#lettura" className="block text-muted-foreground hover:text-accent transition-colors">
+            <a 
+              href="#lettura" 
+              className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
               Consultazione
             </a>
-            <a href="#percorso" className="block text-muted-foreground hover:text-accent transition-colors">
+            <a 
+              href="#percorso" 
+              className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
               Percorso
             </a>
-            <Button className="w-full mystic-gradient border border-accent/30">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Inizia Ora
+            <Button variant="outline" size="sm" className="w-full minimal-border">
+              Inizia
             </Button>
           </div>
         )}
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 

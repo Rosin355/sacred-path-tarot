@@ -8,43 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 280 20% 95%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
 
-    --card: 240 8% 8%;
-    --card-foreground: 280 20% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 240 8% 8%;
-    --popover-foreground: 280 20% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 270 50% 50%;
-    --primary-foreground: 45 100% 70%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 240 8% 12%;
-    --secondary-foreground: 280 20% 95%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 8% 15%;
-    --muted-foreground: 270 10% 60%;
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 45 100% 60%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 45 82% 53%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 280 20% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 20%;
-    --input: 270 20% 20%;
-    --ring: 270 50% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 45 82% 53%;
 
-    --radius: 0.75rem;
-    
-    --mystic-purple: 270 50% 50%;
-    --mystic-purple-light: 270 50% 60%;
-    --mystic-purple-dark: 270 50% 35%;
-    --sacred-gold: 45 100% 60%;
-    --sacred-gold-light: 45 100% 70%;
-    --night-blue: 240 60% 15%;
-    --cosmic-glow: 270 80% 70%;
+    --radius: 0rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -64,33 +56,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 280 20% 95%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
 
-    --card: 240 8% 8%;
-    --card-foreground: 280 20% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 240 8% 8%;
-    --popover-foreground: 280 20% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 270 50% 50%;
-    --primary-foreground: 45 100% 70%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 240 8% 12%;
-    --secondary-foreground: 280 20% 95%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 8% 15%;
-    --muted-foreground: 270 10% 60%;
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 45 100% 60%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 45 82% 53%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 280 20% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 20%;
-    --input: 270 20% 20%;
-    --ring: 270 50% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 45 82% 53%;
     --sidebar-background: 240 8% 8%;
     --sidebar-foreground: 280 20% 95%;
     --sidebar-primary: 270 50% 50%;
@@ -103,36 +95,42 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
-  .text-glow {
-    text-shadow: 0 0 20px hsl(var(--cosmic-glow) / 0.6),
-                 0 0 40px hsl(var(--cosmic-glow) / 0.4);
-  }
-  
-  .mystic-gradient {
-    background: linear-gradient(135deg, 
-      hsl(var(--mystic-purple-dark)) 0%, 
-      hsl(var(--mystic-purple)) 50%, 
-      hsl(var(--night-blue)) 100%);
-  }
-  
-  .gold-gradient {
-    background: linear-gradient(135deg, 
-      hsl(var(--sacred-gold)) 0%, 
-      hsl(var(--sacred-gold-light)) 100%);
+  .text-accent-gradient {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(45 82% 63%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .card-glow {
-    box-shadow: 0 0 30px hsl(var(--mystic-purple) / 0.3),
-                0 0 60px hsl(var(--mystic-purple) / 0.15);
+  .minimal-border {
+    border: 1px solid hsl(var(--border));
   }
   
-  .portal-shadow {
-    box-shadow: 0 0 50px hsl(var(--mystic-purple) / 0.5),
-                0 0 100px hsl(var(--cosmic-glow) / 0.3),
-                inset 0 0 50px hsl(var(--mystic-purple) / 0.2);
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+  
+  .elegant-underline {
+    position: relative;
+  }
+  
+  .elegant-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: hsl(var(--accent));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .elegant-underline:hover::after {
+    width: 100%;
   }
 }
 
@@ -142,6 +140,13 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 }

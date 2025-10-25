@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Moon, Sun, Star } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
 import tarotCardBack from "@/assets/tarot-card-back.jpg";
 
 const TarotReading = () => {
@@ -24,38 +24,40 @@ const TarotReading = () => {
   };
 
   return (
-    <section className="py-24 px-4 relative">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16 space-y-4 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-primary/30 backdrop-blur-sm">
-            <Moon className="w-4 h-4 text-accent animate-glow-pulse" />
-            <span className="text-sm text-muted-foreground">Lettura Esoterica Profonda</span>
+    <section id="lettura" className="py-32 lg:py-40 px-6 lg:px-12 relative">
+      <div className="container mx-auto max-w-7xl">
+        <div className="mb-24 space-y-6 animate-fade-in">
+          <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm">
+            <div className="w-2 h-2 bg-accent" />
+            <span className="text-sm tracking-wider uppercase text-muted-foreground font-light">
+              Lettura Esoterica Profonda
+            </span>
           </div>
           
-          <h2 className="text-4xl lg:text-5xl font-bold">
-            <span className="gold-gradient">Consultazione</span>{" "}
-            <span className="text-glow">dei Tarocchi</span>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight">
+            CONSULTAZIONE
+            <br />
+            <span className="text-accent-gradient">DEI TAROCCHI</span>
           </h2>
           
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl font-light leading-relaxed">
             Seleziona tre carte per ricevere un'interpretazione esoterica basata su
             alchimia, cabala e corrispondenze astrologiche.
           </p>
         </div>
 
-        <Card className="bg-card/50 backdrop-blur-sm border-primary/30 card-glow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-accent" />
+        <Card className="bg-card/30 backdrop-blur-sm minimal-border">
+          <CardHeader className="p-8">
+            <CardTitle className="text-2xl font-display tracking-tight">
               Scegli le Tue Carte
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-base font-light">
               Seleziona {3 - selectedCards.length} {3 - selectedCards.length === 1 ? "carta" : "carte"}
-              {selectedCards.length === 3 && " - Pronto per la lettura"}
+              {selectedCards.length === 3 && " • Pronto per la lettura"}
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-12 p-8 pt-0">
             {/* Card Selection */}
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4">
               {cards.map((card, index) => (
@@ -64,11 +66,11 @@ const TarotReading = () => {
                   onClick={() => handleCardSelect(index)}
                   disabled={isReading}
                   className={`
-                    relative aspect-[2/3] rounded-lg overflow-hidden cursor-pointer
-                    transition-all duration-300 hover:scale-105
+                    relative aspect-[2/3] minimal-border overflow-hidden cursor-pointer
+                    transition-all duration-500 hover-lift
                     ${selectedCards.includes(index)
-                      ? "ring-4 ring-accent shadow-2xl scale-105"
-                      : "opacity-70 hover:opacity-100"
+                      ? "ring-2 ring-accent scale-105"
+                      : "opacity-60 hover:opacity-100"
                     }
                     ${isReading ? "pointer-events-none" : ""}
                   `}
@@ -79,8 +81,8 @@ const TarotReading = () => {
                     className="w-full h-full object-cover"
                   />
                   {selectedCards.includes(index) && (
-                    <div className="absolute inset-0 bg-accent/20 backdrop-blur-sm flex items-center justify-center">
-                      <Star className="w-8 h-8 text-accent animate-glow-pulse" fill="currentColor" />
+                    <div className="absolute inset-0 bg-accent/10 backdrop-blur-[1px] flex items-center justify-center">
+                      <div className="w-3 h-3 bg-accent" />
                     </div>
                   )}
                 </button>
@@ -89,24 +91,24 @@ const TarotReading = () => {
 
             {/* Reading Button */}
             {selectedCards.length === 3 && !isReading && (
-              <div className="text-center animate-scale-in">
+              <div className="flex justify-center animate-scale-in">
                 <Button
                   size="lg"
                   onClick={startReading}
-                  className="mystic-gradient border border-accent/30 hover:scale-105 transition-transform"
+                  className="group"
                 >
-                  <Moon className="w-5 h-5 mr-2" />
                   Rivela la Saggezza
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </div>
             )}
 
             {/* Reading Results */}
             {isReading && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="flex items-center justify-center gap-8">
-                  {selectedCards.map((cardIndex) => (
-                    <div key={cardIndex} className="relative w-32 aspect-[2/3] rounded-lg overflow-hidden portal-shadow animate-scale-in">
+              <div className="space-y-12 animate-fade-in">
+                <div className="flex items-center justify-center gap-6">
+                  {selectedCards.map((cardIndex, idx) => (
+                    <div key={cardIndex} className="relative w-28 aspect-[2/3] minimal-border overflow-hidden animate-scale-in" style={{ animationDelay: `${idx * 0.2}s` }}>
                       <img
                         src={tarotCardBack}
                         alt={`Carta selezionata ${cardIndex + 1}`}
@@ -116,46 +118,50 @@ const TarotReading = () => {
                   ))}
                 </div>
 
-                <Card className="bg-secondary/50 border-primary/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Sun className="w-5 h-5 text-accent" />
+                <div className="space-y-8 border-t border-border pt-12">
+                  <div>
+                    <h3 className="text-2xl font-display font-bold mb-4 tracking-tight">
                       Interpretazione Esoterica
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-muted-foreground leading-relaxed">
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed font-light">
                       Le carte rivelano un percorso di trasformazione profonda. 
                       Il primo Arcano parla della tua situazione attuale, dove l'energia 
                       è in fase di raccoglimento e preparazione interiore...
                     </p>
-                    
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-accent">Corrispondenze Alchemiche:</h4>
-                      <p className="text-sm text-muted-foreground">
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <h4 className="text-sm tracking-widest uppercase text-accent font-medium">
+                        Corrispondenze Alchemiche
+                      </h4>
+                      <p className="text-sm text-muted-foreground font-light leading-relaxed">
                         Elemento: Acqua • Pianeta: Luna • Cristallo: Ametista
                       </p>
                     </div>
 
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-accent">Pratica Magica Suggerita:</h4>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="space-y-3">
+                      <h4 className="text-sm tracking-widest uppercase text-accent font-medium">
+                        Pratica Magica Suggerita
+                      </h4>
+                      <p className="text-sm text-muted-foreground font-light leading-relaxed">
                         Meditazione lunare con ametista durante la fase crescente. 
                         Accendi una candela viola e ripeti il mantra: "Accolgo la saggezza che fluisce attraverso me"
                       </p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
-                <div className="text-center">
+                <div className="flex justify-center pt-6">
                   <Button
                     variant="outline"
                     onClick={() => {
                       setIsReading(false);
                       setSelectedCards([]);
                     }}
-                    className="border-primary/50"
+                    className="group"
                   >
+                    <RotateCcw className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500" />
                     Nuova Consultazione
                   </Button>
                 </div>
