@@ -1,8 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
+import { useHarmonicSound } from "@/hooks/useHarmonicSound";
 
 const Journey = () => {
+  const { playNote } = useHarmonicSound();
+  
   const levels = [
     {
       number: "01",
@@ -90,6 +93,7 @@ const Journey = () => {
                   <Button 
                     className="w-full group/btn"
                     variant={index === 0 ? "default" : "outline"}
+                    onClick={() => playNote('A')}
                   >
                     {index === 0 ? "Inizia Gratis" : "Scopri di Più"}
                     <ArrowUpRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
