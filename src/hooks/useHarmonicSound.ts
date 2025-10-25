@@ -12,17 +12,6 @@ const NOTES = {
   'D-high': 587.33, // Re (ottava alta)
 };
 
-// Hand Pan modal frequencies (based on physical vibration modes)
-// Each mode has: frequency ratio, amplitude, and bandwidth (Hz)
-const HANDPAN_MODES = [
-  { ratio: 1.0, amplitude: 1.0, bandwidth: 0.8 },      // Fundamental
-  { ratio: 1.498, amplitude: 0.25, bandwidth: 1.5 },   // Perfect fifth
-  { ratio: 1.26, amplitude: 0.15, bandwidth: 2.0 },    // Major third
-  { ratio: 2.0, amplitude: 0.3, bandwidth: 1.2 },      // Octave
-  { ratio: 2.76, amplitude: 0.08, bandwidth: 2.5 },    // Upper mode
-  { ratio: 3.01, amplitude: 0.05, bandwidth: 3.0 },    // Metallic shimmer
-];
-
 export type NoteName = keyof typeof NOTES;
 
 export const useHarmonicSound = () => {
@@ -36,12 +25,10 @@ export const useHarmonicSound = () => {
     return audioContextRef.current;
   }, []);
 
-  const playNote = useCallback((note: NoteName, duration: number = 1.5) => {
-    // Check if audio is muted
+  const playNote = useCallback((note: NoteName, duration: number = 1.8) => {
     const isMuted = localStorage.getItem('audio-muted') === 'true';
     if (isMuted) return;
 
-    // Throttle to avoid audio spam (minimum 80ms between sounds)
     const now = Date.now();
     if (now - lastPlayTimeRef.current < 80) return;
     lastPlayTimeRef.current = now;
@@ -51,105 +38,82 @@ export const useHarmonicSound = () => {
       const baseFreq = NOTES[note];
       const currentTime = audioContext.currentTime;
 
-      // Helper: Create impulse excitation (simulates hand strike on metal)
-      const createImpulse = (ctx: AudioContext) => {
-        const impulseLength = 0.01; // 10ms impulse
-        const sampleRate = ctx.sampleRate;
-        const bufferSize = Math.floor(sampleRate * impulseLength);
-        const buffer = ctx.createBuffer(1, bufferSize, sampleRate);
-        const data = buffer.getChannelData(0);
-
-        // Decaying white noise burst (simulates physical impact)
-        for (let i = 0; i < bufferSize; i++) {
-          const decay = Math.exp(-i / (bufferSize * 0.3));
-          data[i] = (Math.random() * 2 - 1) * decay * 0.08;
-        }
-
-        const source = ctx.createBufferSource();
-        source.buffer = buffer;
-        return source;
-      };
-
-      // Helper: Create IIR resonator for modal synthesis
-      const createResonator = (
-        ctx: AudioContext,
-        frequency: number,
-        bandwidth: number,
-        amplitude: number
-      ) => {
-        const sampleRate = ctx.sampleRate;
-        const r = Math.exp(-Math.PI * bandwidth / sampleRate);
-        
-        // IIR filter coefficients for resonator (from paper)
-        const feedforward = [amplitude * (1 - r * r), 0, 0];
-        const feedback = [
-          1,
-          -2 * r * Math.cos(2 * Math.PI * frequency / sampleRate),
-          r * r
-        ];
-
-        return ctx.createIIRFilter(feedforward, feedback);
-      };
-
-      // Master output chain
-      const masterGain = audioContext.createGain();
+      // Master low-pass filter (warm, natural tone)
       const masterFilter = audioContext.createBiquadFilter();
-      
       masterFilter.type = 'lowpass';
-      masterFilter.frequency.value = 2200; // Warm, natural tone
-      masterFilter.Q.value = 1.2;
-      
+      masterFilter.frequency.value = 2400;
+      masterFilter.Q.value = 1.0;
       masterFilter.connect(audioContext.destination);
+
+      // Master gain
+      const masterGain = audioContext.createGain();
       masterGain.connect(masterFilter);
 
-      // ADSR Envelope (softer than additive synthesis)
+      // Envelope: soft attack, sustained, long decay
       masterGain.gain.setValueAtTime(0, currentTime);
-      masterGain.gain.linearRampToValueAtTime(0.10, currentTime + 0.012); // 12ms attack
-      masterGain.gain.linearRampToValueAtTime(0.05, currentTime + 0.3); // 300ms sustain
-      masterGain.gain.exponentialRampToValueAtTime(0.001, currentTime + duration); // Natural decay
+      masterGain.gain.linearRampToValueAtTime(0.12, currentTime + 0.015);
+      masterGain.gain.linearRampToValueAtTime(0.06, currentTime + 0.4);
+      masterGain.gain.exponentialRampToValueAtTime(0.001, currentTime + duration);
 
-      // Create impulse excitation
-      const impulse = createImpulse(audioContext);
-      
-      // Create resonators for each vibrational mode
-      const resonators: IIRFilterNode[] = [];
-      HANDPAN_MODES.forEach((mode) => {
-        const resonator = createResonator(
-          audioContext,
-          baseFreq * mode.ratio,
-          mode.bandwidth,
-          mode.amplitude
-        );
-        
-        impulse.connect(resonator);
-        resonator.connect(masterGain);
-        resonators.push(resonator);
+      // Fundamental (triangle wave for warmth)
+      const osc1 = audioContext.createOscillator();
+      const gain1 = audioContext.createGain();
+      osc1.frequency.value = baseFreq;
+      osc1.type = 'triangle';
+      gain1.gain.value = 0.5;
+      osc1.connect(gain1);
+      gain1.connect(masterGain);
+
+      // Fifth harmonic (characteristic Hand Pan)
+      const osc2 = audioContext.createOscillator();
+      const gain2 = audioContext.createGain();
+      osc2.frequency.value = baseFreq * 1.498;
+      osc2.type = 'sine';
+      gain2.gain.value = 0.2;
+      osc2.connect(gain2);
+      gain2.connect(masterGain);
+
+      // Major third
+      const osc3 = audioContext.createOscillator();
+      const gain3 = audioContext.createGain();
+      osc3.frequency.value = baseFreq * 1.26;
+      osc3.type = 'sine';
+      gain3.gain.value = 0.12;
+      osc3.connect(gain3);
+      gain3.connect(masterGain);
+
+      // Octave
+      const osc4 = audioContext.createOscillator();
+      const gain4 = audioContext.createGain();
+      osc4.frequency.value = baseFreq * 2.0;
+      osc4.type = 'sine';
+      gain4.gain.value = 0.18;
+      osc4.connect(gain4);
+      gain4.connect(masterGain);
+
+      // Upper harmonic (shimmer)
+      const osc5 = audioContext.createOscillator();
+      const gain5 = audioContext.createGain();
+      osc5.frequency.value = baseFreq * 3.01;
+      osc5.type = 'sine';
+      gain5.gain.value = 0.06;
+      osc5.connect(gain5);
+      gain5.connect(masterGain);
+
+      // Start all oscillators
+      [osc1, osc2, osc3, osc4, osc5].forEach(osc => {
+        osc.start(currentTime);
+        osc.stop(currentTime + duration);
       });
-
-      // Trigger impulse
-      impulse.start(currentTime);
-      impulse.stop(currentTime + 0.01); // 10ms impulse duration
-
-      // Cleanup after sound finishes
-      setTimeout(() => {
-        try {
-          impulse.disconnect();
-          resonators.forEach(r => r.disconnect());
-          masterGain.disconnect();
-          masterFilter.disconnect();
-        } catch (e) {
-          // Ignore cleanup errors
-        }
-      }, duration * 1000 + 100);
 
     } catch (error) {
       console.error('Error playing note:', error);
     }
   }, [getAudioContext]);
 
-  const playArpeggio = useCallback((notes: NoteName[], interval: number = 0.15) => {
+  const playArpeggio = useCallback((notes: NoteName[], interval: number = 0.18) => {
     notes.forEach((note, index) => {
-      setTimeout(() => playNote(note, 1.5), index * interval * 1000);
+      setTimeout(() => playNote(note, 2.0), index * interval * 1000);
     });
   }, [playNote]);
 
