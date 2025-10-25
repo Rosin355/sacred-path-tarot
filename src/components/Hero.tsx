@@ -58,11 +58,10 @@ void main() {
   float lm = length(p - mp);
   vec4 c = vec4(smoothstep(0., 1., pow(.1 / lm, .2)));
   
-  c -= acc;
   c += vec4((spectrum(cos(acc * 3.5))), 1) * acc * 2.5;
   
   c -= hash(vec3(uv.xyy)) * 0.01;
-  gl_FragColor = c;  
+  gl_FragColor = c;
 }
 `;
 
