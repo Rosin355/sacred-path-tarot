@@ -140,8 +140,8 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       matrix.lookAt(position, position.clone().add(outwardDirection), new THREE.Vector3(0, 1, 0))
       euler.setFromRotationMatrix(matrix)
       
-      // Add 180-degree rotation to flip the cards upright
-      euler.z += Math.PI
+      // Add 180-degree rotation to correct mirror horizontally
+      euler.y += Math.PI
 
       images.push({
         position: [x, y, z],

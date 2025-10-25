@@ -42,7 +42,7 @@ const Hero = () => {
         </Canvas>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl pointer-events-none">
         <div className="flex flex-col items-center space-y-12 md:space-y-16 animate-fade-in-slow text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-3 px-6 py-2 minimal-border bg-card/10 backdrop-blur-sm mx-auto" style={{ animationDelay: "0.2s" }}>
@@ -74,7 +74,7 @@ const Hero = () => {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center" style={{ animationDelay: "0.8s" }}>
+          <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center pointer-events-auto" style={{ animationDelay: "0.8s" }}>
             <Button size="lg" variant="default" className="group">
               Inizia il Percorso
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
@@ -86,7 +86,7 @@ const Hero = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in" style={{
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in pointer-events-none" style={{
         animationDelay: "1.2s"
       }}>
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
