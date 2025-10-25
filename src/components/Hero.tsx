@@ -1,8 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
 
 const Hero = () => {
+  const tarotImages = [
+    "https://images.pexels.com/photos/1169754/pexels-photo-1169754.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/1252890/pexels-photo-1252890.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "https://images.pexels.com/photos/1229042/pexels-photo-1229042.jpeg?auto=compress&cs=tinysrgb&w=800",
+  ];
+
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 lg:py-32">
+      {/* 3D Background */}
+      <div className="absolute inset-0 z-0">
+        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <ParticleSphere images={tarotImages} />
+          <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+        </Canvas>
+      </div>
+
       <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl">
         <div className="flex flex-col items-center space-y-12 md:space-y-16 animate-fade-in-slow text-center">
           {/* Badge */}
