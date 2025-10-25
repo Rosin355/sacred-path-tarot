@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useMemo } from "react"
-import { useFrame } from "@react-three/fiber"
+import { useRef, useMemo, useState, useEffect } from "react"
+import { useFrame, useThree } from "@react-three/fiber"
 import { useTexture } from "@react-three/drei"
 import * as THREE from "three"
 
@@ -23,8 +23,53 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
   const IMAGE_SIZE = 1.5 // Increased image size to make them more visible
 
   const groupRef = useRef<THREE.Group>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [rotation, setRotation] = useState({ x: 0, y: 0 })
+  const previousMousePosition = useRef({ x: 0, y: 0 })
+  
+  const { gl } = useThree()
 
   const textures = useTexture(images)
+
+  useEffect(() => {
+    const canvas = gl.domElement
+
+    const handlePointerDown = (e: PointerEvent) => {
+      setIsDragging(true)
+      previousMousePosition.current = { x: e.clientX, y: e.clientY }
+      canvas.style.cursor = 'grabbing'
+    }
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      
+      const deltaX = e.clientX - previousMousePosition.current.x
+      const deltaY = e.clientY - previousMousePosition.current.y
+      
+      setRotation(prev => ({
+        x: prev.x + deltaY * 0.01,
+        y: prev.y + deltaX * 0.01
+      }))
+      
+      previousMousePosition.current = { x: e.clientX, y: e.clientY }
+    }
+
+    const handlePointerUp = () => {
+      setIsDragging(false)
+      canvas.style.cursor = 'grab'
+    }
+
+    canvas.style.cursor = 'grab'
+    canvas.addEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
+
+    return () => {
+      canvas.removeEventListener('pointerdown', handlePointerDown)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
+    }
+  }, [isDragging, gl.domElement])
 
   const particles = useMemo(() => {
     const particles = []
@@ -88,8 +133,15 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += ROTATION_SPEED_Y
-      groupRef.current.rotation.x += ROTATION_SPEED_X
+      if (isDragging) {
+        // Apply manual rotation from drag
+        groupRef.current.rotation.x = rotation.x
+        groupRef.current.rotation.y = rotation.y
+      } else {
+        // Continue automatic rotation when not dragging
+        groupRef.current.rotation.y += ROTATION_SPEED_Y
+        groupRef.current.rotation.x += ROTATION_SPEED_X
+      }
     }
   })
 
