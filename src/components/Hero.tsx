@@ -1,47 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-import jessicaImage from "@/assets/jessica-marin.jpg";
+
 const Hero = () => {
-  return <section className="relative min-h-screen flex items-center overflow-hidden py-32 lg:py-40">
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-16 items-start">
-          {/* Text Content - Takes 7 columns */}
-          <div className="lg:col-span-7 space-y-10 animate-fade-in-slow">
-            <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-accent" />
-              <span className="text-sm tracking-wider uppercase text-muted-foreground font-light">
-                Metodo Esoterico & Magico-Pratico
-              </span>
-            </div>
-
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.95] tracking-tight">
-              TAROCCHI
-              <br />
-              <span className="text-accent-gradient">PER</span>
-              <br />
-              ILLUMINARSI
-            </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl font-light">
-              Non semplice divinazione, ma un viaggio profondo verso la{" "}
-              <span className="text-accent font-medium">Saggezza</span> attraverso
-              13 anni di pratica magica e studio esoterico approfondito.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" variant="default" className="group">
-                Inizia il Percorso
-                <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
-              </Button>
-              <Button size="lg" variant="outline" className="elegant-underline">
-                Scopri il Metodo
-              </Button>
-            </div>
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-40 lg:py-56">
+      <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl">
+        <div className="flex flex-col items-center space-y-12 md:space-y-16 animate-fade-in-slow text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-3 px-6 py-2 minimal-border bg-card/10 backdrop-blur-sm mx-auto" style={{ animationDelay: "0.2s" }}>
+            <span className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-muted-foreground font-light">
+              Metodo Esoterico & Magico-Pratico
+            </span>
           </div>
 
-          {/* Jessica Image - Takes 5 columns, positioned top-right */}
-          <div className="lg:col-span-5 relative animate-scale-in">
-            
+          {/* Title - Monumental Typography */}
+          <h1 className="font-display font-bold leading-[0.9] tracking-tighter text-[clamp(4rem,10vw,10rem)]" style={{ animationDelay: "0.4s" }}>
+            TAROCCHI
+            <br />
+            <span className="text-accent-gradient">PER</span>
+            <br />
+            ILLUMINARSI
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto font-light" style={{ animationDelay: "0.6s" }}>
+            Non semplice divinazione, ma un viaggio profondo verso la{" "}
+            <span className="text-accent font-medium">Saggezza</span> attraverso
+            13 anni di pratica magica e studio esoterico approfondito.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center" style={{ animationDelay: "0.8s" }}>
+            <Button size="lg" variant="default" className="group">
+              Inizia il Percorso
+              <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
+            </Button>
+            <Button size="lg" variant="outline" className="elegant-underline">
+              Scopri il Metodo
+            </Button>
           </div>
         </div>
 
