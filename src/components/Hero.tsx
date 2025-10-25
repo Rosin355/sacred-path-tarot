@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 
 const Hero = () => {
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-40 lg:py-56">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 lg:py-32">
       <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl">
         <div className="flex flex-col items-center space-y-12 md:space-y-16 animate-fade-in-slow text-center">
           {/* Badge */}
