@@ -14,7 +14,7 @@ const Index = () => {
         <Method />
         <TarotReading />
         <Journey />
-        <About className="my-0" />
+        <About />
         <Services />
       </main>
       <Footer />
