@@ -1,22 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
-import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { useAmbientDrone } from "@/hooks/useAmbientDrone";
 import { useHarmonicSound } from "@/hooks/useHarmonicSound";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isMuted, toggleMute } = useBackgroundMusic('/sounds/ambient-mystic.mp3');
-  const { playNote } = useHarmonicSound();
+  const { isMuted, toggleMute, isPlaying } = useAmbientDrone();
+  const { playNote, playArpeggio } = useHarmonicSound();
 
   const handleMenuToggle = () => {
-    playNote(isMenuOpen ? 'E' : 'G');
+    if (isMenuOpen) {
+      playArpeggio(['G', 'E', 'D'], 0.12); // Closing - descending
+    } else {
+      playArpeggio(['D', 'E', 'G'], 0.12); // Opening - ascending
+    }
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleNavClick = () => {
-    playNote('A');
+    playNote('A', 1.2);
     setIsMenuOpen(false);
+  };
+
+  const handleAudioToggle = () => {
+    toggleMute();
+    if (!isMuted) {
+      playNote('D', 0.8); // Soft confirmation note when unmuting
+    }
   };
 
   return (
@@ -47,9 +58,12 @@ const Navigation = () => {
           {/* Audio Controls & Mobile Menu */}
           <div className="flex items-center gap-4">
             <button
-              onClick={toggleMute}
-              className="p-2 hover:bg-card/50 rounded-md transition-colors"
-              aria-label={isMuted ? "Unmute audio" : "Mute audio"}
+              onClick={handleAudioToggle}
+              className={`p-2 hover:bg-card/50 rounded-md transition-all ${
+                isPlaying && !isMuted ? 'text-accent animate-pulse' : ''
+              }`}
+              aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
+              title={isMuted ? "Clicca per attivare l'audio ambient" : "Audio ambient attivo"}
             >
               {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
             </button>

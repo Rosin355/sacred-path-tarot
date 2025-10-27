@@ -45,58 +45,58 @@ export const useHarmonicSound = () => {
       masterFilter.Q.value = 1.0;
       masterFilter.connect(audioContext.destination);
 
-      // Master gain
+      // Master gain (increased for more prominent sound)
       const masterGain = audioContext.createGain();
       masterGain.connect(masterFilter);
 
-      // Envelope: soft attack, sustained, long decay
+      // Envelope: soft attack, sustained, long decay (louder)
       masterGain.gain.setValueAtTime(0, currentTime);
-      masterGain.gain.linearRampToValueAtTime(0.12, currentTime + 0.015);
-      masterGain.gain.linearRampToValueAtTime(0.06, currentTime + 0.4);
+      masterGain.gain.linearRampToValueAtTime(0.25, currentTime + 0.015);
+      masterGain.gain.linearRampToValueAtTime(0.15, currentTime + 0.4);
       masterGain.gain.exponentialRampToValueAtTime(0.001, currentTime + duration);
 
-      // Fundamental (triangle wave for warmth)
+      // Fundamental (triangle wave for warmth) - increased
       const osc1 = audioContext.createOscillator();
       const gain1 = audioContext.createGain();
       osc1.frequency.value = baseFreq;
       osc1.type = 'triangle';
-      gain1.gain.value = 0.5;
+      gain1.gain.value = 0.7;
       osc1.connect(gain1);
       gain1.connect(masterGain);
 
-      // Fifth harmonic (characteristic Hand Pan)
+      // Fifth harmonic (characteristic Hand Pan) - increased
       const osc2 = audioContext.createOscillator();
       const gain2 = audioContext.createGain();
       osc2.frequency.value = baseFreq * 1.498;
       osc2.type = 'sine';
-      gain2.gain.value = 0.2;
+      gain2.gain.value = 0.3;
       osc2.connect(gain2);
       gain2.connect(masterGain);
 
-      // Major third
+      // Major third - increased
       const osc3 = audioContext.createOscillator();
       const gain3 = audioContext.createGain();
       osc3.frequency.value = baseFreq * 1.26;
       osc3.type = 'sine';
-      gain3.gain.value = 0.12;
+      gain3.gain.value = 0.18;
       osc3.connect(gain3);
       gain3.connect(masterGain);
 
-      // Octave
+      // Octave - increased
       const osc4 = audioContext.createOscillator();
       const gain4 = audioContext.createGain();
       osc4.frequency.value = baseFreq * 2.0;
       osc4.type = 'sine';
-      gain4.gain.value = 0.18;
+      gain4.gain.value = 0.25;
       osc4.connect(gain4);
       gain4.connect(masterGain);
 
-      // Upper harmonic (shimmer)
+      // Upper harmonic (shimmer) - increased
       const osc5 = audioContext.createOscillator();
       const gain5 = audioContext.createGain();
       osc5.frequency.value = baseFreq * 3.01;
       osc5.type = 'sine';
-      gain5.gain.value = 0.06;
+      gain5.gain.value = 0.1;
       osc5.connect(gain5);
       gain5.connect(masterGain);
 

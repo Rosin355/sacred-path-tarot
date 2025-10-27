@@ -26,11 +26,27 @@ export const useBackgroundMusic = (audioSrc: string) => {
       }
     };
 
+    // Handler for first user interaction to unlock audio
+    const handleFirstInteraction = () => {
+      playAudio();
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+
     // Attempt autoplay on mount
     playAudio();
 
+    // Fallback: wait for user interaction
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+
     // Cleanup
     return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
       audio.pause();
       audio.src = '';
     };
