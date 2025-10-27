@@ -113,42 +113,42 @@ const ScrollMorphSymbol = () => {
         {/* Layer 1: Particella più lontana e grande */}
         <div className="absolute inset-0 opacity-10 blur-2xl scale-[2.5] animate-pulse" style={{ animationDuration: '4s' }}>
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
         
         {/* Layer 2: Particella grande con blur forte */}
         <div className="absolute inset-0 opacity-15 blur-xl scale-[2] animate-pulse" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}>
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
         
         {/* Layer 3: Particella media */}
         <div className="absolute inset-0 opacity-20 blur-lg scale-[1.6] animate-pulse" style={{ animationDuration: '3s', animationDelay: '1s' }}>
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
         
         {/* Layer 4: Particella piccola */}
         <div className="absolute inset-0 opacity-25 blur-md scale-[1.3] animate-pulse" style={{ animationDuration: '2.5s', animationDelay: '1.5s' }}>
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
         
         {/* Layer 5: Particella molto vicina */}
         <div className="absolute inset-0 opacity-30 blur-sm scale-110 animate-pulse" style={{ animationDuration: '2s', animationDelay: '2s' }}>
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
         
         {/* Main symbol - Simbolo principale con opacità ridotta */}
         <div className="relative opacity-20">
           <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[0]}
+            {symbols[currentSymbolRef.current]}
           </div>
         </div>
       </div>
