@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { getAudioFileUrl } from '@/lib/audioStorage';
 
-const STORAGE_KEY = 'audio-muted';
+const STORAGE_KEY = 'music-muted';
 const INITIAL_VOLUME = 0.12; // 12% volume like richardmattka.com
 const FADE_IN_DURATION = 2000; // 2 seconds fade-in
 
