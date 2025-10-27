@@ -51,9 +51,12 @@ const Navigation = () => {
             </button>
             
             {!user ? (
-              <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => { playNavigation(); navigate('/login'); }}>
-                Login
-              </Button>
+              <>
+                <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => { playNavigation(); navigate('/login'); }}>
+                  Login
+                </Button>
+                <UnderwaterNavigation />
+              </>
             ) : (
               <>
                 {isAdmin && (
@@ -65,6 +68,7 @@ const Navigation = () => {
                   <LogOut className="w-4 h-4 mr-2" />
                   Esci
                 </Button>
+                <UnderwaterNavigation />
               </>
             )}
           </div>
