@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useAmbientDrone = () => {
+export const useMinimalAmbient = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorsRef = useRef<OscillatorNode[]>([]);
   const gainsRef = useRef<GainNode[]>([]);
@@ -14,51 +14,41 @@ export const useAmbientDrone = () => {
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     audioContextRef.current = audioContext;
 
-    // Master filter (warm, deep ambient)
+    // Master filter (dark, cinematic low-pass)
     const masterFilter = audioContext.createBiquadFilter();
     masterFilter.type = 'lowpass';
-    masterFilter.frequency.value = 2000;
-    masterFilter.Q.value = 0.7;
+    masterFilter.frequency.value = 800; // Very dark
+    masterFilter.Q.value = 0.3;
     masterFilter.connect(audioContext.destination);
 
-    // Master gain
+    // Master gain (ultra minimal volume)
     const masterGain = audioContext.createGain();
-    masterGain.gain.value = 0.3; // 30% volume for ambient background
+    masterGain.gain.value = 0.08; // 8% volume - barely perceptible
     masterGain.connect(masterFilter);
 
-    // Create 432 Hz based drone (healing frequency)
+    // Minimal cinematic pad frequencies
     const frequencies = [
-      432 * 0.5,   // Sub bass (216 Hz)
-      432,         // Fundamental (432 Hz)
-      432 * 1.5,   // Fifth (648 Hz)
-      432 * 2,     // Octave (864 Hz)
+      88,   // Low bass (A1)
+      132,  // Mid bass (C2)
+      176,  // Upper bass (F2)
     ];
 
-    const startDrone = () => {
+    const startAmbient = () => {
       if (!isMuted && oscillatorsRef.current.length === 0) {
         frequencies.forEach((freq, index) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
-          const lfo = audioContext.createOscillator();
-          const lfoGain = audioContext.createGain();
 
-          // Oscillator setup
-          osc.type = index === 0 ? 'sine' : 'triangle';
+          // Simple sine/triangle waves
+          osc.type = index === 2 ? 'triangle' : 'sine';
           osc.frequency.value = freq;
 
-          // LFO for subtle modulation
-          lfo.type = 'sine';
-          lfo.frequency.value = 0.1 + (index * 0.05); // Slow modulation
-          lfoGain.gain.value = index === 0 ? 2 : 5; // Subtle frequency modulation
-          lfo.connect(lfoGain);
-          lfoGain.connect(osc.frequency);
-
-          // Gain envelope - very slow fade in
+          // Individual gains
+          const targetGain = index === 0 ? 0.05 : (index === 1 ? 0.03 : 0.02);
+          
+          // Very slow fade in (10 seconds)
           gain.gain.setValueAtTime(0, audioContext.currentTime);
-          gain.gain.linearRampToValueAtTime(
-            index === 0 ? 0.15 : (index === 1 ? 0.25 : 0.1),
-            audioContext.currentTime + 8
-          ); // 8 second fade in
+          gain.gain.linearRampToValueAtTime(targetGain, audioContext.currentTime + 10);
 
           // Connect
           osc.connect(gain);
@@ -66,7 +56,6 @@ export const useAmbientDrone = () => {
 
           // Start
           osc.start();
-          lfo.start();
 
           oscillatorsRef.current.push(osc);
           gainsRef.current.push(gain);
@@ -81,13 +70,13 @@ export const useAmbientDrone = () => {
       if (audioContext.state === 'suspended') {
         audioContext.resume();
       }
-      startDrone();
+      startAmbient();
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('touchstart', handleFirstInteraction);
     };
 
     if (!isMuted) {
-      startDrone();
+      startAmbient();
       // Fallback for autoplay blocked
       document.addEventListener('click', handleFirstInteraction);
       document.addEventListener('touchstart', handleFirstInteraction);
@@ -117,7 +106,7 @@ export const useAmbientDrone = () => {
       if (isMuted) {
         // Fade out
         gainsRef.current.forEach(gain => {
-          gain.gain.linearRampToValueAtTime(0, audioContextRef.current!.currentTime + 0.5);
+          gain.gain.linearRampToValueAtTime(0, audioContextRef.current!.currentTime + 1);
         });
         setTimeout(() => {
           oscillatorsRef.current.forEach(osc => {
@@ -130,7 +119,7 @@ export const useAmbientDrone = () => {
           oscillatorsRef.current = [];
           gainsRef.current = [];
           setIsPlaying(false);
-        }, 500);
+        }, 1000);
       }
       localStorage.setItem('audio-muted', String(isMuted));
     }

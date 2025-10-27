@@ -3,27 +3,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import tarotCardBack from "@/assets/tarot-card-back.jpg";
-import { useHarmonicSound } from "@/hooks/useHarmonicSound";
+import { useClickSound } from "@/hooks/useClickSound";
 
 const TarotReading = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [isReading, setIsReading] = useState(false);
-  const { playNote, playArpeggio } = useHarmonicSound();
+  const { playClick } = useClickSound();
 
   const cards = Array.from({ length: 7 }, (_, i) => i);
 
   const handleCardSelect = (index: number) => {
+    playClick();
     if (selectedCards.includes(index)) {
-      playNote('E');
       setSelectedCards(selectedCards.filter((i) => i !== index));
     } else if (selectedCards.length < 3) {
-      playNote('F#');
       setSelectedCards([...selectedCards, index]);
     }
   };
 
   const startReading = () => {
-    playArpeggio(['G', 'A', 'C#'], 0.15);
+    playClick();
     setIsReading(true);
     // Here would be the AI integration
   };
@@ -161,7 +160,7 @@ const TarotReading = () => {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      playNote('D-high');
+                      playClick();
                       setIsReading(false);
                       setSelectedCards([]);
                     }}

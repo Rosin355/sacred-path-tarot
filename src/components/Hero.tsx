@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
-import { useHarmonicSound } from "@/hooks/useHarmonicSound";
+import { useClickSound } from "@/hooks/useClickSound";
 
 const Hero = () => {
-  const { playNote } = useHarmonicSound();
+  const { playClick } = useClickSound();
   
   const tarotImages = [
     "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
@@ -78,11 +78,11 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center pointer-events-auto" style={{ animationDelay: "0.8s" }}>
-            <Button size="lg" variant="default" className="group" onClick={() => playNote('A')}>
+            <Button size="lg" variant="default" className="group" onClick={playClick}>
               Inizia il Percorso
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="elegant-underline" onClick={() => playNote('A')}>
+            <Button size="lg" variant="outline" className="elegant-underline" onClick={playClick}>
               Scopri il Metodo
             </Button>
           </div>

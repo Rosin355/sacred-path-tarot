@@ -1,33 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
-import { useAmbientDrone } from "@/hooks/useAmbientDrone";
-import { useHarmonicSound } from "@/hooks/useHarmonicSound";
+import { useMinimalAmbient } from "@/hooks/useMinimalAmbient";
+import { useClickSound } from "@/hooks/useClickSound";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isMuted, toggleMute, isPlaying } = useAmbientDrone();
-  const { playNote, playArpeggio } = useHarmonicSound();
+  const { isMuted, toggleMute, isPlaying } = useMinimalAmbient();
+  const { playClick } = useClickSound();
 
   const handleMenuToggle = () => {
-    if (isMenuOpen) {
-      playArpeggio(['G', 'E', 'D'], 0.12); // Closing - descending
-    } else {
-      playArpeggio(['D', 'E', 'G'], 0.12); // Opening - ascending
-    }
+    playClick();
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleNavClick = () => {
-    playNote('A', 1.2);
+    playClick();
     setIsMenuOpen(false);
   };
 
   const handleAudioToggle = () => {
     toggleMute();
-    if (!isMuted) {
-      playNote('D', 0.8); // Soft confirmation note when unmuting
-    }
+    playClick();
   };
 
   return (
@@ -41,16 +35,16 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12">
-            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={() => playNote('A')}>
+            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
               Metodo
             </a>
-            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={() => playNote('A')}>
+            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
               Consultazione
             </a>
-            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={() => playNote('A')}>
+            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
               Percorso
             </a>
-            <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => playNote('A')}>
+            <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={playClick}>
               Inizia
             </Button>
           </div>
