@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import tarotCardBack from "@/assets/tarot-card-back.jpg";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 
+interface DragState {
+  isDragging: boolean;
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
+}
+
 const TarotReading = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [isReading, setIsReading] = useState(false);
+  const [dragState, setDragState] = useState<DragState | null>(null);
+  const [draggedCard, setDraggedCard] = useState<number | null>(null);
   const { playCardClick, playRevealWisdom, playNewConsultation } = useSoundEffects();
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const cards = Array.from({ length: 7 }, (_, i) => i);
 
@@ -19,6 +30,52 @@ const TarotReading = () => {
     } else if (selectedCards.length < 3) {
       setSelectedCards([...selectedCards, index]);
     }
+  };
+
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
+    if (isReading) return;
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    setDraggedCard(index);
+    setDragState({
+      isDragging: true,
+      startX: clientX,
+      startY: clientY,
+      currentX: clientX,
+      currentY: clientY,
+    });
+    
+    e.preventDefault();
+  };
+
+  const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!dragState?.isDragging || draggedCard === null) return;
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    setDragState({
+      ...dragState,
+      currentX: clientX,
+      currentY: clientY,
+    });
+  };
+
+  const handleDragEnd = () => {
+    if (!dragState?.isDragging || draggedCard === null) return;
+    
+    const deltaX = Math.abs(dragState.currentX - dragState.startX);
+    const deltaY = Math.abs(dragState.currentY - dragState.startY);
+    
+    // Se il movimento è minimo, tratta come click
+    if (deltaX < 5 && deltaY < 5) {
+      handleCardSelect(draggedCard);
+    }
+    
+    setDragState(null);
+    setDraggedCard(null);
   };
 
   const startReading = () => {
@@ -63,34 +120,59 @@ const TarotReading = () => {
           
           <CardContent className="space-y-12 p-8 pt-0">
             {/* Card Selection */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4">
-              {cards.map((card, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleCardSelect(index)}
-                  disabled={isReading}
-                  className={`
-                    relative aspect-[2/3] minimal-border overflow-hidden cursor-pointer
-                    transition-all duration-500 hover-lift
-                    ${selectedCards.includes(index)
-                      ? "ring-2 ring-accent scale-105"
-                      : "opacity-60 hover:opacity-100"
-                    }
-                    ${isReading ? "pointer-events-none" : ""}
-                  `}
-                >
-                  <img
-                    src={tarotCardBack}
-                    alt={`Carta ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  {selectedCards.includes(index) && (
-                    <div className="absolute inset-0 bg-accent/10 backdrop-blur-[1px] flex items-center justify-center">
-                      <div className="w-3 h-3 bg-accent" />
-                    </div>
-                  )}
-                </button>
-              ))}
+            <div 
+              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4"
+              onMouseMove={handleDragMove}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
+            >
+              {cards.map((card, index) => {
+                const isDragging = draggedCard === index && dragState?.isDragging;
+                const translateX = isDragging ? dragState.currentX - dragState.startX : 0;
+                const translateY = isDragging ? dragState.currentY - dragState.startY : 0;
+                
+                return (
+                  <div
+                    key={index}
+                    ref={(el) => cardRefs.current[index] = el}
+                    onMouseDown={(e) => handleDragStart(e, index)}
+                    onTouchStart={(e) => handleDragStart(e, index)}
+                    className={`
+                      relative aspect-[2/3] minimal-border overflow-hidden cursor-grab
+                      ${selectedCards.includes(index)
+                        ? "ring-2 ring-accent"
+                        : "opacity-60 hover:opacity-100"
+                      }
+                      ${isReading ? "pointer-events-none" : ""}
+                      ${isDragging ? "cursor-grabbing z-50" : ""}
+                    `}
+                    style={{
+                      transform: isDragging 
+                        ? `translate3d(${translateX}px, ${translateY}px, 0) scale(1.1)` 
+                        : selectedCards.includes(index) 
+                        ? "scale(1.05)" 
+                        : "scale(1)",
+                      transition: isDragging ? "none" : "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      willChange: isDragging ? "transform" : "auto",
+                      touchAction: "none",
+                    }}
+                  >
+                    <img
+                      src={tarotCardBack}
+                      alt={`Carta ${index + 1}`}
+                      className="w-full h-full object-cover pointer-events-none select-none"
+                      draggable="false"
+                    />
+                    {selectedCards.includes(index) && (
+                      <div className="absolute inset-0 bg-accent/10 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                        <div className="w-3 h-3 bg-accent" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Reading Button */}
