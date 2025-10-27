@@ -17,6 +17,7 @@ export default {
         display: ['Metamorphous', 'serif'],
         body: ['Modern Antiqua', 'serif'],
         heading3: ['UnifrakturMaguntia', 'serif'],
+        consent: ['Rajdhani', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
