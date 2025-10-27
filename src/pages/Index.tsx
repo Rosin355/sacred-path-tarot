@@ -6,22 +6,18 @@ import Journey from "@/components/Journey";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Footer from "@/components/Footer";
-
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Navigation />
       <main className="pt-16">
         <Hero />
         <Method />
         <TarotReading />
         <Journey />
-        <About />
+        <About className="my-0" />
         <Services />
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
