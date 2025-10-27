@@ -21,9 +21,7 @@ export const useUserRole = () => {
     enabled: !!user
   });
 
-  const isAdmin = () => {
-    return roles?.includes('admin') || false;
-  };
+  const isAdmin = roles?.includes('admin') || false;
 
   return {
     roles: roles || [],

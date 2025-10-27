@@ -22,7 +22,7 @@ export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRout
       return;
     }
 
-    if (requireAdmin && !isAdmin()) {
+    if (requireAdmin && !isAdmin) {
       navigate('/', { replace: true });
     }
   }, [user, isAdmin, authLoading, roleLoading, requireAdmin, navigate]);
@@ -35,7 +35,7 @@ export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRout
     );
   }
 
-  if (!user || (requireAdmin && !isAdmin())) {
+  if (!user || (requireAdmin && !isAdmin)) {
     return null;
   }
 

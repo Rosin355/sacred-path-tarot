@@ -24,9 +24,12 @@ const Navigation = () => {
       <nav className="container mx-auto px-6 lg:px-12 py-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="text-xl font-display font-bold tracking-tight hover:text-accent transition-colors">
+          <button 
+            onClick={() => navigate('/')} 
+            className="text-xl font-display font-bold tracking-tight hover:text-accent transition-colors"
+          >
             TAROCCHI PER ILLUMINARSI
-          </a>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12">
@@ -53,7 +56,7 @@ const Navigation = () => {
               </Button>
             ) : (
               <>
-                {isAdmin() && (
+                {isAdmin && (
                   <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => navigate('/admin')}>
                     Admin
                   </Button>
@@ -116,7 +119,7 @@ const Navigation = () => {
               </Button>
             ) : (
               <>
-                {isAdmin() && (
+                {isAdmin && (
                   <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { navigate('/admin'); setIsMenuOpen(false); }}>
                     Admin
                   </Button>

@@ -15,7 +15,7 @@ const Login = () => {
     if (authLoading || roleLoading) return;
     
     if (user) {
-      if (isAdmin()) {
+      if (isAdmin) {
         navigate('/admin', { replace: true });
       } else {
         navigate('/', { replace: true });
