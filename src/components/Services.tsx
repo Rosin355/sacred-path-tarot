@@ -23,7 +23,7 @@ const Services = () => {
   ];
 
   return (
-    <section className="py-32 lg:py-40 px-6 lg:px-12 relative">
+    <section id="services-section" className="py-32 lg:py-40 px-6 lg:px-12 relative">
       <div className="container mx-auto max-w-7xl">
         
         {/* Header con simbolo astrologico */}

@@ -19,7 +19,7 @@ const About = () => {
     icon: "♆",
     text: "Metodo esclusivo Magico-Pratico per l'Illuminazione"
   }];
-  return <section id="chi-sono" className="py-20 lg:py-28 px-6 lg:px-12 relative">
+  return <section id="about-section" className="py-20 lg:py-28 px-6 lg:px-12 relative">
       <div className="container mx-auto max-w-7xl">
         
         {/* Header con simbolo astrologico */}

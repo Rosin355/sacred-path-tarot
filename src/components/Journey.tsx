@@ -34,7 +34,7 @@ const Journey = () => {
   ];
 
   return (
-    <section id="percorso" className="py-32 lg:py-40 px-6 lg:px-12 relative">
+    <section id="journey-section" className="py-32 lg:py-40 px-6 lg:px-12 relative">
       <div className="container mx-auto max-w-7xl">
         <div className="mb-24 space-y-6 animate-fade-in">
           <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm">
