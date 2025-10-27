@@ -81,7 +81,7 @@ const About = () => {
               <img 
                 src={jessicaImage}
                 alt="Jessica Marin - Guida esoterica e esperta di Tarocchi"
-                className="w-full aspect-square object-cover"
+                className="w-full aspect-[4/5] object-cover"
               />
               
               {/* Decorazione con simboli astrologici negli angoli */}
