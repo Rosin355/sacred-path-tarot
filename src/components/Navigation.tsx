@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
+import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isMuted, toggleMute } = useBackgroundMusic();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-border/50">
@@ -25,19 +27,35 @@ const Navigation = () => {
             <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Percorso
             </a>
+            <button
+              onClick={toggleMute}
+              className="p-2 minimal-border bg-card/30 hover:bg-card/50 transition-colors"
+              aria-label={isMuted ? "Attiva musica" : "Disattiva musica"}
+            >
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
             <Button variant="outline" size="sm" className="minimal-border hover-lift">
               Inizia
             </Button>
           </div>
 
           {/* Mobile Menu */}
-          <button
-            className="md:hidden text-foreground p-2 minimal-border bg-card/30"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="md:hidden flex items-center gap-3">
+            <button
+              onClick={toggleMute}
+              className="p-2 minimal-border bg-card/30"
+              aria-label={isMuted ? "Attiva musica" : "Disattiva musica"}
+            >
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+            <button
+              className="text-foreground p-2 minimal-border bg-card/30"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
