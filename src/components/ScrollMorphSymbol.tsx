@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { InteractiveParticles } from '@/components/ui/InteractiveParticles';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,68 +90,59 @@ const ScrollMorphSymbol = () => {
   };
 
   return (
-    <>
-      {/* Interactive Particles Layer */}
-      <InteractiveParticles 
-        currentSymbol={symbols[currentSymbolRef.current]} 
-        isVisible={isVisible} 
-      />
+    <div
+      ref={symbolRef}
+      className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none transition-opacity duration-700 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+      style={{
+        filter: 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.4))',
+      }}
+    >
+      {/* Particle effect layers - 6 layers per effetto più intenso */}
       
-      {/* Original Blur/Pulse Layers */}
-      <div
-        ref={symbolRef}
-        className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none transition-opacity duration-700 ${
-          isVisible ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          filter: 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.4))',
-        }}
-      >
-        {/* Particle effect layers - 6 layers per effetto più intenso */}
-        
-        {/* Layer 1: Particella più lontana e grande */}
-        <div className="absolute inset-0 opacity-10 blur-2xl scale-[2.5] animate-pulse" style={{ animationDuration: '4s' }}>
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
-        </div>
-        
-        {/* Layer 2: Particella grande con blur forte */}
-        <div className="absolute inset-0 opacity-15 blur-xl scale-[2] animate-pulse" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}>
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
-        </div>
-        
-        {/* Layer 3: Particella media */}
-        <div className="absolute inset-0 opacity-20 blur-lg scale-[1.6] animate-pulse" style={{ animationDuration: '3s', animationDelay: '1s' }}>
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
-        </div>
-        
-        {/* Layer 4: Particella piccola */}
-        <div className="absolute inset-0 opacity-25 blur-md scale-[1.3] animate-pulse" style={{ animationDuration: '2.5s', animationDelay: '1.5s' }}>
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
-        </div>
-        
-        {/* Layer 5: Particella molto vicina */}
-        <div className="absolute inset-0 opacity-30 blur-sm scale-110 animate-pulse" style={{ animationDuration: '2s', animationDelay: '2s' }}>
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
-        </div>
-        
-        {/* Main symbol - Simbolo principale con opacità ridotta */}
-        <div className="relative opacity-20">
-          <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
-            {symbols[currentSymbolRef.current]}
-          </div>
+      {/* Layer 1: Particella più lontana e grande */}
+      <div className="absolute inset-0 opacity-10 blur-2xl scale-[2.5] animate-pulse" style={{ animationDuration: '4s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
         </div>
       </div>
-    </>
+      
+      {/* Layer 2: Particella grande con blur forte */}
+      <div className="absolute inset-0 opacity-15 blur-xl scale-[2] animate-pulse" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 3: Particella media */}
+      <div className="absolute inset-0 opacity-20 blur-lg scale-[1.6] animate-pulse" style={{ animationDuration: '3s', animationDelay: '1s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 4: Particella piccola */}
+      <div className="absolute inset-0 opacity-25 blur-md scale-[1.3] animate-pulse" style={{ animationDuration: '2.5s', animationDelay: '1.5s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 5: Particella molto vicina */}
+      <div className="absolute inset-0 opacity-30 blur-sm scale-110 animate-pulse" style={{ animationDuration: '2s', animationDelay: '2s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Main symbol - Simbolo principale con opacità ridotta */}
+      <div className="relative opacity-20">
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+    </div>
   );
 };
 
