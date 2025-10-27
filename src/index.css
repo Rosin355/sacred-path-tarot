@@ -132,6 +132,53 @@ All colors MUST be HSL.
   .elegant-underline:hover::after {
     width: 100%;
   }
+
+  /* Underwater navigation liquid effect */
+  .underwater-link {
+    position: relative;
+    display: inline-block;
+    filter: blur(0px);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform, filter;
+  }
+
+  .underwater-link::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsla(var(--accent) / 0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease-out, height 0.6s ease-out;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .underwater-link:hover {
+    filter: blur(0.5px);
+    transform: scale(1.05) skewX(-1deg);
+    text-shadow: 0 0 30px hsla(var(--accent) / 0.6),
+                 0 0 60px hsla(var(--accent) / 0.3);
+  }
+
+  .underwater-link:hover::before {
+    width: 200%;
+    height: 200%;
+  }
+
+  @keyframes ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(4);
+      opacity: 0;
+    }
+  }
 }
 
 @layer base {
