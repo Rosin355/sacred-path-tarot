@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { getAudioFileUrl } from '@/lib/audioStorage';
 
 const STORAGE_KEY = 'audio-muted';
 const INITIAL_VOLUME = 0.12; // 12% volume like richardmattka.com
@@ -18,9 +19,14 @@ export const useBackgroundMusic = () => {
     audio.loop = true;
     audio.volume = 0; // Start at 0 for fade-in
     
-    // Use local fallback file
-    audio.src = '/sounds/ambient-music.mp3';
+    // Get audio from Supabase Storage
+    const audioUrl = getAudioFileUrl();
+    if (!audioUrl) {
+      console.log('No audio file available yet');
+      return;
+    }
     
+    audio.src = audioUrl;
     audioRef.current = audio;
 
     // Fade in function

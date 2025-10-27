@@ -1,11 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Volume2, VolumeX } from "lucide-react";
+import { Menu, X, Volume2, VolumeX, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const { isMuted, toggleMute } = useBackgroundMusic();
+  const { user, signOut } = useAuth();
+  const { isAdmin } = useUserRole();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-border/50">
@@ -34,9 +46,24 @@ const Navigation = () => {
             >
               {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
             </button>
-            <Button variant="outline" size="sm" className="minimal-border hover-lift">
-              Inizia
-            </Button>
+            
+            {!user ? (
+              <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => navigate('/login')}>
+                Login
+              </Button>
+            ) : (
+              <>
+                {isAdmin() && (
+                  <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => navigate('/admin')}>
+                    Admin
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Esci
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -82,9 +109,24 @@ const Navigation = () => {
             >
               Percorso
             </a>
-            <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => setIsMenuOpen(false)}>
-              Inizia
-            </Button>
+            
+            {!user ? (
+              <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { navigate('/login'); setIsMenuOpen(false); }}>
+                Login
+              </Button>
+            ) : (
+              <>
+                {isAdmin() && (
+                  <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { navigate('/admin'); setIsMenuOpen(false); }}>
+                    Admin
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" className="w-full" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Esci
+                </Button>
+              </>
+            )}
           </div>
         )}
       </nav>
