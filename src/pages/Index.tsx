@@ -4,6 +4,8 @@ import Method from "@/components/Method";
 import TarotReading from "@/components/TarotReading";
 import Journey from "@/components/Journey";
 import About from "@/components/About";
+import Services from "@/components/Services";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -15,7 +17,9 @@ const Index = () => {
         <TarotReading />
         <Journey />
         <About />
+        <Services />
       </main>
+      <Footer />
     </div>
   );
 };

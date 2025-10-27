@@ -26,27 +26,10 @@ const About = () => {
         </div>
 
         {/* Layout a due colonne */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-16 items-center">
           
-          {/* Colonna sinistra: Immagine Jessica */}
-          <div className="relative animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <div className="relative overflow-hidden minimal-border hover-lift">
-              <img 
-                src={jessicaImage}
-                alt="Jessica Marin - Guida esoterica e esperta di Tarocchi"
-                className="w-full aspect-[3/4] object-cover"
-              />
-              
-              {/* Decorazione con simboli astrologici negli angoli */}
-              <div className="absolute top-4 left-4 text-accent text-2xl opacity-30">♀</div>
-              <div className="absolute top-4 right-4 text-accent text-2xl opacity-30">♂</div>
-              <div className="absolute bottom-4 left-4 text-accent text-2xl opacity-30">♃</div>
-              <div className="absolute bottom-4 right-4 text-accent text-2xl opacity-30">☉</div>
-            </div>
-          </div>
-
-          {/* Colonna destra: Testo */}
-          <div className="space-y-8 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          {/* Colonna sinistra: Testo */}
+          <div className="space-y-8 animate-fade-in order-2 lg:order-1" style={{ animationDelay: "0.2s" }}>
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
               JESSICA
               <br />
@@ -90,6 +73,23 @@ const About = () => {
               Scopri di Più sulla Mia Storia
               <ArrowUpRight className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </Button>
+          </div>
+
+          {/* Colonna destra: Immagine Jessica */}
+          <div className="relative animate-fade-in order-1 lg:order-2" style={{ animationDelay: "0.4s" }}>
+            <div className="relative overflow-hidden minimal-border hover-lift">
+              <img 
+                src={jessicaImage}
+                alt="Jessica Marin - Guida esoterica e esperta di Tarocchi"
+                className="w-full aspect-[4/5] object-cover"
+              />
+              
+              {/* Decorazione con simboli astrologici negli angoli */}
+              <div className="absolute top-4 left-4 text-accent text-2xl opacity-30">♀</div>
+              <div className="absolute top-4 right-4 text-accent text-2xl opacity-30">♂</div>
+              <div className="absolute bottom-4 left-4 text-accent text-2xl opacity-30">♃</div>
+              <div className="absolute bottom-4 right-4 text-accent text-2xl opacity-30">☉</div>
+            </div>
           </div>
         </div>
       </div>
