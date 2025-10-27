@@ -1,28 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Volume2, VolumeX } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useMinimalAmbient } from "@/hooks/useMinimalAmbient";
-import { useClickSound } from "@/hooks/useClickSound";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isMuted, toggleMute, isPlaying } = useMinimalAmbient();
-  const { playClick } = useClickSound();
-
-  const handleMenuToggle = () => {
-    playClick();
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleNavClick = () => {
-    playClick();
-    setIsMenuOpen(false);
-  };
-
-  const handleAudioToggle = () => {
-    toggleMute();
-    playClick();
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-border/50">
@@ -35,41 +16,28 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12">
-            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
+            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Metodo
             </a>
-            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
+            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Consultazione
             </a>
-            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline" onClick={playClick}>
+            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Percorso
             </a>
-            <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={playClick}>
+            <Button variant="outline" size="sm" className="minimal-border hover-lift">
               Inizia
             </Button>
           </div>
 
-          {/* Audio Controls & Mobile Menu */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handleAudioToggle}
-              className={`p-2 hover:bg-card/50 rounded-md transition-all ${
-                isPlaying && !isMuted ? 'text-accent animate-pulse' : ''
-              }`}
-              aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
-              title={isMuted ? "Clicca per attivare l'audio ambient" : "Audio ambient attivo"}
-            >
-              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-            </button>
-
-            <button
-              className="md:hidden text-foreground p-2 minimal-border bg-card/30"
-              onClick={handleMenuToggle}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          {/* Mobile Menu */}
+          <button
+            className="md:hidden text-foreground p-2 minimal-border bg-card/30"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
 
         {/* Mobile Navigation */}
@@ -78,25 +46,25 @@ const Navigation = () => {
             <a 
               href="#metodo" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={handleNavClick}
+              onClick={() => setIsMenuOpen(false)}
             >
               Metodo
             </a>
             <a 
               href="#lettura" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={handleNavClick}
+              onClick={() => setIsMenuOpen(false)}
             >
               Consultazione
             </a>
             <a 
               href="#percorso" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={handleNavClick}
+              onClick={() => setIsMenuOpen(false)}
             >
               Percorso
             </a>
-            <Button variant="outline" size="sm" className="w-full minimal-border" onClick={handleNavClick}>
+            <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => setIsMenuOpen(false)}>
               Inizia
             </Button>
           </div>
