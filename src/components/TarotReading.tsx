@@ -89,7 +89,7 @@ const TarotReading = () => {
       <div className="container mx-auto max-w-7xl">
         <div className="mb-24 space-y-6 animate-fade-in">
           <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm">
-            <div className="w-2 h-2 bg-accent" />
+            <span className="text-accent text-lg leading-none">♀</span>
             <span className="text-sm tracking-wider uppercase text-muted-foreground font-light">
               Lettura Esoterica Profonda
             </span>
@@ -167,7 +167,7 @@ const TarotReading = () => {
                     />
                     {selectedCards.includes(index) && (
                       <div className="absolute inset-0 bg-accent/10 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
-                        <div className="w-3 h-3 bg-accent" />
+                        <span className="text-accent text-xl leading-none">☉</span>
                       </div>
                     )}
                   </div>

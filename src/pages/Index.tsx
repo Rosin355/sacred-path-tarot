@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Method from "@/components/Method";
 import TarotReading from "@/components/TarotReading";
 import Journey from "@/components/Journey";
+import About from "@/components/About";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
         <Method />
         <TarotReading />
         <Journey />
+        <About />
       </main>
     </div>
   );
