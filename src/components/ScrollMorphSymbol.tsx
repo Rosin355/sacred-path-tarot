@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ScrollMorphSymbol = () => {
   const symbolRef = useRef<HTMLDivElement>(null);
   const currentSymbolRef = useRef<number>(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   // 5 simboli astrologici (Hero esclusa)
   const symbols = ['♂', '♃', '♄', '♆', '☉'];
@@ -28,7 +29,18 @@ const ScrollMorphSymbol = () => {
     ).matches;
     if (prefersReducedMotion) return;
 
-    // Creare ScrollTrigger per ogni sezione
+    // ScrollTrigger per controllare visibilità
+    ScrollTrigger.create({
+      trigger: '#method-section',
+      start: 'top bottom',
+      end: 'bottom top',
+      onEnter: () => setIsVisible(true),
+      onLeave: () => setIsVisible(false),
+      onEnterBack: () => setIsVisible(true),
+      onLeaveBack: () => setIsVisible(false),
+    });
+
+    // Creare ScrollTrigger per ogni sezione per il morph
     sections.forEach((sectionId, index) => {
       const section = document.getElementById(sectionId);
       if (!section) return;
@@ -57,9 +69,9 @@ const ScrollMorphSymbol = () => {
       gsap.timeline()
         .to(symbolElements, {
           opacity: 0,
-          scale: 0.5,
+          scale: 0.3,
           rotation: 180,
-          duration: 0.4,
+          duration: 0.5,
           ease: 'power2.in',
         })
         .call(() => {
@@ -71,7 +83,7 @@ const ScrollMorphSymbol = () => {
           opacity: 1,
           scale: 1,
           rotation: 360,
-          duration: 0.4,
+          duration: 0.5,
           ease: 'power2.out',
         });
     }
@@ -80,26 +92,53 @@ const ScrollMorphSymbol = () => {
   return (
     <div
       ref={symbolRef}
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
+      className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none transition-opacity duration-700 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
       style={{
-        filter: 'drop-shadow(0 0 30px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 60px rgba(212, 175, 55, 0.3))',
+        filter: 'drop-shadow(0 0 40px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.4))',
       }}
     >
-      {/* Particle effect layers */}
-      <div className="absolute inset-0 opacity-50 blur-sm scale-110 animate-pulse">
-        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
-          {symbols[0]}
-        </div>
-      </div>
-      <div className="absolute inset-0 opacity-30 blur-md scale-125 animate-pulse" style={{ animationDelay: '0.5s' }}>
-        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
+      {/* Particle effect layers - 6 layers per effetto più intenso */}
+      
+      {/* Layer 1: Particella più lontana e grande */}
+      <div className="absolute inset-0 opacity-10 blur-2xl scale-[2.5] animate-pulse" style={{ animationDuration: '4s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
           {symbols[0]}
         </div>
       </div>
       
-      {/* Main symbol */}
-      <div className="relative">
-        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
+      {/* Layer 2: Particella grande con blur forte */}
+      <div className="absolute inset-0 opacity-15 blur-xl scale-[2] animate-pulse" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 3: Particella media */}
+      <div className="absolute inset-0 opacity-20 blur-lg scale-[1.6] animate-pulse" style={{ animationDuration: '3s', animationDelay: '1s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 4: Particella piccola */}
+      <div className="absolute inset-0 opacity-25 blur-md scale-[1.3] animate-pulse" style={{ animationDuration: '2.5s', animationDelay: '1.5s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Layer 5: Particella molto vicina */}
+      <div className="absolute inset-0 opacity-30 blur-sm scale-110 animate-pulse" style={{ animationDuration: '2s', animationDelay: '2s' }}>
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Main symbol - Simbolo principale con opacità ridotta */}
+      <div className="relative opacity-20">
+        <div className="symbol-text text-[12rem] lg:text-[16rem] text-accent font-light">
           {symbols[0]}
         </div>
       </div>
