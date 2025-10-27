@@ -26,10 +26,10 @@ const About = () => {
         </div>
 
         {/* Layout a due colonne */}
-        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-start">
+        <div className="grid md:grid-cols-[1.5fr_1fr] gap-12 items-start">
           
           {/* Colonna sinistra: Testo */}
-          <div className="space-y-8 animate-fade-in order-2 lg:order-1" style={{ animationDelay: "0.2s" }}>
+          <div className="space-y-8 animate-fade-in order-2 md:order-1" style={{ animationDelay: "0.2s" }}>
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
               JESSICA
               <br />
@@ -76,7 +76,7 @@ const About = () => {
           </div>
 
           {/* Colonna destra: Immagine Jessica */}
-          <div className="relative animate-fade-in order-1 lg:order-2 max-w-md lg:max-w-none" style={{ animationDelay: "0.4s" }}>
+          <div className="relative animate-fade-in order-1 md:order-2 max-w-md md:max-w-none" style={{ animationDelay: "0.4s" }}>
             <div className="relative overflow-hidden minimal-border hover-lift">
               <img 
                 src={jessicaImage}
