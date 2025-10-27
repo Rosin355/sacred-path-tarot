@@ -3,14 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import tarotCardBack from "@/assets/tarot-card-back.jpg";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const TarotReading = () => {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [isReading, setIsReading] = useState(false);
+  const { playCardClick, playRevealWisdom, playNewConsultation } = useSoundEffects();
 
   const cards = Array.from({ length: 7 }, (_, i) => i);
 
   const handleCardSelect = (index: number) => {
+    playCardClick();
     if (selectedCards.includes(index)) {
       setSelectedCards(selectedCards.filter((i) => i !== index));
     } else if (selectedCards.length < 3) {
@@ -19,6 +22,7 @@ const TarotReading = () => {
   };
 
   const startReading = () => {
+    playRevealWisdom();
     setIsReading(true);
     // Here would be the AI integration
   };
@@ -156,6 +160,7 @@ const TarotReading = () => {
                   <Button
                     variant="outline"
                     onClick={() => {
+                      playNewConsultation();
                       setIsReading(false);
                       setSelectedCards([]);
                     }}

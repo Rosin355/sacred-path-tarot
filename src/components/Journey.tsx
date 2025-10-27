@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const Journey = () => {
+  const { playNavigation } = useSoundEffects();
   
   const levels = [
     {
@@ -89,6 +91,7 @@ const Journey = () => {
                 <div className="pt-6 border-t border-border space-y-4">
                   <p className="text-sm text-muted-foreground font-light">{level.lessons}</p>
                   <Button 
+                    onClick={playNavigation}
                     className="w-full group/btn"
                     variant={index === 0 ? "default" : "outline"}
                   >

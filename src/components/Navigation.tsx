@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +13,7 @@ const Navigation = () => {
   const { isMuted, toggleMute } = useBackgroundMusic();
   const { user, signOut } = useAuth();
   const { isAdmin } = useUserRole();
+  const { playNavigation } = useSoundEffects();
 
   const handleLogout = async () => {
     await signOut();
@@ -33,13 +35,13 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12">
-            <a href="#metodo" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
+            <a href="#metodo" onClick={playNavigation} className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Metodo
             </a>
-            <a href="#lettura" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
+            <a href="#lettura" onClick={playNavigation} className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Consultazione
             </a>
-            <a href="#percorso" className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
+            <a href="#percorso" onClick={playNavigation} className="text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors elegant-underline">
               Percorso
             </a>
             <button
@@ -51,17 +53,17 @@ const Navigation = () => {
             </button>
             
             {!user ? (
-              <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => navigate('/login')}>
+              <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => { playNavigation(); navigate('/login'); }}>
                 Login
               </Button>
             ) : (
               <>
                 {isAdmin && (
-                  <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => navigate('/admin')}>
+                  <Button variant="outline" size="sm" className="minimal-border hover-lift" onClick={() => { playNavigation(); navigate('/admin'); }}>
                     Admin
                   </Button>
                 )}
-                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <Button variant="ghost" size="sm" onClick={() => { playNavigation(); handleLogout(); }}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Esci
                 </Button>
@@ -94,37 +96,37 @@ const Navigation = () => {
             <a 
               href="#metodo" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => { playNavigation(); setIsMenuOpen(false); }}
             >
               Metodo
             </a>
             <a 
               href="#lettura" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => { playNavigation(); setIsMenuOpen(false); }}
             >
               Consultazione
             </a>
             <a 
               href="#percorso" 
               className="block text-sm tracking-wide uppercase font-light text-foreground/70 hover:text-foreground transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => { playNavigation(); setIsMenuOpen(false); }}
             >
               Percorso
             </a>
             
             {!user ? (
-              <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { navigate('/login'); setIsMenuOpen(false); }}>
+              <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { playNavigation(); navigate('/login'); setIsMenuOpen(false); }}>
                 Login
               </Button>
             ) : (
               <>
                 {isAdmin && (
-                  <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { navigate('/admin'); setIsMenuOpen(false); }}>
+                  <Button variant="outline" size="sm" className="w-full minimal-border" onClick={() => { playNavigation(); navigate('/admin'); setIsMenuOpen(false); }}>
                     Admin
                   </Button>
                 )}
-                <Button variant="ghost" size="sm" className="w-full" onClick={handleLogout}>
+                <Button variant="ghost" size="sm" className="w-full" onClick={() => { playNavigation(); handleLogout(); }}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Esci
                 </Button>

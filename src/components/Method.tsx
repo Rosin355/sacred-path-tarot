@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const Method = () => {
+  const { playNavigation } = useSoundEffects();
+  
   const features = [
     {
       number: "01",
@@ -44,6 +47,7 @@ const Method = () => {
           {features.map((feature, index) => (
             <Card
               key={index}
+              onClick={playNavigation}
               className="bg-transparent minimal-border hover-lift group cursor-pointer animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
