@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
     --card: 0 0% 10%;
@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 45 82% 53%;
+    --accent: 351 100% 52%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84.2% 60.2%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 45 82% 53%;
+    --ring: 351 100% 52%;
 
     --radius: 0rem;
 
@@ -56,7 +56,7 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 4%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
     --card: 0 0% 10%;
@@ -74,7 +74,7 @@ All colors MUST be HSL.
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 45 82% 53%;
+    --accent: 351 100% 52%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 62.8% 30.6%;
@@ -82,7 +82,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 45 82% 53%;
+    --ring: 351 100% 52%;
     --sidebar-background: 240 8% 8%;
     --sidebar-foreground: 280 20% 95%;
     --sidebar-primary: 270 50% 50%;
@@ -96,7 +96,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   .text-accent-gradient {
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(45 82% 63%) 100%);
+    background: linear-gradient(135deg, hsl(351 100% 52%) 0%, hsl(351 100% 62%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -141,12 +141,18 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-body;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Modern Antiqua', serif;
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+  h1, h2, h4, h5, h6 {
+    font-family: 'Metamorphous', serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  h3 {
+    font-family: 'UnifrakturMaguntia', serif;
+    font-weight: 400;
+    letter-spacing: 0.05em;
   }
 }
