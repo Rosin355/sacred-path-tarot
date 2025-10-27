@@ -51,11 +51,11 @@ const ScrollMorphSymbol = () => {
     if (currentSymbolRef.current === index || !symbolRef.current) return;
     
     currentSymbolRef.current = index;
-    const symbolElement = symbolRef.current.querySelector('.symbol-text');
+    const symbolElements = symbolRef.current.querySelectorAll('.symbol-text');
     
-    if (symbolElement) {
+    if (symbolElements.length > 0) {
       gsap.timeline()
-        .to(symbolElement, {
+        .to(symbolElements, {
           opacity: 0,
           scale: 0.5,
           rotation: 180,
@@ -63,9 +63,11 @@ const ScrollMorphSymbol = () => {
           ease: 'power2.in',
         })
         .call(() => {
-          symbolElement.textContent = symbols[index];
+          symbolElements.forEach(el => {
+            el.textContent = symbols[index];
+          });
         })
-        .to(symbolElement, {
+        .to(symbolElements, {
           opacity: 1,
           scale: 1,
           rotation: 360,
@@ -78,13 +80,28 @@ const ScrollMorphSymbol = () => {
   return (
     <div
       ref={symbolRef}
-      className="fixed top-20 right-8 z-50 pointer-events-none"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
       style={{
-        filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))',
+        filter: 'drop-shadow(0 0 30px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 60px rgba(212, 175, 55, 0.3))',
       }}
     >
-      <div className="symbol-text text-6xl text-accent font-light">
-        {symbols[0]}
+      {/* Particle effect layers */}
+      <div className="absolute inset-0 opacity-50 blur-sm scale-110 animate-pulse">
+        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      <div className="absolute inset-0 opacity-30 blur-md scale-125 animate-pulse" style={{ animationDelay: '0.5s' }}>
+        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
+          {symbols[0]}
+        </div>
+      </div>
+      
+      {/* Main symbol */}
+      <div className="relative">
+        <div className="symbol-text text-8xl lg:text-9xl text-accent font-light">
+          {symbols[0]}
+        </div>
       </div>
     </div>
   );

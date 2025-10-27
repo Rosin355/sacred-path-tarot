@@ -5,6 +5,7 @@ import TarotReading from "@/components/TarotReading";
 import Journey from "@/components/Journey";
 import About from "@/components/About";
 import Services from "@/components/Services";
+import QuoteBanner from "@/components/QuoteBanner";
 import Footer from "@/components/Footer";
 import ScrollMorphSymbol from "@/components/ScrollMorphSymbol";
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
         <About />
         <Services />
       </main>
+      <QuoteBanner />
       <Footer />
     </div>;
 };
