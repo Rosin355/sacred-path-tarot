@@ -2,7 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 const AUDIO_BUCKET = 'audio';
 const AUDIO_FILE_NAME = 'ambient-music.mp3';
-const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
 export const uploadAudioFile = async (file: File): Promise<{ error?: string }> => {
   try {
@@ -13,7 +13,7 @@ export const uploadAudioFile = async (file: File): Promise<{ error?: string }> =
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      return { error: 'Il file non può superare i 20MB' };
+      return { error: 'Il file non può superare i 50MB' };
     }
 
     // Delete existing file if present
