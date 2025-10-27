@@ -26,7 +26,7 @@ const About = () => {
         </div>
 
         {/* Layout a due colonne */}
-        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-16 items-center">
+        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-start">
           
           {/* Colonna sinistra: Testo */}
           <div className="space-y-8 animate-fade-in order-2 lg:order-1" style={{ animationDelay: "0.2s" }}>
@@ -76,12 +76,12 @@ const About = () => {
           </div>
 
           {/* Colonna destra: Immagine Jessica */}
-          <div className="relative animate-fade-in order-1 lg:order-2" style={{ animationDelay: "0.4s" }}>
+          <div className="relative animate-fade-in order-1 lg:order-2 max-w-md lg:max-w-none" style={{ animationDelay: "0.4s" }}>
             <div className="relative overflow-hidden minimal-border hover-lift">
               <img 
                 src={jessicaImage}
                 alt="Jessica Marin - Guida esoterica e esperta di Tarocchi"
-                className="w-full aspect-[4/5] object-cover"
+                className="w-full aspect-square object-cover"
               />
               
               {/* Decorazione con simboli astrologici negli angoli */}
