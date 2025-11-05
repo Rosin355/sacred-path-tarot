@@ -189,6 +189,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground font-body;
     font-family: 'Goudy Bookletter 1911', serif;
+    font-size: 17px;
   }
   
   h1 {

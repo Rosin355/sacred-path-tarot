@@ -56,10 +56,10 @@ const Hero = () => {
 
           {/* Title - Monumental Typography */}
           <h1 
-            className="font-display leading-[0.9] tracking-tighter text-[clamp(4rem,10vw,10rem)]" 
+            className="font-display leading-[0.9] tracking-tighter text-[clamp(5rem,12vw,12rem)]" 
             style={{ 
               animationDelay: "0.4s",
-              textShadow: "0 0 40px rgba(212, 175, 55, 0.3), 0 0 80px rgba(212, 175, 55, 0.2)"
+              textShadow: "0 0 50px hsla(var(--accent) / 0.6), 0 0 100px hsla(var(--accent) / 0.4)"
             }}
           >
             Tarocchi
@@ -78,7 +78,7 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center pointer-events-auto" style={{ animationDelay: "0.8s" }}>
-            <Button size="lg" variant="default" className="group" onClick={playNavigation}>
+            <Button size="lg" variant="glow" className="group" onClick={playNavigation}>
               Inizia il Percorso
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
             </Button>
