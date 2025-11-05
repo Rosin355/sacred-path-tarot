@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Allison', 'cursive'],
+        display: ['Love Light', 'cursive'],
         body: ['Goudy Bookletter 1911', 'serif'],
         heading3: ['UnifrakturMaguntia', 'serif'],
         consent: ['Manufacturing Consent', 'serif'],

@@ -192,9 +192,10 @@ All colors MUST be HSL.
   }
   
   h1, h2, h4, h5, h6 {
-    font-family: 'Allison', cursive;
+    font-family: 'Love Light', cursive;
     font-weight: 400;
     letter-spacing: 0.02em;
+    text-transform: none;
   }
 
   h3 {
