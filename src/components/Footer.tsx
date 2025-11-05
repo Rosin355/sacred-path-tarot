@@ -1,12 +1,8 @@
 import { Separator } from "@/components/ui/separator";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
   const celestialSymbols = ['♀', '♂', '♃', '♄', '♆', '☉'];
-
-  return (
-    <footer className="py-16 px-6 lg:px-12 relative border-t border-border/30">
+  return <footer className="py-16 px-6 lg:px-12 relative border-t border-border/30">
       <div className="container mx-auto max-w-7xl">
         
         {/* Grid principale: 4 colonne su desktop */}
@@ -16,7 +12,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <span className="text-accent text-2xl leading-none">♆</span>
-              <span className="text-lg font-display font-bold">JESSICA MARIN</span>
+              <span className="font-display font-bold text-2xl">Jessica Marin | Tarocchi per Illumiarsi</span>
             </div>
             <p className="text-sm text-muted-foreground font-light leading-relaxed">
               Guida esoterica specializzata in Tarocchi, Cabala e Alchimia Spirituale. 
@@ -26,7 +22,7 @@ const Footer = () => {
 
           {/* Colonna 2: Link rapidi */}
           <div className="space-y-4">
-            <h4 className="text-sm font-display tracking-wider">Navigazione</h4>
+            <h4 className="font-display tracking-wider text-xl">Navigazione</h4>
             <ul className="space-y-3 text-sm text-muted-foreground font-light">
               <li><a href="#metodo" className="elegant-underline">Il Metodo</a></li>
               <li><a href="#tarocchi" className="elegant-underline">Lettura Tarocchi</a></li>
@@ -66,14 +62,10 @@ const Footer = () => {
           </p>
           
           <div className="flex items-center gap-4 text-accent text-lg">
-            {celestialSymbols.map((symbol, index) => (
-              <span key={index} className="leading-none">{symbol}</span>
-            ))}
+            {celestialSymbols.map((symbol, index) => <span key={index} className="leading-none">{symbol}</span>)}
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

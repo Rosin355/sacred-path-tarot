@@ -20,7 +20,7 @@ const About = () => {
     text: "Metodo esclusivo Magico-Pratico per l'Illuminazione"
   }];
   return <section id="about-section" className="py-20 lg:py-28 px-6 lg:px-12 relative">
-      <div className="container mx-auto max-w-7xl">
+      <div className="container mx-auto max-w-7xl py-[32px]">
         
         {/* Header con simbolo astrologico */}
         <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm mb-12 animate-fade-in">
@@ -37,14 +37,14 @@ const About = () => {
           <div className="space-y-8 animate-fade-in order-2 md:order-1" style={{
           animationDelay: "0.2s"
         }}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-display leading-tight">
+            <h2 className="text-5xl md:text-6xl font-display leading-tight lg:text-8xl">
               Jessica
               <br />
               <span className="text-accent-gradient">Marin</span>
             </h2>
 
             <div className="space-y-6 text-muted-foreground font-light leading-relaxed">
-              <p className="text-lg">
+              <p className="text-2xl">
                 Da 13 anni dedico la mia vita allo studio e alla pratica delle tradizioni esoteriche più profonde. I Tarocchi non sono per me un semplice strumento divinatorio, ma una mappa sacra verso l'Illuminazione.
               </p>
               
@@ -59,7 +59,7 @@ const About = () => {
               animationDelay: `${0.6 + index * 0.1}s`
             }}>
                   <span className="text-accent text-lg leading-none mt-1">{credential.icon}</span>
-                  <p className="text-sm text-muted-foreground font-light">{credential.text}</p>
+                  <p className="text-muted-foreground font-light text-lg">{credential.text}</p>
                 </div>)}
             </div>
 
