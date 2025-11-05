@@ -6,7 +6,7 @@ import { useSoundEffects } from "@/hooks/useSoundEffects";
 
 const Hero = () => {
   const { playNavigation } = useSoundEffects();
-  
+
   const tarotImages = [
     "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
@@ -32,13 +32,11 @@ const Hero = () => {
     "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",
   ];
 
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 lg:py-32">
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 lg:py-32">
       {/* 3D Background */}
-      <div className="absolute inset-0 z-0" style={{ touchAction: 'none' }}>
-        <Canvas 
-          camera={{ position: [-10, 1.5, 10], fov: 50 }}
-          style={{ width: '100%', height: '100%' }}
-        >
+      <div className="absolute inset-0 z-0" style={{ touchAction: "none" }}>
+        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%" }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <ParticleSphere images={tarotImages} />
@@ -48,36 +46,45 @@ const Hero = () => {
       <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl pointer-events-none">
         <div className="flex flex-col items-center space-y-12 md:space-y-16 animate-fade-in-slow text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-3 px-6 py-2 minimal-border bg-card/10 backdrop-blur-sm mx-auto" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="inline-flex items-center gap-3 px-6 py-2 minimal-border bg-card/10 backdrop-blur-sm mx-auto"
+            style={{ animationDelay: "0.2s" }}
+          >
             <span className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-muted-foreground font-light">
               Metodo Esoterico & Magico-Pratico
             </span>
           </div>
 
           {/* Title - Monumental Typography */}
-          <h1 
-            className="font-display leading-[0.9] tracking-tighter text-[clamp(5rem,12vw,12rem)]" 
-            style={{ 
+          <h1
+            className="font-display leading-[0.9] tracking-tighter text-[clamp(5rem,12vw,12rem)]"
+            style={{
               animationDelay: "0.4s",
-              textShadow: "0 0 50px hsla(var(--accent) / 0.6), 0 0 100px hsla(var(--accent) / 0.4)"
+              textShadow: "0 0 50px hsla(var(--accent) / 0.6), 0 0 100px hsla(var(--accent) / 0.4)",
             }}
           >
             Tarocchi
             <br />
-            <span className="text-accent-gradient">per</span>
+            <span className="text-accent-gradient">Per</span>
             <br />
             Illuminarsi
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto font-light" style={{ animationDelay: "0.6s" }}>
+          <p
+            className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto font-light"
+            style={{ animationDelay: "0.6s" }}
+          >
             Non semplice divinazione, ma un viaggio profondo verso la{" "}
-            <span className="text-accent font-medium">Saggezza</span> attraverso
-            13 anni di pratica magica e studio esoterico approfondito.
+            <span className="text-accent font-medium">Saggezza</span> attraverso 13 anni di pratica magica e studio
+            esoterico approfondito.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center pointer-events-auto" style={{ animationDelay: "0.8s" }}>
+          <div
+            className="flex flex-col sm:flex-row gap-4 pt-4 justify-center pointer-events-auto"
+            style={{ animationDelay: "0.8s" }}
+          >
             <Button size="lg" variant="glow" className="group" onClick={playNavigation}>
               Inizia il Percorso
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
@@ -89,15 +96,19 @@ const Hero = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in pointer-events-none" style={{
-        animationDelay: "1.2s"
-      }}>
+        <div
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in pointer-events-none"
+          style={{
+            animationDelay: "1.2s",
+          }}
+        >
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
             <span className="text-xs tracking-widest uppercase font-light">Scorri</span>
             <ArrowDown className="w-4 h-4 animate-bounce" />
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 export default Hero;
