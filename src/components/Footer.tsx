@@ -26,7 +26,7 @@ const Footer = () => {
 
           {/* Colonna 2: Link rapidi */}
           <div className="space-y-4">
-            <h4 className="text-sm font-display uppercase tracking-wider">Navigazione</h4>
+            <h4 className="text-sm font-display tracking-wider">Navigazione</h4>
             <ul className="space-y-3 text-sm text-muted-foreground font-light">
               <li><a href="#metodo" className="elegant-underline">Il Metodo</a></li>
               <li><a href="#tarocchi" className="elegant-underline">Lettura Tarocchi</a></li>
@@ -37,7 +37,7 @@ const Footer = () => {
 
           {/* Colonna 3: Servizi */}
           <div className="space-y-4">
-            <h4 className="text-sm font-display uppercase tracking-wider">Servizi</h4>
+            <h4 className="text-sm font-display tracking-wider">Servizi</h4>
             <ul className="space-y-3 text-sm text-muted-foreground font-light">
               <li>Lettura Approfondita</li>
               <li>Percorso Iniziatico</li>
@@ -48,7 +48,7 @@ const Footer = () => {
 
           {/* Colonna 4: Contatti */}
           <div className="space-y-4">
-            <h4 className="text-sm font-display uppercase tracking-wider">Contatti</h4>
+            <h4 className="text-sm font-display tracking-wider">Contatti</h4>
             <ul className="space-y-3 text-sm text-muted-foreground font-light">
               <li>info@jessicamarin.com</li>
               <li>+39 XXX XXX XXXX</li>

@@ -37,10 +37,10 @@ const About = () => {
           <div className="space-y-8 animate-fade-in order-2 md:order-1" style={{
           animationDelay: "0.2s"
         }}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
-              JESSICA
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-display leading-tight">
+              Jessica
               <br />
-              <span className="text-accent-gradient">MARIN</span>
+              <span className="text-accent-gradient">Marin</span>
             </h2>
 
             <div className="space-y-6 text-muted-foreground font-light leading-relaxed">

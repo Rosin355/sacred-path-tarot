@@ -95,10 +95,10 @@ const TarotReading = () => {
             </span>
           </div>
           
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight">
-            CONSULTAZIONE
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display tracking-tight">
+            Consultazione
             <br />
-            <span className="text-accent-gradient">DEI TAROCCHI</span>
+            <span className="text-accent-gradient">dei Tarocchi</span>
           </h2>
           
           <p className="text-lg text-muted-foreground max-w-2xl font-light leading-relaxed">
@@ -206,7 +206,7 @@ const TarotReading = () => {
 
                 <div className="space-y-8 border-t border-border pt-12">
                   <div>
-                    <h3 className="text-2xl font-display font-bold mb-4 tracking-tight">
+                    <h3 className="text-2xl font-display mb-4 tracking-tight">
                       Interpretazione Esoterica
                     </h3>
                     <p className="text-muted-foreground leading-relaxed font-light">
@@ -218,7 +218,7 @@ const TarotReading = () => {
                   
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <h4 className="text-sm tracking-widest uppercase text-accent font-medium">
+                      <h4 className="text-sm tracking-widest text-accent font-medium">
                         Corrispondenze Alchemiche
                       </h4>
                       <p className="text-sm text-muted-foreground font-light leading-relaxed">
@@ -227,7 +227,7 @@ const TarotReading = () => {
                     </div>
 
                     <div className="space-y-3">
-                      <h4 className="text-sm tracking-widest uppercase text-accent font-medium">
+                      <h4 className="text-sm tracking-widest text-accent font-medium">
                         Pratica Magica Suggerita
                       </h4>
                       <p className="text-sm text-muted-foreground font-light leading-relaxed">

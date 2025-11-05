@@ -56,17 +56,17 @@ const Hero = () => {
 
           {/* Title - Monumental Typography */}
           <h1 
-            className="font-display font-bold leading-[0.9] tracking-tighter text-[clamp(4rem,10vw,10rem)]" 
+            className="font-display leading-[0.9] tracking-tighter text-[clamp(4rem,10vw,10rem)]" 
             style={{ 
               animationDelay: "0.4s",
               textShadow: "0 0 40px rgba(212, 175, 55, 0.3), 0 0 80px rgba(212, 175, 55, 0.2)"
             }}
           >
-            TAROCCHI
+            Tarocchi
             <br />
-            <span className="text-accent-gradient">PER</span>
+            <span className="text-accent-gradient">per</span>
             <br />
-            ILLUMINARSI
+            Illuminarsi
           </h1>
 
           {/* Subtitle */}

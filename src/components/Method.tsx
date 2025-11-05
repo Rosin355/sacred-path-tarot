@@ -31,10 +31,10 @@ const Method = () => {
     <section id="method-section" className="py-32 lg:py-40 px-6 lg:px-12 relative">
       <div className="container mx-auto max-w-7xl">
         <div className="mb-24 space-y-6 animate-fade-in">
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight">
-            IL METODO
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display tracking-tight">
+            Il Metodo
             <br />
-            <span className="text-accent-gradient">ESOTERICO</span>
+            <span className="text-accent-gradient">Esoterico</span>
           </h2>
           
           <p className="text-lg text-muted-foreground max-w-2xl font-light leading-relaxed">

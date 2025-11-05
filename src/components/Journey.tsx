@@ -44,10 +44,10 @@ const Journey = () => {
             </span>
           </div>
           
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight">
-            IL TUO PERCORSO
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display tracking-tight">
+            Il tuo Percorso
             <br />
-            <span className="text-accent-gradient">SPIRITUALE</span>
+            <span className="text-accent-gradient">Spirituale</span>
           </h2>
           
           <p className="text-lg text-muted-foreground max-w-2xl font-light leading-relaxed">
