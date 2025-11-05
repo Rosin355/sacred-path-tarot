@@ -57,7 +57,7 @@ const Hero = () => {
 
           {/* Title - Monumental Typography */}
           <h1
-            className="font-display leading-[0.9] tracking-tighter text-[clamp(5rem,12vw,12rem)]"
+            className="font-display leading-[0.9] tracking-tighter text-[clamp(5.5rem,13vw,14rem)]"
             style={{
               animationDelay: "0.4s",
               textShadow: "0 0 50px hsla(var(--accent) / 0.6), 0 0 100px hsla(var(--accent) / 0.4)",
