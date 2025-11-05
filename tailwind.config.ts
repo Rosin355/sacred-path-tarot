@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Metamorphous', 'serif'],
-        body: ['Modern Antiqua', 'serif'],
+        display: ['Allison', 'cursive'],
+        body: ['Goudy Bookletter 1911', 'serif'],
         heading3: ['UnifrakturMaguntia', 'serif'],
         consent: ['Manufacturing Consent', 'serif'],
       },

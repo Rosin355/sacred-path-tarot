@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 351 100% 52%;
+    --accent: 270 70% 75%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 84.2% 60.2%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 351 100% 52%;
+    --ring: 270 70% 75%;
 
     --radius: 0rem;
 
@@ -74,7 +74,7 @@ All colors MUST be HSL.
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 351 100% 52%;
+    --accent: 270 70% 75%;
     --accent-foreground: 0 0% 4%;
 
     --destructive: 0 62.8% 30.6%;
@@ -82,7 +82,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 351 100% 52%;
+    --ring: 270 70% 75%;
     --sidebar-background: 240 8% 8%;
     --sidebar-foreground: 280 20% 95%;
     --sidebar-primary: 270 50% 50%;
@@ -96,7 +96,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   .text-accent-gradient {
-    background: linear-gradient(135deg, hsl(351 100% 52%) 0%, hsl(351 100% 62%) 100%);
+    background: linear-gradient(135deg, hsl(270 70% 75%) 0%, hsl(270 70% 85%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -188,11 +188,11 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-body;
-    font-family: 'Modern Antiqua', serif;
+    font-family: 'Goudy Bookletter 1911', serif;
   }
   
   h1, h2, h4, h5, h6 {
-    font-family: 'Metamorphous', serif;
+    font-family: 'Allison', cursive;
     font-weight: 400;
     letter-spacing: 0.02em;
   }
