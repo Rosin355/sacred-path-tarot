@@ -76,7 +76,7 @@ const TarotReading = () => {
   };
   return <section id="tarot-section" className="py-32 lg:py-40 px-6 lg:px-12 relative">
       <div className="container mx-auto max-w-7xl">
-        <div className="mb-24 space-y-6 animate-fade-in">
+        <div className="mb-24 space-y-6 animate-fade-in py-[26px]">
           <div className="inline-flex items-center gap-3 px-5 py-2 minimal-border bg-card/30 backdrop-blur-sm">
             <span className="text-accent text-lg leading-none">♀</span>
             <span className="text-sm tracking-wider uppercase text-muted-foreground font-light">

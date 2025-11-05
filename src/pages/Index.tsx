@@ -15,7 +15,7 @@ const Index = () => {
       <main className="pt-16">
         <Hero />
         <Method className="py-0" />
-        <TarotReading />
+        <TarotReading className="py-0" />
         <Journey className="py-0" />
         <About className="py-0" />
         <Services className="py-0" />
