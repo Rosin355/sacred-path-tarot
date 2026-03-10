@@ -49,7 +49,7 @@ const Threshold = () => {
           <h1 className="text-foreground leading-none mb-6">
             Il Tempio delle Tre Vie
           </h1>
-          <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto">
+          <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto leading-relaxed">
             "Ogni via si apre a chi è pronto ad ascoltare."
           </p>
         </header>
