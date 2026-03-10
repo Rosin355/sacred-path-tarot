@@ -43,13 +43,13 @@ const Threshold = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
-          <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-body">
+          <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
             Jessica Marin — Un solo tempio. Tre vie interiori.
           </p>
           <h1 className="text-foreground leading-none mb-6">
             Il Tempio delle Tre Vie
           </h1>
-          <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto">
+          <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto leading-relaxed">
             "Ogni via si apre a chi è pronto ad ascoltare."
           </p>
         </header>
@@ -91,7 +91,7 @@ const Threshold = () => {
                 <h3 className="text-foreground text-lg tracking-[0.08em] group-hover:text-accent transition-colors duration-500">
                   {door.title}
                 </h3>
-                <p className="text-muted-foreground text-xs tracking-wide font-body leading-relaxed">
+                <p className="text-muted-foreground text-xs tracking-wide font-caption leading-relaxed">
                   {door.subtitle}
                 </p>
                 {/* Threshold symbol */}
