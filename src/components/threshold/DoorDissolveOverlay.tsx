@@ -147,7 +147,7 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     const doorW = doorRect.width;
     const doorH = doorRect.height;
 
-    const cellSize = 4; // Size of each dissolve cell in CSS pixels
+    const cellSize = 3; // Smaller cells = finer dissolve granularity
 
     const animate = () => {
       ctx.clearRect(0, 0, cw, ch);
