@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 interface ViaLayoutProps {
@@ -12,9 +12,20 @@ interface ViaLayoutProps {
 const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const navigate = useNavigate();
   const { isMuted, toggleMute } = useBackgroundMusic();
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    // Trigger fade-in after mount
+    const t = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
 
   return (
-    <div className={`min-h-screen bg-background ${viaClass}`}>
+    <div
+      className={`min-h-screen bg-background ${viaClass} transition-opacity duration-[1200ms] ease-out ${
+        entered ? "opacity-100" : "opacity-0"
+      }`}
+    >
       {/* Top bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/20">
         <button

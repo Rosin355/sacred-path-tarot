@@ -4,7 +4,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ThresholdDoor, { type DoorData } from "@/components/threshold/ThresholdDoor";
-import TextDissolveOverlay from "@/components/threshold/TextDissolveOverlay";
+import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 
 const doors: DoorData[] = [
@@ -47,10 +47,10 @@ const Threshold = () => {
 
   const [phase, setPhase] = useState<Phase>("idle");
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
-  const [titleRect, setTitleRect] = useState<DOMRect | null>(null);
+  const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const titleRefs = useRef<Record<string, HTMLHeadingElement | null>>({});
+  const doorButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
@@ -76,21 +76,19 @@ const Threshold = () => {
         return;
       }
 
-      // Capture title rect
-      const titleEl = titleRefs.current[door.id];
-      if (titleEl) {
-        setTitleRect(titleEl.getBoundingClientRect());
+      // Capture the full door button rect
+      const doorEl = doorButtonRefs.current[door.id];
+      if (doorEl) {
+        setDoorRect(doorEl.getBoundingClientRect());
       }
 
       setPhase("dissolving");
+      setTimeout(() => setShowOverlay(true), 400);
 
-      // Start dark overlay after brief delay
-      setTimeout(() => setShowOverlay(true), 300);
-
-      // Fallback: navigate after 3s no matter what
+      // Fallback: navigate after 4s
       fallbackTimerRef.current = setTimeout(() => {
         navigate(door.route);
-      }, 3000);
+      }, 4000);
     },
     [phase, navigate, reducedMotion]
   );
@@ -103,10 +101,6 @@ const Threshold = () => {
       navigate(activeDoor.route);
     }
   }, [activeDoor, navigate, phase]);
-
-  const handleOverlayComplete = useCallback(() => {
-    // Overlay finished fading in — dissolve should trigger nav
-  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
@@ -150,8 +144,8 @@ const Threshold = () => {
               phase={phase}
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
-              onTitleRef={(id, el) => {
-                titleRefs.current[id] = el;
+              ref={(el) => {
+                doorButtonRefs.current[door.id] = el;
               }}
             />
           ))}
@@ -166,11 +160,12 @@ const Threshold = () => {
         </p>
       </div>
 
-      {/* Text dissolve overlay */}
+      {/* Door dissolve overlay */}
       {activeDoor && !reducedMotion && (
-        <TextDissolveOverlay
-          title={activeDoor.title}
-          startRect={titleRect}
+        <DoorDissolveOverlay
+          doorRect={doorRect}
+          titleText={activeDoor.title}
+          subtitleText={activeDoor.subtitle}
           active={phase === "dissolving"}
           onComplete={handleDissolveComplete}
           doorColor={DOOR_COLORS[activeDoor.id]}
@@ -182,7 +177,6 @@ const Threshold = () => {
         <PetalBurstOverlay
           active={true}
           doorColor={DOOR_COLORS[activeDoor.id]}
-          onComplete={handleOverlayComplete}
         />
       )}
     </div>
