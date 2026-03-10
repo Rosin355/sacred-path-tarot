@@ -135,9 +135,9 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     tl.to(progressRef.current, {
       value: 1,
       duration: DISSOLVE_DURATION,
-      ease: "power1.inOut",
+      ease: "power2.out",
       onComplete: () => {
-        setTimeout(() => onComplete?.(), 400);
+        onComplete?.();
       },
     });
 
