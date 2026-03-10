@@ -124,7 +124,7 @@ const Threshold = () => {
             Entra in una porta del tempio
           </p>
           <h1 className="text-foreground leading-none mb-6 font-display">
-            Tre vie Per Illuminarsi
+            Tre vie <em className="italic">Per</em> Illuminarsi
           </h1>
           <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto leading-relaxed">
             "Ogni via si apre a chi è pronto ad ascoltare."
