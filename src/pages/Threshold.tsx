@@ -145,7 +145,7 @@ const Threshold = () => {
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
               ref={(el) => {
-                doorButtonRefs.current[door.id] = el;
+                doorHandleRefs.current[door.id] = el;
               }}
             />
           ))}
