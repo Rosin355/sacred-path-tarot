@@ -81,6 +81,7 @@ const Threshold = () => {
       const handle = doorHandleRefs.current[door.id];
       if (handle) {
         setDoorRect(handle.getTextRect());
+        activeTextRef.current = handle.getTextEl();
       }
 
       setPhase("dissolving");
