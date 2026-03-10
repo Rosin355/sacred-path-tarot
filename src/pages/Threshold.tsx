@@ -121,7 +121,7 @@ const Threshold = () => {
           } ${phase !== "idle" ? "opacity-0 transition-opacity duration-500" : ""}`}
         >
           <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
-            Jessica Marin — Un solo tempio. Tre vie interiori.
+            Entra in una porta del tempio
           </p>
           <h1 className="text-foreground leading-none mb-6 font-display">
             Il Tempio delle Tre Vie
