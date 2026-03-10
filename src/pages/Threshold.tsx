@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
-import templeArch from "@/assets/temple-arch.jpg";
+import templeArch from "@/assets/temple-arch.png";
 
 const doors = [
   {
