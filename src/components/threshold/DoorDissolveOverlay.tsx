@@ -59,7 +59,7 @@ function randomRange(min: number, max: number) {
 }
 
 const NOISE_SCALE = 0.06;
-const DISSOLVE_DURATION = 2.4;
+const DISSOLVE_DURATION = 1.8;
 const PADDING = 160; // Extra space around door for particles to fly into
 
 const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props) => {
@@ -135,9 +135,9 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     tl.to(progressRef.current, {
       value: 1,
       duration: DISSOLVE_DURATION,
-      ease: "power1.inOut",
+      ease: "power2.out",
       onComplete: () => {
-        setTimeout(() => onComplete?.(), 400);
+        onComplete?.();
       },
     });
 
@@ -213,9 +213,6 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
           ctx.moveTo(0, -sz);
           ctx.bezierCurveTo(sz * 0.6, -sz * 0.6, sz * 0.8, sz * 0.3, 0, sz);
           ctx.bezierCurveTo(-sz * 0.8, sz * 0.3, -sz * 0.6, -sz * 0.6, 0, -sz);
-          ctx.fill();
-          ctx.shadowColor = p.color + "0.3)";
-          ctx.shadowBlur = 6;
           ctx.fill();
         } else {
           ctx.fillStyle = p.color + p.opacity + ")";

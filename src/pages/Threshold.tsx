@@ -83,12 +83,12 @@ const Threshold = () => {
       }
 
       setPhase("dissolving");
-      setTimeout(() => setShowOverlay(true), 400);
+      setTimeout(() => setShowOverlay(true), 300);
 
-      // Fallback: navigate after 4s
+      // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
         navigate(door.route);
-      }, 4000);
+      }, 3000);
     },
     [phase, navigate, reducedMotion]
   );
