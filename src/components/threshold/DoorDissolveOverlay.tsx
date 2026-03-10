@@ -6,6 +6,8 @@ interface Props {
   active: boolean;
   onComplete?: () => void;
   doorColor: string; // HSL like "270 55% 45%"
+  /** Ref to the text element so we can fade it out in sync */
+  textRef?: React.RefObject<HTMLDivElement>;
 }
 
 // ── Lightweight 2D value noise ──
@@ -60,9 +62,8 @@ function randomRange(min: number, max: number) {
 
 const NOISE_SCALE = 0.06;
 const DISSOLVE_DURATION = 1.8;
-const PADDING = 400; // Large padding so particles never hit boundaries
 
-const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props) => {
+const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor, textRef }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
   const progressRef = useRef({ value: 0 });
@@ -73,10 +74,9 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
 
   const spawnParticles = useCallback(
     (worldX: number, worldY: number) => {
-      // Spawn a cluster of 2-4 particles per dissolve point
       const count = Math.floor(randomRange(2, 5));
       for (let i = 0; i < count; i++) {
-        const isPetal = Math.random() > 0.4; // 60% petals
+        const isPetal = Math.random() > 0.4;
         const angle = randomRange(0, Math.PI * 2);
         const speed = isPetal ? randomRange(0.4, 2.8) : randomRange(0.15, 1.4);
         const jitter = randomRange(-3, 3);
@@ -110,22 +110,16 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Use full viewport so particles are never clipped
     const dpr = window.devicePixelRatio || 1;
-    const cw = doorRect.width + PADDING * 2;
-    const ch = doorRect.height + PADDING * 2;
-    const canvasLeft = doorRect.left - PADDING;
-    const canvasTop = doorRect.top - PADDING;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    canvas.width = cw * dpr;
-    canvas.height = ch * dpr;
-    canvas.style.width = `${cw}px`;
-    canvas.style.height = `${ch}px`;
-    canvas.style.left = `${canvasLeft}px`;
-    canvas.style.top = `${canvasTop}px`;
+    canvas.width = vw * dpr;
+    canvas.height = vh * dpr;
+    canvas.style.width = `${vw}px`;
+    canvas.style.height = `${vh}px`;
     ctx.scale(dpr, dpr);
-
-    // Get background color from CSS
-    const bgRaw = getComputedStyle(document.documentElement).getPropertyValue("--background").trim();
 
     spawnedRef.current.clear();
     particlesRef.current = [];
@@ -141,45 +135,50 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
       },
     });
 
-    // The door area within the canvas (offset by padding)
-    const doorX = PADDING;
-    const doorY = PADDING;
     const doorW = doorRect.width;
     const doorH = doorRect.height;
-
-    const cellSize = 3; // Smaller cells = finer dissolve granularity
+    const cellSize = 3;
+    // Center of the text area in viewport coords for radial glow
+    const glowCx = doorRect.left + doorW / 2;
+    const glowCy = doorRect.top + doorH / 2;
 
     const animate = () => {
-      ctx.clearRect(0, 0, cw, ch);
+      ctx.clearRect(0, 0, vw, vh);
 
       const progress = progressRef.current.value;
 
-      // Paint background-colored cells over the door area based on noise
-      // This "erases" the door underneath
+      // Fade out the real text element in sync with dissolve
+      if (textRef?.current) {
+        textRef.current.style.opacity = String(Math.max(0, 1 - progress * 1.5));
+      }
+
+      // Spawn particles based on noise threshold over the text area
       for (let cy = 0; cy < doorH; cy += cellSize) {
         for (let cx = 0; cx < doorW; cx += cellSize) {
           const nx = cx * NOISE_SCALE;
           const ny = cy * NOISE_SCALE;
           const n = fbmNoise(nx, ny);
 
-          if (n < progress) {
-            // Draw a background-colored cell to hide the door pixel
-            ctx.fillStyle = `hsl(${bgRaw})`;
-            ctx.fillRect(doorX + cx, doorY + cy, cellSize, cellSize);
-
-            // Spawn particles at dissolve boundary — denser grid
-            const spawnKey = `${Math.floor(cx / (cellSize * 2))},${Math.floor(cy / (cellSize * 2))}`;
-            if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.07) {
-              spawnedRef.current.add(spawnKey);
-              const worldX = doorRect.left + cx;
-              const worldY = doorRect.top + cy;
-              spawnParticles(worldX, worldY);
-            }
+          const spawnKey = `${Math.floor(cx / (cellSize * 2))},${Math.floor(cy / (cellSize * 2))}`;
+          if (!spawnedRef.current.has(spawnKey) && n < progress && Math.abs(n - progress) < 0.07) {
+            spawnedRef.current.add(spawnKey);
+            spawnParticles(doorRect.left + cx, doorRect.top + cy);
           }
         }
       }
 
-      // Draw particles (converted from world to canvas-local coords)
+      // Draw radial glow behind particles
+      if (particlesRef.current.length > 0) {
+        const glowRadius = 60 + progress * 120;
+        const glowGrad = ctx.createRadialGradient(glowCx, glowCy, 0, glowCx, glowCy, glowRadius);
+        const glowAlpha = Math.min(0.25, progress * 0.3);
+        glowGrad.addColorStop(0, `hsla(${h}, ${s}%, ${l + 15}%, ${glowAlpha})`);
+        glowGrad.addColorStop(1, `hsla(${h}, ${s}%, ${l}%, 0)`);
+        ctx.fillStyle = glowGrad;
+        ctx.fillRect(glowCx - glowRadius, glowCy - glowRadius, glowRadius * 2, glowRadius * 2);
+      }
+
+      // Draw particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
         if (p.life >= p.maxLife) {
@@ -197,12 +196,8 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
         p.vy += 0.012;
         p.rotation += p.vr;
 
-        // World → canvas-local
-        const lx = p.x - canvasLeft;
-        const ly = p.y - canvasTop;
-
         ctx.save();
-        ctx.translate(lx, ly);
+        ctx.translate(p.x, p.y);
         ctx.rotate((p.rotation * Math.PI) / 180);
         ctx.globalAlpha = p.opacity;
 
@@ -231,15 +226,19 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     return () => {
       cancelAnimationFrame(rafRef.current);
       tl.kill();
+      // Reset text opacity on cleanup
+      if (textRef?.current) {
+        textRef.current.style.opacity = "";
+      }
     };
-  }, [active, doorRect, doorColor, onComplete, spawnParticles, h, s, l]);
+  }, [active, doorRect, doorColor, onComplete, spawnParticles, h, s, l, textRef]);
 
   if (!active || !doorRect) return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed pointer-events-none"
+      className="fixed inset-0 pointer-events-none"
       style={{ zIndex: 9999 }}
       aria-hidden="true"
     />
