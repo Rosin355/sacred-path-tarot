@@ -19,7 +19,6 @@ interface Props {
 const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
   ({ door, phase, isActive, onClick }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
-    const hidden = phase !== "idle" && isActive; // Hide when canvas takes over
 
     return (
       <button
@@ -31,7 +30,6 @@ const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
           transition-all duration-700 ease-out hover:scale-[1.03]
           ${door.colorClass}
           ${dimmed ? "opacity-0 scale-95 pointer-events-none" : ""}
-          ${hidden ? "invisible" : ""}
         `}
         style={{
           transition: dimmed

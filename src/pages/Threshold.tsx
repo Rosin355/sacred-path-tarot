@@ -164,8 +164,6 @@ const Threshold = () => {
       {activeDoor && !reducedMotion && (
         <DoorDissolveOverlay
           doorRect={doorRect}
-          titleText={activeDoor.title}
-          subtitleText={activeDoor.subtitle}
           active={phase === "dissolving"}
           onComplete={handleDissolveComplete}
           doorColor={DOOR_COLORS[activeDoor.id]}
