@@ -12,6 +12,7 @@ export interface DoorData {
 export interface DoorHandle {
   getTextRect: () => DOMRect | null;
   getButtonEl: () => HTMLButtonElement | null;
+  getTextEl: () => HTMLDivElement | null;
 }
 
 interface Props {
@@ -30,6 +31,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
     useImperativeHandle(ref, () => ({
       getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
       getButtonEl: () => buttonRef.current,
+      getTextEl: () => textRef.current,
     }));
 
     return (

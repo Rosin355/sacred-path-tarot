@@ -49,6 +49,7 @@ const Threshold = () => {
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const activeTextRef = useRef<HTMLDivElement | null>(null);
 
   const doorHandleRefs = useRef<Record<string, DoorHandle | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -80,6 +81,7 @@ const Threshold = () => {
       const handle = doorHandleRefs.current[door.id];
       if (handle) {
         setDoorRect(handle.getTextRect());
+        activeTextRef.current = handle.getTextEl();
       }
 
       setPhase("dissolving");
@@ -167,6 +169,7 @@ const Threshold = () => {
           active={phase === "dissolving"}
           onComplete={handleDissolveComplete}
           doorColor={DOOR_COLORS[activeDoor.id]}
+          textRef={activeTextRef as React.RefObject<HTMLDivElement>}
         />
       )}
 
