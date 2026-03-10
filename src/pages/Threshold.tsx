@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
-import templeArch from "@/assets/temple-arch.png";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import ThresholdDoor, { type DoorData } from "@/components/threshold/ThresholdDoor";
+import GhostTitleOverlay from "@/components/threshold/GhostTitleOverlay";
+import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 
-const doors = [
+const doors: DoorData[] = [
   {
     id: "arcani",
     title: "La Via degli Arcani",
@@ -28,15 +31,84 @@ const doors = [
   },
 ];
 
+const DOOR_COLORS: Record<string, string> = {
+  arcani: "270 55% 45%",
+  respiro: "175 40% 45%",
+  ispirazione: "38 55% 52%",
+};
+
+type Phase = "idle" | "title-centering" | "petal-burst" | "navigating";
+
 const Threshold = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const { isMuted, toggleMute } = useBackgroundMusic();
+  const reducedMotion = useReducedMotion();
+
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
+  const [titleRect, setTitleRect] = useState<DOMRect | null>(null);
+  const [showPetals, setShowPetals] = useState(false);
+
+  const titleRefs = useRef<Record<string, HTMLHeadingElement | null>>({});
+  const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(t);
   }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+  }, []);
+
+  const handleDoorClick = useCallback(
+    (door: DoorData) => {
+      if (phase !== "idle") return;
+
+      setActiveDoor(door);
+
+      if (reducedMotion) {
+        // Reduced motion: simple glow + delayed nav
+        setPhase("navigating");
+        setTimeout(() => navigate(door.route), 400);
+        return;
+      }
+
+      // Capture title rect
+      const titleEl = titleRefs.current[door.id];
+      if (titleEl) {
+        setTitleRect(titleEl.getBoundingClientRect());
+      }
+
+      setPhase("title-centering");
+
+      // Start petal burst after short delay
+      setTimeout(() => setShowPetals(true), 150);
+
+      // Fallback: navigate after 3s no matter what
+      fallbackTimerRef.current = setTimeout(() => {
+        navigate(door.route);
+      }, 3000);
+    },
+    [phase, navigate, reducedMotion]
+  );
+
+  const handleTitleCentered = useCallback(() => {
+    setPhase("petal-burst");
+  }, []);
+
+  const handlePetalComplete = useCallback(() => {
+    if (phase === "navigating") return;
+    setPhase("navigating");
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    if (activeDoor) {
+      navigate(activeDoor.route);
+    }
+  }, [activeDoor, navigate, phase]);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
@@ -57,7 +129,7 @@ const Threshold = () => {
         <header
           className={`text-center mb-12 md:mb-16 transition-all duration-[1200ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
-          }`}
+          } ${phase !== "idle" ? "opacity-0 transition-opacity duration-500" : ""}`}
         >
           <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
             Jessica Marin — Un solo tempio. Tre vie interiori.
@@ -78,47 +150,18 @@ const Threshold = () => {
           }`}
         >
           {doors.map((door) => (
-            <button
+            <ThresholdDoor
               key={door.id}
-              onClick={() => navigate(door.route)}
-              className={`group relative w-[200px] md:w-[230px] cursor-pointer
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
-                transition-transform duration-700 ease-out hover:scale-[1.03]
-                ${door.colorClass}
-              `}
-              aria-label={`Entra ne ${door.title}`}
-            >
-              {/* Arch container */}
-              <div className="relative">
-                {/* Divine light glow behind the arch */}
-                <div className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" aria-hidden="true" />
-
-                {/* Divine light animation inside arch */}
-                <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden">
-                  <div className="absolute inset-0 divine-light-inner" aria-hidden="true" />
-                  {/* Fog effect */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[40%] fog-effect" aria-hidden="true" />
-                </div>
-
-                {/* Arch image */}
-                <img
-                  src={templeArch}
-                  alt=""
-                  className="relative z-10 w-full h-auto pointer-events-none select-none"
-                  draggable={false}
-                />
-              </div>
-
-              {/* Text below arch */}
-              <div className="relative z-10 mt-4 text-center space-y-2">
-                <h3 className="text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500">
-                  {door.title}
-                </h3>
-                <p className="text-muted-foreground text-[0.65rem] tracking-wide font-caption leading-relaxed">
-                  {door.subtitle}
-                </p>
-              </div>
-            </button>
+              door={door}
+              phase={phase}
+              isActive={activeDoor?.id === door.id}
+              onClick={handleDoorClick}
+              titleRef={{
+                current: titleRefs.current[door.id] ?? null,
+                // @ts-ignore - manual ref assignment
+              } as any}
+              ref={undefined}
+            />
           ))}
         </nav>
 
@@ -126,11 +169,31 @@ const Threshold = () => {
         <p
           className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 ${
             visible ? "opacity-100" : "opacity-0"
-          }`}
+          } ${phase !== "idle" ? "opacity-0" : ""}`}
         >
           Scegli la soglia che ti chiama
         </p>
       </div>
+
+      {/* Ghost title overlay */}
+      {activeDoor && !reducedMotion && (
+        <GhostTitleOverlay
+          title={activeDoor.title}
+          startRect={titleRect}
+          active={phase === "title-centering" || phase === "petal-burst"}
+          onCentered={handleTitleCentered}
+          doorColor={`hsl(${DOOR_COLORS[activeDoor.id]})`}
+        />
+      )}
+
+      {/* Petal burst overlay */}
+      {showPetals && activeDoor && !reducedMotion && (
+        <PetalBurstOverlay
+          active={true}
+          doorColor={DOOR_COLORS[activeDoor.id]}
+          onComplete={handlePetalComplete}
+        />
+      )}
     </div>
   );
 };
