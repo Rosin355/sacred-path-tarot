@@ -49,6 +49,7 @@ const Threshold = () => {
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const activeTextRef = useRef<HTMLDivElement | null>(null);
 
   const doorHandleRefs = useRef<Record<string, DoorHandle | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
