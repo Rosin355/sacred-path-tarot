@@ -1,5 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
+import { Canvas } from "@react-three/fiber";
+import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
+import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+
+const tarotImages = [
+  "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",
+];
 
 const doors = [
   {
@@ -25,6 +54,7 @@ const doors = [
 const Threshold = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
+  const { isMuted, toggleMute } = useBackgroundMusic();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -33,8 +63,26 @@ const Threshold = () => {
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
+      {/* 3D Starry Background */}
+      <div className="absolute inset-0 z-0" style={{ touchAction: "none" }}>
+        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%" }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <ParticleSphere images={tarotImages} />
+        </Canvas>
+      </div>
+
       {/* Ambient background drift */}
-      <div className="absolute inset-0 threshold-ambient" aria-hidden="true" />
+      <div className="absolute inset-0 z-[1] threshold-ambient" aria-hidden="true" />
+
+      {/* Mute/Unmute Button */}
+      <button
+        onClick={toggleMute}
+        className="fixed top-6 right-6 z-50 p-2 text-muted-foreground hover:text-foreground transition-colors duration-300"
+        aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
+      >
+        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+      </button>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
         {/* Invocation */}
@@ -46,7 +94,7 @@ const Threshold = () => {
           <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
             Jessica Marin — Un solo tempio. Tre vie interiori.
           </p>
-          <h1 className="text-foreground leading-none mb-6">
+          <h1 className="text-foreground leading-none mb-6 font-display">
             Il Tempio delle Tre Vie
           </h1>
           <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto leading-relaxed">
@@ -77,24 +125,17 @@ const Threshold = () => {
               `}
               aria-label={`Entra ne ${door.title}`}
             >
-              {/* Stone texture overlay */}
               <div className="absolute inset-0 rounded-t-[2rem] opacity-[0.03] bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,currentColor_2px,currentColor_3px)]" aria-hidden="true" />
-              
-              {/* Glow backdrop on hover */}
               <div className="absolute inset-0 rounded-t-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 door-glow-backdrop" aria-hidden="true" />
-
-              {/* Door arch line */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-12 bg-gradient-to-b from-muted-foreground/30 to-transparent" aria-hidden="true" />
 
-              {/* Content */}
               <div className="relative z-10 p-6 text-center space-y-3">
-                <h3 className="text-foreground text-lg tracking-[0.08em] group-hover:text-accent transition-colors duration-500">
+                <h3 className="text-foreground text-lg tracking-[0.08em] font-display group-hover:text-accent transition-colors duration-500">
                   {door.title}
                 </h3>
                 <p className="text-muted-foreground text-xs tracking-wide font-caption leading-relaxed">
                   {door.subtitle}
                 </p>
-                {/* Threshold symbol */}
                 <div className="w-8 h-[1px] mx-auto bg-muted-foreground/30 group-hover:bg-accent/60 transition-colors duration-500" aria-hidden="true" />
               </div>
             </button>
@@ -103,7 +144,7 @@ const Threshold = () => {
 
         {/* Bottom subtle text */}
         <p
-          className={`mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase transition-all duration-[1800ms] ease-out delay-1000 ${
+          className={`mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >
