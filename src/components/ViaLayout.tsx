@@ -49,7 +49,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
     <div className={`min-h-screen bg-background ${viaClass}`}>
       {/* Continuity overlay — matches PetalBurstOverlay's final state */}
       <div
-        className="fixed inset-0 pointer-events-none transition-opacity duration-[1200ms] ease-out"
+        className="fixed inset-0 pointer-events-none transition-opacity duration-[1800ms] ease-out"
         style={{
           zIndex: 9999,
           background: overlayBg,

@@ -112,7 +112,7 @@ const Threshold = () => {
       if (d) {
         navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
       }
-    }, 400);
+    }, 800);
   }, [navigate]);
 
   return (
