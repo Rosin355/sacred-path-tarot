@@ -71,28 +71,33 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
 
   const { h, s, l } = parseHSL(doorColor);
 
-  const spawnParticle = useCallback(
+  const spawnParticles = useCallback(
     (worldX: number, worldY: number) => {
-      const isPetal = Math.random() > 0.5;
-      const angle = randomRange(0, Math.PI * 2);
-      const speed = isPetal ? randomRange(0.5, 2.2) : randomRange(0.2, 1.0);
+      // Spawn a cluster of 2-4 particles per dissolve point
+      const count = Math.floor(randomRange(2, 5));
+      for (let i = 0; i < count; i++) {
+        const isPetal = Math.random() > 0.4; // 60% petals
+        const angle = randomRange(0, Math.PI * 2);
+        const speed = isPetal ? randomRange(0.4, 2.8) : randomRange(0.15, 1.4);
+        const jitter = randomRange(-3, 3);
 
-      particlesRef.current.push({
-        x: worldX,
-        y: worldY,
-        size: isPetal ? randomRange(5, 15) : randomRange(1.5, 4),
-        rotation: randomRange(0, 360),
-        opacity: 0,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - randomRange(0.2, 0.9),
-        vr: isPetal ? randomRange(-2.5, 2.5) : 0,
-        life: 0,
-        maxLife: randomRange(70, 140),
-        color: isPetal
-          ? `hsla(${h + randomRange(-15, 15)}, ${s + randomRange(-10, 10)}%, ${l + randomRange(-5, 15)}%, `
-          : `hsla(${h}, ${s - 10}%, ${l + 20}%, `,
-        type: isPetal ? "petal" : "dust",
-      });
+        particlesRef.current.push({
+          x: worldX + jitter,
+          y: worldY + jitter,
+          size: isPetal ? randomRange(4, 18) : randomRange(1, 5),
+          rotation: randomRange(0, 360),
+          opacity: 0,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - randomRange(0.1, 1.1),
+          vr: isPetal ? randomRange(-3, 3) : randomRange(-1, 1),
+          life: 0,
+          maxLife: randomRange(80, 160),
+          color: isPetal
+            ? `hsla(${h + randomRange(-20, 20)}, ${s + randomRange(-12, 12)}%, ${l + randomRange(-8, 20)}%, `
+            : `hsla(${h + randomRange(-5, 5)}, ${s - 10}%, ${l + randomRange(15, 30)}%, `,
+          type: isPetal ? "petal" : "dust",
+        });
+      }
     },
     [h, s, l]
   );
@@ -142,7 +147,7 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
     const doorW = doorRect.width;
     const doorH = doorRect.height;
 
-    const cellSize = 4; // Size of each dissolve cell in CSS pixels
+    const cellSize = 3; // Smaller cells = finer dissolve granularity
 
     const animate = () => {
       ctx.clearRect(0, 0, cw, ch);
@@ -162,13 +167,13 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
             ctx.fillStyle = `hsl(${bgRaw})`;
             ctx.fillRect(doorX + cx, doorY + cy, cellSize, cellSize);
 
-            // Spawn particle at dissolve boundary
-            const spawnKey = `${Math.floor(cx / (cellSize * 3))},${Math.floor(cy / (cellSize * 3))}`;
-            if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.05) {
+            // Spawn particles at dissolve boundary — denser grid
+            const spawnKey = `${Math.floor(cx / (cellSize * 2))},${Math.floor(cy / (cellSize * 2))}`;
+            if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.07) {
               spawnedRef.current.add(spawnKey);
               const worldX = doorRect.left + cx;
               const worldY = doorRect.top + cy;
-              spawnParticle(worldX, worldY);
+              spawnParticles(worldX, worldY);
             }
           }
         }
@@ -230,7 +235,7 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
       cancelAnimationFrame(rafRef.current);
       tl.kill();
     };
-  }, [active, doorRect, doorColor, onComplete, spawnParticle, h, s, l]);
+  }, [active, doorRect, doorColor, onComplete, spawnParticles, h, s, l]);
 
   if (!active || !doorRect) return null;
 
