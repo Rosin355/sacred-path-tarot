@@ -156,11 +156,9 @@ const Threshold = () => {
               phase={phase}
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
-              titleRef={{
-                current: titleRefs.current[door.id] ?? null,
-                // @ts-ignore - manual ref assignment
-              } as any}
-              ref={undefined}
+              onTitleRef={(id, el) => {
+                titleRefs.current[id] = el;
+              }}
             />
           ))}
         </nav>
