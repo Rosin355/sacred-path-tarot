@@ -43,7 +43,7 @@ const Threshold = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           }`}
         >
-          <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-body">
+          <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
             Jessica Marin — Un solo tempio. Tre vie interiori.
           </p>
           <h1 className="text-foreground leading-none mb-6">
