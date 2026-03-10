@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import ThresholdDoor, { type DoorData } from "@/components/threshold/ThresholdDoor";
+import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 
@@ -50,7 +50,7 @@ const Threshold = () => {
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const doorButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const doorHandleRefs = useRef<Record<string, DoorHandle | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
@@ -76,10 +76,10 @@ const Threshold = () => {
         return;
       }
 
-      // Capture the full door button rect
-      const doorEl = doorButtonRefs.current[door.id];
-      if (doorEl) {
-        setDoorRect(doorEl.getBoundingClientRect());
+      // Capture the text area rect only
+      const handle = doorHandleRefs.current[door.id];
+      if (handle) {
+        setDoorRect(handle.getTextRect());
       }
 
       setPhase("dissolving");
@@ -145,7 +145,7 @@ const Threshold = () => {
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
               ref={(el) => {
-                doorButtonRefs.current[door.id] = el;
+                doorHandleRefs.current[door.id] = el;
               }}
             />
           ))}
