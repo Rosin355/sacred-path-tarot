@@ -169,6 +169,7 @@ const Threshold = () => {
           active={phase === "dissolving"}
           onComplete={handleDissolveComplete}
           doorColor={DOOR_COLORS[activeDoor.id]}
+          textRef={activeTextRef as React.RefObject<HTMLDivElement>}
         />
       )}
 

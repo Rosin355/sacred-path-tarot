@@ -31,6 +31,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
     useImperativeHandle(ref, () => ({
       getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
       getButtonEl: () => buttonRef.current,
+      getTextEl: () => textRef.current,
     }));
 
     return (
