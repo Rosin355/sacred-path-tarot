@@ -214,9 +214,6 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
           ctx.bezierCurveTo(sz * 0.6, -sz * 0.6, sz * 0.8, sz * 0.3, 0, sz);
           ctx.bezierCurveTo(-sz * 0.8, sz * 0.3, -sz * 0.6, -sz * 0.6, 0, -sz);
           ctx.fill();
-          ctx.shadowColor = p.color + "0.3)";
-          ctx.shadowBlur = 6;
-          ctx.fill();
         } else {
           ctx.fillStyle = p.color + p.opacity + ")";
           ctx.beginPath();
