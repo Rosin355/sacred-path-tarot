@@ -26,7 +26,7 @@ const PetalBurstOverlay = ({ active, doorColor, onComplete }: Props) => {
       { opacity: 0 },
       {
         opacity: 1,
-        duration: 1.8,
+        duration: 1.2,
         ease: "power2.inOut",
         onComplete: () => onComplete?.(),
       }

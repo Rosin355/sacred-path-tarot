@@ -89,19 +89,22 @@ const Threshold = () => {
 
       // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
-        navigate(door.route);
+        navigate(door.route, { state: { doorColor: DOOR_COLORS[door.id] } });
       }, 3000);
     },
     [phase, navigate, reducedMotion]
   );
 
-  const handleDissolveComplete = useCallback(() => {
+  const handleOverlayComplete = useCallback(() => {
     if (phase === "navigating") return;
     setPhase("navigating");
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
-    if (activeDoor) {
-      navigate(activeDoor.route);
-    }
+    // Small delay while fully dark, then navigate with color state
+    setTimeout(() => {
+      if (activeDoor) {
+        navigate(activeDoor.route, { state: { doorColor: DOOR_COLORS[activeDoor.id] } });
+      }
+    }, 400);
   }, [activeDoor, navigate, phase]);
 
   return (
@@ -167,7 +170,7 @@ const Threshold = () => {
         <DoorDissolveOverlay
           doorRect={doorRect}
           active={phase === "dissolving"}
-          onComplete={handleDissolveComplete}
+          onComplete={() => {}}
           doorColor={DOOR_COLORS[activeDoor.id]}
           textRef={activeTextRef as React.RefObject<HTMLDivElement>}
         />
@@ -178,6 +181,7 @@ const Threshold = () => {
         <PetalBurstOverlay
           active={true}
           doorColor={DOOR_COLORS[activeDoor.id]}
+          onComplete={handleOverlayComplete}
         />
       )}
     </div>

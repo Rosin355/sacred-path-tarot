@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
@@ -9,23 +9,46 @@ interface ViaLayoutProps {
   title: string;
 }
 
+function parseHSL(color: string): { h: number; s: number; l: number } {
+  const nums = color.match(/[\d.]+/g);
+  if (!nums || nums.length < 3) return { h: 270, s: 55, l: 45 };
+  return { h: parseFloat(nums[0]), s: parseFloat(nums[1]), l: parseFloat(nums[2]) };
+}
+
 const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isMuted, toggleMute } = useBackgroundMusic();
-  const [entered, setEntered] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(true);
+
+  const doorColor = (location.state as any)?.doorColor as string | undefined;
 
   useEffect(() => {
-    // Trigger fade-in after mount
-    const t = requestAnimationFrame(() => setEntered(true));
+    // Start fading out the overlay after mount
+    const t = requestAnimationFrame(() => setOverlayVisible(false));
     return () => cancelAnimationFrame(t);
   }, []);
 
+  const overlayBg = doorColor
+    ? (() => {
+        const { h, s, l } = parseHSL(doorColor);
+        return `radial-gradient(ellipse at center, hsla(${h}, ${s}%, ${Math.max(l - 25, 3)}%, 1) 0%, hsla(${h}, ${s}%, ${Math.max(l - 35, 2)}%, 1) 100%)`;
+      })()
+    : "hsl(var(--background))";
+
   return (
-    <div
-      className={`min-h-screen bg-background ${viaClass} transition-opacity duration-[1200ms] ease-out ${
-        entered ? "opacity-100" : "opacity-0"
-      }`}
-    >
+    <div className={`min-h-screen bg-background ${viaClass}`}>
+      {/* Continuity overlay — matches PetalBurstOverlay's final state */}
+      <div
+        className="fixed inset-0 pointer-events-none transition-opacity duration-[1200ms] ease-out"
+        style={{
+          zIndex: 9999,
+          background: overlayBg,
+          opacity: overlayVisible ? 1 : 0,
+        }}
+        aria-hidden="true"
+      />
+
       {/* Top bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/20">
         <button
