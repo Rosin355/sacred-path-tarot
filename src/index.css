@@ -2,87 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-
     --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
-
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 100%;
-
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 4%;
-
     --secondary: 0 0% 16%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
-
     --accent: 280 65% 70%;
     --accent-foreground: 0 0% 4%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 280 65% 70%;
-
     --radius: 0rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Via-specific accent tokens */
+    --via-arcani-accent: 270 60% 55%;
+    --via-arcani-glow: 270 70% 40%;
+    --via-respiro-accent: 240 30% 75%;
+    --via-respiro-glow: 220 40% 70%;
+    --via-ispirazione-accent: 40 50% 55%;
+    --via-ispirazione-glow: 35 45% 45%;
   }
 
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-
     --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
-
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 100%;
-
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 4%;
-
     --secondary: 0 0% 16%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 0 0% 25%;
     --muted-foreground: 0 0% 60%;
-
     --accent: 280 65% 70%;
     --accent-foreground: 0 0% 4%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 280 65% 70%;
+
     --sidebar-background: 240 8% 8%;
     --sidebar-foreground: 280 20% 95%;
     --sidebar-primary: 270 50% 50%;
@@ -94,6 +75,55 @@ All colors MUST be HSL.
   }
 }
 
+/* === Via-specific color overrides === */
+.via-arcani {
+  --accent: var(--via-arcani-accent);
+  --ring: var(--via-arcani-accent);
+}
+.via-respiro {
+  --accent: var(--via-respiro-accent);
+  --ring: var(--via-respiro-accent);
+}
+.via-ispirazione {
+  --accent: var(--via-ispirazione-accent);
+  --ring: var(--via-ispirazione-accent);
+}
+
+/* === Threshold page === */
+.threshold-bg {
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    hsl(270 30% 8%) 0%,
+    hsl(0 0% 0%) 70%
+  );
+}
+
+.threshold-ambient {
+  background: radial-gradient(
+    circle at 50% 40%,
+    hsla(270 40% 20% / 0.08) 0%,
+    transparent 60%
+  );
+  animation: ambient-drift 20s ease-in-out infinite alternate;
+}
+
+@keyframes ambient-drift {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.1) translate(2%, -3%); }
+}
+
+/* Door glow effects */
+.via-arcani-glow .door-glow-backdrop {
+  background: radial-gradient(ellipse at 50% 80%, hsla(var(--via-arcani-glow) / 0.15) 0%, transparent 70%);
+}
+.via-respiro-glow .door-glow-backdrop {
+  background: radial-gradient(ellipse at 50% 80%, hsla(var(--via-respiro-glow) / 0.15) 0%, transparent 70%);
+}
+.via-ispirazione-glow .door-glow-backdrop {
+  background: radial-gradient(ellipse at 50% 80%, hsla(var(--via-ispirazione-glow) / 0.12) 0%, transparent 70%);
+}
+
+/* === Utilities === */
 @layer utilities {
   .text-accent-gradient {
     background: linear-gradient(135deg, hsl(280 65% 70%) 0%, hsl(280 65% 80%) 100%);
@@ -101,23 +131,21 @@ All colors MUST be HSL.
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .minimal-border {
     border: 1px solid hsl(var(--border));
   }
-  
+
   .hover-lift {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
   .hover-lift:hover {
     transform: translateY(-4px);
   }
-  
+
   .elegant-underline {
     position: relative;
   }
-  
   .elegant-underline::after {
     content: '';
     position: absolute;
@@ -128,12 +156,10 @@ All colors MUST be HSL.
     background: hsl(var(--accent));
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
   .elegant-underline:hover::after {
     width: 100%;
   }
 
-  /* Underwater navigation liquid effect */
   .underwater-link {
     position: relative;
     display: inline-block;
@@ -141,7 +167,6 @@ All colors MUST be HSL.
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     will-change: transform, filter;
   }
-
   .underwater-link::before {
     content: '';
     position: absolute;
@@ -156,31 +181,18 @@ All colors MUST be HSL.
     z-index: -1;
     pointer-events: none;
   }
-
   .underwater-link:hover {
     filter: blur(0.5px);
     transform: scale(1.05) skewX(-1deg);
-    text-shadow: 0 0 30px hsla(var(--accent) / 0.6),
-                 0 0 60px hsla(var(--accent) / 0.3);
+    text-shadow: 0 0 30px hsla(var(--accent) / 0.6), 0 0 60px hsla(var(--accent) / 0.3);
   }
-
   .underwater-link:hover::before {
     width: 200%;
     height: 200%;
   }
-
-  @keyframes ripple {
-    0% {
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(4);
-      opacity: 0;
-    }
-  }
 }
 
+/* === Base typography === */
 @layer base {
   * {
     @apply border-border;
@@ -192,7 +204,7 @@ All colors MUST be HSL.
     font-size: 19px;
     line-height: 1.7;
   }
-  
+
   h1 {
     font-family: 'Love Light', cursive;
     font-weight: 400;
@@ -214,7 +226,7 @@ All colors MUST be HSL.
                  0 0 50px hsla(var(--accent) / 0.25),
                  0 3px 15px hsla(0 0% 0% / 0.3);
   }
-  
+
   h4, h5, h6 {
     font-family: 'Love Light', cursive;
     font-weight: 400;
@@ -228,5 +240,14 @@ All colors MUST be HSL.
     font-family: 'UnifrakturMaguntia', serif;
     font-weight: 400;
     letter-spacing: 0.05em;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .threshold-ambient,
+  .door-glow-backdrop {
+    animation: none !important;
+    transition: none !important;
   }
 }
