@@ -235,7 +235,7 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
       cancelAnimationFrame(rafRef.current);
       tl.kill();
     };
-  }, [active, doorRect, doorColor, onComplete, spawnParticle, h, s, l]);
+  }, [active, doorRect, doorColor, onComplete, spawnParticles, h, s, l]);
 
   if (!active || !doorRect) return null;
 
