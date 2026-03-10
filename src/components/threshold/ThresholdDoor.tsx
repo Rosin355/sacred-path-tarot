@@ -18,7 +18,7 @@ interface Props {
 }
 
 const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
-  ({ door, phase, isActive, onClick, titleRef }, ref) => {
+  ({ door, phase, isActive, onClick, onTitleRef }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
     const hideTitle = phase !== "idle" && isActive;
 
