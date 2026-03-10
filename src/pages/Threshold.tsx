@@ -90,7 +90,7 @@ const Threshold = () => {
 
       setPhase("dissolving");
       phaseRef.current = "dissolving";
-      setTimeout(() => setShowOverlay(true), 300);
+      setTimeout(() => setShowOverlay(true), 1200);
 
       // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
@@ -112,7 +112,7 @@ const Threshold = () => {
       if (d) {
         navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
       }
-    }, 400);
+    }, 800);
   }, [navigate]);
 
   return (
