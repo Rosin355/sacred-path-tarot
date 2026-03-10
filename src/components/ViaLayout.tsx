@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { ReactNode } from "react";
+import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 interface ViaLayoutProps {
   children: ReactNode;
