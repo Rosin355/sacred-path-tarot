@@ -95,13 +95,16 @@ const Threshold = () => {
     [phase, navigate, reducedMotion]
   );
 
-  const handleDissolveComplete = useCallback(() => {
+  const handleOverlayComplete = useCallback(() => {
     if (phase === "navigating") return;
     setPhase("navigating");
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
-    if (activeDoor) {
-      navigate(activeDoor.route);
-    }
+    // Small delay while fully dark, then navigate with color state
+    setTimeout(() => {
+      if (activeDoor) {
+        navigate(activeDoor.route, { state: { doorColor: DOOR_COLORS[activeDoor.id] } });
+      }
+    }, 400);
   }, [activeDoor, navigate, phase]);
 
   return (
