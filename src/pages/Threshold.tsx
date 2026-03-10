@@ -170,7 +170,7 @@ const Threshold = () => {
         <DoorDissolveOverlay
           doorRect={doorRect}
           active={phase === "dissolving"}
-          onComplete={handleDissolveComplete}
+          onComplete={() => {}}
           doorColor={DOOR_COLORS[activeDoor.id]}
           textRef={activeTextRef as React.RefObject<HTMLDivElement>}
         />
