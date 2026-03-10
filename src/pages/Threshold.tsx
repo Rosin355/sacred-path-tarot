@@ -181,6 +181,7 @@ const Threshold = () => {
         <PetalBurstOverlay
           active={true}
           doorColor={DOOR_COLORS[activeDoor.id]}
+          onComplete={handleOverlayComplete}
         />
       )}
     </div>
