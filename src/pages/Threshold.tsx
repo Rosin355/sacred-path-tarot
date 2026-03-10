@@ -37,14 +37,7 @@ const Threshold = () => {
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
-      {/* 3D Starry Background */}
-      <div className="absolute inset-0 z-0" style={{ touchAction: "none" }}>
-        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%" }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <ParticleSphere images={tarotImages} />
-        </Canvas>
-      </div>
+
 
       {/* Ambient background drift */}
       <div className="absolute inset-0 z-[1] threshold-ambient" aria-hidden="true" />
