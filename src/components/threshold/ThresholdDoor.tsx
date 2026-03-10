@@ -14,7 +14,7 @@ interface Props {
   phase: "idle" | "title-centering" | "petal-burst" | "navigating";
   isActive: boolean;
   onClick: (door: DoorData) => void;
-  titleRef: React.RefObject<HTMLHeadingElement>;
+  onTitleRef?: (id: string, el: HTMLHeadingElement | null) => void;
 }
 
 const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
