@@ -61,7 +61,7 @@ const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
         {/* Text below arch */}
         <div className="relative z-10 mt-4 text-center space-y-2">
           <h3
-            ref={titleRef as any}
+            ref={(el) => onTitleRef?.(door.id, el)}
             className={`text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500 ${
               hideTitle ? "invisible" : ""
             }`}
