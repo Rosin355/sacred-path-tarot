@@ -50,7 +50,7 @@ const Threshold = () => {
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const doorButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const doorHandleRefs = useRef<Record<string, DoorHandle | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
