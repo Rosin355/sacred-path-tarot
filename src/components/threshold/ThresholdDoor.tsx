@@ -11,7 +11,7 @@ export interface DoorData {
 
 interface Props {
   door: DoorData;
-  phase: "idle" | "title-centering" | "petal-burst" | "navigating";
+  phase: "idle" | "dissolving" | "navigating" | "title-centering" | "petal-burst";
   isActive: boolean;
   onClick: (door: DoorData) => void;
   onTitleRef?: (id: string, el: HTMLHeadingElement | null) => void;
