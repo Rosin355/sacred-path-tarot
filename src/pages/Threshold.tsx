@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import ThresholdDoor, { type DoorData } from "@/components/threshold/ThresholdDoor";
+import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 

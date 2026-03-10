@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useRef, useImperativeHandle } from "react";
 import templeArch from "@/assets/temple-arch.png";
 
 export interface DoorData {
@@ -9,6 +9,11 @@ export interface DoorData {
   colorClass: string;
 }
 
+export interface DoorHandle {
+  getTextRect: () => DOMRect | null;
+  getButtonEl: () => HTMLButtonElement | null;
+}
+
 interface Props {
   door: DoorData;
   phase: "idle" | "dissolving" | "navigating";
@@ -16,13 +21,20 @@ interface Props {
   onClick: (door: DoorData) => void;
 }
 
-const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
+const ThresholdDoor = forwardRef<DoorHandle, Props>(
   ({ door, phase, isActive, onClick }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
+
+    useImperativeHandle(ref, () => ({
+      getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
+      getButtonEl: () => buttonRef.current,
+    }));
 
     return (
       <button
-        ref={ref}
+        ref={buttonRef}
         onClick={() => onClick(door)}
         disabled={phase !== "idle"}
         className={`group relative w-[200px] md:w-[230px] cursor-pointer
@@ -57,7 +69,7 @@ const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
         </div>
 
         {/* Text below arch */}
-        <div className="relative z-10 mt-4 text-center space-y-2">
+        <div ref={textRef} className="relative z-10 mt-4 text-center space-y-2">
           <h3 className="text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500">
             {door.title}
           </h3>
