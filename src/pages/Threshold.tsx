@@ -90,7 +90,7 @@ const Threshold = () => {
 
       setPhase("dissolving");
       phaseRef.current = "dissolving";
-      setTimeout(() => setShowOverlay(true), 300);
+      setTimeout(() => setShowOverlay(true), 1200);
 
       // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
