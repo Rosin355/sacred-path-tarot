@@ -76,10 +76,10 @@ const Threshold = () => {
         return;
       }
 
-      // Capture the full door button rect
-      const doorEl = doorButtonRefs.current[door.id];
-      if (doorEl) {
-        setDoorRect(doorEl.getBoundingClientRect());
+      // Capture the text area rect only
+      const handle = doorHandleRefs.current[door.id];
+      if (handle) {
+        setDoorRect(handle.getTextRect());
       }
 
       setPhase("dissolving");
