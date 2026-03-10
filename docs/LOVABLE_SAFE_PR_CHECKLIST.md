@@ -17,9 +17,12 @@ Usa questa checklist prima di aprire o mergiare una PR per evitare regressioni s
 
 ## 3) Routing e UX core
 
-- [ ] Le route principali funzionano: `/`, `/home`, `/login`, `/admin`, fallback `*`.
+- [ ] Le route principali funzionano: `/`, `/arcani`, `/respiro`, `/ispirazione`, `/login`, `/admin`, fallback `*`.
+- [ ] Threshold → Via transition funziona (click porta → petali → navigazione).
+- [ ] Fallback transition funziona (navigazione entro 3s anche se animazione fallisce).
+- [ ] `prefers-reduced-motion` rispettato (fade semplice, no Canvas).
 - [ ] Nessun link/anchor interno è rotto (sezioni raggiungibili da menu desktop/mobile).
-- [ ] In caso di errore non critico (audio/autoplay/WebGL), l'app degrada senza crash.
+- [ ] In caso di errore non critico (audio/autoplay/WebGL/Canvas), l'app degrada senza crash.
 
 ## 4) Auth, ruoli e sicurezza
 

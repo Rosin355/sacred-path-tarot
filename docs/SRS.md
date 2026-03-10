@@ -32,11 +32,21 @@ Stack attuale:
 
 ### FR-01 Routing principale
 - Il sistema deve esporre le route:
-  - `/` loader iniziale
-  - `/home` landing principale
+  - `/` Threshold homepage (tre porte)
+  - `/arcani`, `/respiro`, `/ispirazione` mini-home delle tre vie
   - `/login` autenticazione/registrazione
   - `/admin` area protetta admin
   - fallback `*` su pagina 404
+
+### FR-01b Transizione Threshold → Via
+- Al click su una porta, il sistema esegue una transizione cinematica:
+  - Le porte non selezionate sfumano
+  - Il titolo della porta attiva anima verso il centro viewport (GSAP)
+  - Un overlay Canvas 2D con petali organici e polvere copre la scena
+  - Navigazione alla route selezionata al completamento
+- Fallback: navigazione diretta dopo 3s
+- `prefers-reduced-motion`: fade semplice + navigazione dopo 400ms
+- Ref: `docs/threshold-motion-spec.md`
 
 ### FR-02 Loader di ingresso
 - La route `/` deve mostrare un'animazione iniziale e un bottone `Enter`.
