@@ -12,6 +12,7 @@ export interface DoorData {
 export interface DoorHandle {
   getTextRect: () => DOMRect | null;
   getButtonEl: () => HTMLButtonElement | null;
+  getTextEl: () => HTMLDivElement | null;
 }
 
 interface Props {
