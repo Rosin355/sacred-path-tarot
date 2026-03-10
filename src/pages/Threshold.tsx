@@ -89,7 +89,7 @@ const Threshold = () => {
 
       // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
-        navigate(door.route);
+        navigate(door.route, { state: { doorColor: DOOR_COLORS[door.id] } });
       }, 3000);
     },
     [phase, navigate, reducedMotion]
