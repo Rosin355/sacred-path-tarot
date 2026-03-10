@@ -24,9 +24,18 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const doorColor = (location.state as any)?.doorColor as string | undefined;
 
   useEffect(() => {
-    // Start fading out the overlay after mount
-    const t = requestAnimationFrame(() => setOverlayVisible(false));
-    return () => cancelAnimationFrame(t);
+    // Double rAF ensures the browser paints opacity:1 before we transition to 0
+    const frame1 = requestAnimationFrame(() => {
+      const frame2 = requestAnimationFrame(() => {
+        setOverlayVisible(false);
+      });
+      // store for cleanup
+      (frame1 as any).__inner = frame2;
+    });
+    return () => {
+      cancelAnimationFrame(frame1);
+      if ((frame1 as any).__inner) cancelAnimationFrame((frame1 as any).__inner);
+    };
   }, []);
 
   const overlayBg = doorColor
