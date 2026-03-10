@@ -167,13 +167,13 @@ const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props)
             ctx.fillStyle = `hsl(${bgRaw})`;
             ctx.fillRect(doorX + cx, doorY + cy, cellSize, cellSize);
 
-            // Spawn particle at dissolve boundary
-            const spawnKey = `${Math.floor(cx / (cellSize * 3))},${Math.floor(cy / (cellSize * 3))}`;
-            if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.05) {
+            // Spawn particles at dissolve boundary — denser grid
+            const spawnKey = `${Math.floor(cx / (cellSize * 2))},${Math.floor(cy / (cellSize * 2))}`;
+            if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.07) {
               spawnedRef.current.add(spawnKey);
               const worldX = doorRect.left + cx;
               const worldY = doorRect.top + cy;
-              spawnParticle(worldX, worldY);
+              spawnParticles(worldX, worldY);
             }
           }
         }
