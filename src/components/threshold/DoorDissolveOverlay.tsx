@@ -59,7 +59,7 @@ function randomRange(min: number, max: number) {
 }
 
 const NOISE_SCALE = 0.06;
-const DISSOLVE_DURATION = 2.4;
+const DISSOLVE_DURATION = 1.8;
 const PADDING = 160; // Extra space around door for particles to fly into
 
 const DoorDissolveOverlay = ({ doorRect, active, onComplete, doorColor }: Props) => {
