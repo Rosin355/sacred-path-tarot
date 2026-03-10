@@ -1,18 +1,19 @@
 import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
+import templeArch from "@/assets/temple-arch.png";
 
 interface Props {
-  title: string;
-  startRect: DOMRect | null;
+  doorRect: DOMRect | null;
+  titleText: string;
+  subtitleText: string;
   active: boolean;
   onComplete?: () => void;
-  doorColor: string; // HSL string like "270 55% 45%"
+  doorColor: string;
 }
 
-// ── Lightweight 2D value noise (no dependencies) ──
-const NOISE_SEED = 42;
+// ── Lightweight 2D value noise ──
 function hash(x: number, y: number): number {
-  let h = x * 374761393 + y * 668265263 + NOISE_SEED;
+  let h = x * 374761393 + y * 668265263 + 42;
   h = ((h ^ (h >> 13)) * 1274126177) | 0;
   return (h & 0x7fffffff) / 0x7fffffff;
 }
@@ -35,7 +36,6 @@ function fbmNoise(x: number, y: number): number {
   return smoothNoise(x, y) * 0.6 + smoothNoise(x * 2.3, y * 2.3) * 0.3 + smoothNoise(x * 5.1, y * 5.1) * 0.1;
 }
 
-// ── Particle types ──
 interface Particle {
   x: number;
   y: number;
@@ -61,37 +61,39 @@ function randomRange(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
-const NOISE_SCALE = 0.04;
-const DISSOLVE_DURATION = 1.6;
+const NOISE_SCALE = 0.035;
+const DISSOLVE_DURATION = 2.4;
+const PADDING = 150;
 
-const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }: Props) => {
+const DoorDissolveOverlay = ({ doorRect, titleText, subtitleText, active, onComplete, doorColor }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
   const progressRef = useRef({ value: 0 });
   const particlesRef = useRef<Particle[]>([]);
-  const textImageRef = useRef<ImageData | null>(null);
+  const snapshotRef = useRef<ImageData | null>(null);
   const spawnedRef = useRef<Set<string>>(new Set());
+  const archImgRef = useRef<HTMLImageElement | null>(null);
 
   const spawnParticle = useCallback(
     (px: number, py: number, canvasLeft: number, canvasTop: number) => {
       const { h, s, l } = parseHSL(doorColor);
       const worldX = canvasLeft + px;
       const worldY = canvasTop + py;
-      const isPetal = Math.random() > 0.6;
+      const isPetal = Math.random() > 0.55;
       const angle = randomRange(0, Math.PI * 2);
-      const speed = isPetal ? randomRange(0.8, 2.5) : randomRange(0.3, 1.5);
+      const speed = isPetal ? randomRange(0.6, 2.0) : randomRange(0.2, 1.2);
 
       particlesRef.current.push({
         x: worldX,
         y: worldY,
-        size: isPetal ? randomRange(5, 14) : randomRange(1.5, 3.5),
+        size: isPetal ? randomRange(6, 16) : randomRange(1.5, 4),
         rotation: randomRange(0, 360),
         opacity: 0,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - randomRange(0.3, 1.2),
-        vr: isPetal ? randomRange(-3, 3) : 0,
+        vy: Math.sin(angle) * speed - randomRange(0.2, 0.8),
+        vr: isPetal ? randomRange(-2, 2) : 0,
         life: 0,
-        maxLife: randomRange(50, 100),
+        maxLife: randomRange(60, 130),
         color: isPetal
           ? `hsla(${h + randomRange(-15, 15)}, ${s + randomRange(-10, 10)}%, ${l + randomRange(-5, 15)}%, `
           : `hsla(${h}, ${s - 10}%, ${l + 20}%, `,
@@ -101,8 +103,17 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
     [doorColor]
   );
 
+  // Preload arch image
   useEffect(() => {
-    if (!active || !startRect) return;
+    const img = new Image();
+    img.src = templeArch;
+    img.onload = () => {
+      archImgRef.current = img;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!active || !doorRect) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -110,84 +121,121 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    // Expand canvas area to contain particles that fly out
-    const padding = 120;
-    const cw = startRect.width + padding * 2;
-    const ch = startRect.height + padding * 2;
+    const cw = doorRect.width + PADDING * 2;
+    const ch = doorRect.height + PADDING * 2;
 
     canvas.width = cw * dpr;
     canvas.height = ch * dpr;
     canvas.style.width = `${cw}px`;
     canvas.style.height = `${ch}px`;
-    canvas.style.left = `${startRect.left - padding}px`;
-    canvas.style.top = `${startRect.top - padding}px`;
+    canvas.style.left = `${doorRect.left - PADDING}px`;
+    canvas.style.top = `${doorRect.top - PADDING}px`;
     ctx.scale(dpr, dpr);
 
-    // Draw text to capture as bitmap
-    const fontSize = parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
-    const textSize = window.innerWidth >= 768 ? fontSize * 1.125 : fontSize; // text-base or text-lg
-    ctx.font = `400 ${textSize}px 'Cormorant Garamond', serif`;
-    ctx.fillStyle = getComputedStyle(document.documentElement)
-      .getPropertyValue("--foreground")
-      .trim();
-    // Convert HSL token to actual color
-    const fg = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim();
-    ctx.fillStyle = `hsl(${fg})`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.letterSpacing = "0.06em";
-    ctx.fillText(title, cw / 2, ch / 2);
+    // Draw the door snapshot onto canvas
+    const drawSnapshot = () => {
+      ctx.clearRect(0, 0, cw, ch);
 
-    // Capture text bitmap
-    textImageRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const archImg = archImgRef.current;
+      const doorW = doorRect.width;
+
+      // Draw arch image centered in canvas
+      if (archImg) {
+        const imgAspect = archImg.naturalHeight / archImg.naturalWidth;
+        const drawW = doorW;
+        const drawH = drawW * imgAspect;
+        const drawX = PADDING;
+        const drawY = PADDING;
+        ctx.drawImage(archImg, drawX, drawY, drawW, drawH);
+      }
+
+      // Draw title text
+      const root = document.documentElement;
+      const fg = getComputedStyle(root).getPropertyValue("--foreground").trim();
+      const isMd = window.innerWidth >= 768;
+      const titleSize = isMd ? 18 : 16;
+
+      ctx.font = `400 ${titleSize}px 'Cormorant Garamond', serif`;
+      ctx.fillStyle = `hsl(${fg})`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.letterSpacing = "0.06em";
+
+      // Title position: below the arch image
+      const archImg2 = archImgRef.current;
+      let textY = PADDING + doorW * 1.3 + 16; // estimate arch height + margin
+      if (archImg2) {
+        const imgAspect = archImg2.naturalHeight / archImg2.naturalWidth;
+        textY = PADDING + doorW * imgAspect + 16;
+      }
+
+      ctx.fillText(titleText, cw / 2, textY);
+
+      // Draw subtitle
+      const mutedFg = getComputedStyle(root).getPropertyValue("--muted-foreground").trim();
+      ctx.font = `400 ${isMd ? 10.5 : 10}px 'Source Sans 3', sans-serif`;
+      ctx.fillStyle = `hsl(${mutedFg})`;
+      ctx.fillText(subtitleText, cw / 2, textY + titleSize + 8);
+
+      // Capture snapshot
+      snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    };
+
+    // Wait a frame for arch image, or proceed immediately
+    if (archImgRef.current) {
+      drawSnapshot();
+    } else {
+      const img = new Image();
+      img.src = templeArch;
+      img.onload = () => {
+        archImgRef.current = img;
+        drawSnapshot();
+      };
+    }
+
     spawnedRef.current.clear();
     particlesRef.current = [];
     progressRef.current.value = 0;
 
-    // GSAP dissolve progress
     const tl = gsap.timeline();
     tl.to(progressRef.current, {
       value: 1,
       duration: DISSOLVE_DURATION,
       ease: "power1.inOut",
       onComplete: () => {
-        // Allow particles to finish before completing
-        setTimeout(() => onComplete?.(), 400);
+        setTimeout(() => onComplete?.(), 500);
       },
     });
 
-    const canvasLeft = startRect.left - padding;
-    const canvasTop = startRect.top - padding;
+    const canvasLeft = doorRect.left - PADDING;
+    const canvasTop = doorRect.top - PADDING;
 
     const animate = () => {
       ctx.clearRect(0, 0, cw, ch);
 
       const progress = progressRef.current.value;
-      const imgData = textImageRef.current;
+      const imgData = snapshotRef.current;
 
       if (imgData) {
-        // Create a working copy of the text image
         const workingData = new ImageData(
           new Uint8ClampedArray(imgData.data),
           imgData.width,
           imgData.height
         );
 
-        const step = Math.max(1, Math.round(2 / (window.devicePixelRatio || 1)));
+        const step = Math.max(1, Math.round(2 / dpr));
 
-        // Dissolve pixels based on noise
         for (let py = 0; py < imgData.height; py += step) {
           for (let px = 0; px < imgData.width; px += step) {
             const idx = (py * imgData.width + px) * 4;
             const alpha = imgData.data[idx + 3];
-            if (alpha < 30) continue;
+            if (alpha < 20) continue;
 
             const nx = px * NOISE_SCALE;
             const ny = py * NOISE_SCALE;
             const n = fbmNoise(nx, ny);
 
             if (n < progress) {
-              // Erase this pixel region
               for (let dy = 0; dy < step && py + dy < imgData.height; dy++) {
                 for (let dx = 0; dx < step && px + dx < imgData.width; dx++) {
                   const i2 = ((py + dy) * imgData.width + (px + dx)) * 4;
@@ -195,13 +243,12 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
                 }
               }
 
-              // Spawn particle at dissolve boundary
-              const spawnKey = `${Math.floor(px / (step * 3))},${Math.floor(py / (step * 3))}`;
-              if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.08) {
+              // Spawn particles at dissolve boundary
+              const cellSize = step * 4;
+              const spawnKey = `${Math.floor(px / cellSize)},${Math.floor(py / cellSize)}`;
+              if (!spawnedRef.current.has(spawnKey) && Math.abs(n - progress) < 0.06) {
                 spawnedRef.current.add(spawnKey);
-                const dpx = px / (window.devicePixelRatio || 1);
-                const dpy = py / (window.devicePixelRatio || 1);
-                spawnParticle(dpx, dpy, canvasLeft, canvasTop);
+                spawnParticle(px / dpr, py / dpr, canvasLeft, canvasTop);
               }
             }
           }
@@ -210,7 +257,7 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
         ctx.putImageData(workingData, 0, 0);
       }
 
-      // Draw particles (in world coords converted to canvas-local)
+      // Draw particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
         if (p.life >= p.maxLife) {
@@ -221,14 +268,13 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
         const lifeRatio = p.life / p.maxLife;
         const alpha =
           lifeRatio < 0.15 ? lifeRatio / 0.15 : lifeRatio > 0.6 ? 1 - (lifeRatio - 0.6) / 0.4 : 1;
-        p.opacity = Math.max(0, Math.min(1, alpha * 0.85));
+        p.opacity = Math.max(0, Math.min(1, alpha * 0.8));
 
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.015;
+        p.vy += 0.012;
         p.rotation += p.vr;
 
-        // Convert world coords to canvas-local
         const lx = p.x - canvasLeft;
         const ly = p.y - canvasTop;
 
@@ -260,15 +306,21 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
       rafRef.current = requestAnimationFrame(animate);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    // Small delay to ensure snapshot is ready
+    const startTimer = setTimeout(() => {
+      if (snapshotRef.current) {
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    }, 50);
 
     return () => {
+      clearTimeout(startTimer);
       cancelAnimationFrame(rafRef.current);
       tl.kill();
     };
-  }, [active, startRect, title, doorColor, onComplete, spawnParticle]);
+  }, [active, doorRect, titleText, subtitleText, doorColor, onComplete, spawnParticle]);
 
-  if (!active || !startRect) return null;
+  if (!active || !doorRect) return null;
 
   return (
     <canvas
@@ -280,4 +332,4 @@ const TextDissolveOverlay = ({ title, startRect, active, onComplete, doorColor }
   );
 };
 
-export default TextDissolveOverlay;
+export default DoorDissolveOverlay;

@@ -11,16 +11,15 @@ export interface DoorData {
 
 interface Props {
   door: DoorData;
-  phase: "idle" | "dissolving" | "navigating" | "title-centering" | "petal-burst";
+  phase: "idle" | "dissolving" | "navigating";
   isActive: boolean;
   onClick: (door: DoorData) => void;
-  onTitleRef?: (id: string, el: HTMLHeadingElement | null) => void;
 }
 
 const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
-  ({ door, phase, isActive, onClick, onTitleRef }, ref) => {
+  ({ door, phase, isActive, onClick }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
-    const hideTitle = phase !== "idle" && isActive;
+    const hidden = phase !== "idle" && isActive; // Hide when canvas takes over
 
     return (
       <button
@@ -32,6 +31,7 @@ const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
           transition-all duration-700 ease-out hover:scale-[1.03]
           ${door.colorClass}
           ${dimmed ? "opacity-0 scale-95 pointer-events-none" : ""}
+          ${hidden ? "invisible" : ""}
         `}
         style={{
           transition: dimmed
@@ -60,12 +60,7 @@ const ThresholdDoor = forwardRef<HTMLButtonElement, Props>(
 
         {/* Text below arch */}
         <div className="relative z-10 mt-4 text-center space-y-2">
-          <h3
-            ref={(el) => onTitleRef?.(door.id, el)}
-            className={`text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500 ${
-              hideTitle ? "invisible" : ""
-            }`}
-          >
+          <h3 className="text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500">
             {door.title}
           </h3>
           <p className="text-muted-foreground text-[0.65rem] tracking-wide font-caption leading-relaxed">
