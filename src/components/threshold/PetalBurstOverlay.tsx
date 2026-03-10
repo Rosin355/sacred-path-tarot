@@ -16,6 +16,8 @@ function parseHSL(color: string): { h: number; s: number; l: number } {
 /** Simplified: just a dark overlay that fades in, then calls onComplete */
 const PetalBurstOverlay = ({ active, doorColor, onComplete }: Props) => {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (!active || !overlayRef.current) return;
@@ -28,14 +30,14 @@ const PetalBurstOverlay = ({ active, doorColor, onComplete }: Props) => {
         opacity: 1,
         duration: 1.2,
         ease: "power2.inOut",
-        onComplete: () => onComplete?.(),
+        onComplete: () => onCompleteRef.current?.(),
       }
     );
 
     return () => {
       tl.kill();
     };
-  }, [active, onComplete]);
+  }, [active]);
 
   if (!active) return null;
 
@@ -47,7 +49,7 @@ const PetalBurstOverlay = ({ active, doorColor, onComplete }: Props) => {
       className="fixed inset-0 pointer-events-none"
       style={{
         zIndex: 9998,
-        background: `radial-gradient(ellipse at center, hsla(${h}, ${s}%, ${Math.max(l - 25, 3)}%, 0.7) 0%, hsla(${h}, ${s}%, ${Math.max(l - 35, 2)}%, 0.9) 100%)`,
+        background: `radial-gradient(ellipse at center, hsla(${h}, ${s}%, ${Math.max(l - 25, 3)}%, 1) 0%, hsla(${h}, ${s}%, ${Math.max(l - 35, 2)}%, 1) 100%)`,
         opacity: 0,
       }}
       aria-hidden="true"

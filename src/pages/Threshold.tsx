@@ -53,6 +53,8 @@ const Threshold = () => {
 
   const doorHandleRefs = useRef<Record<string, DoorHandle | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const activeDoorRef = useRef<DoorData | null>(null);
+  const phaseRef = useRef<Phase>("idle");
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -70,9 +72,11 @@ const Threshold = () => {
       if (phase !== "idle") return;
 
       setActiveDoor(door);
+      activeDoorRef.current = door;
 
       if (reducedMotion) {
         setPhase("navigating");
+        phaseRef.current = "navigating";
         setTimeout(() => navigate(door.route), 400);
         return;
       }
@@ -85,27 +89,31 @@ const Threshold = () => {
       }
 
       setPhase("dissolving");
+      phaseRef.current = "dissolving";
       setTimeout(() => setShowOverlay(true), 300);
 
       // Fallback: navigate after 3s
       fallbackTimerRef.current = setTimeout(() => {
-        navigate(door.route, { state: { doorColor: DOOR_COLORS[door.id] } });
+        const d = activeDoorRef.current;
+        if (d) navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
       }, 3000);
     },
     [phase, navigate, reducedMotion]
   );
 
   const handleOverlayComplete = useCallback(() => {
-    if (phase === "navigating") return;
+    if (phaseRef.current === "navigating") return;
     setPhase("navigating");
+    phaseRef.current = "navigating";
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
     // Small delay while fully dark, then navigate with color state
     setTimeout(() => {
-      if (activeDoor) {
-        navigate(activeDoor.route, { state: { doorColor: DOOR_COLORS[activeDoor.id] } });
+      const d = activeDoorRef.current;
+      if (d) {
+        navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
       }
     }, 400);
-  }, [activeDoor, navigate, phase]);
+  }, [navigate]);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
