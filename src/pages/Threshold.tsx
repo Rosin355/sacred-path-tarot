@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import { Canvas } from "@react-three/fiber";
-import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 const tarotImages = [
