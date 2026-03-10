@@ -91,7 +91,7 @@ const Threshold = () => {
                 <h3 className="text-foreground text-lg tracking-[0.08em] group-hover:text-accent transition-colors duration-500">
                   {door.title}
                 </h3>
-                <p className="text-muted-foreground text-xs tracking-wide font-body leading-relaxed">
+                <p className="text-muted-foreground text-xs tracking-wide font-caption leading-relaxed">
                   {door.subtitle}
                 </p>
                 {/* Threshold symbol */}
