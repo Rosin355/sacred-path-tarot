@@ -4,7 +4,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ThresholdDoor, { type DoorData } from "@/components/threshold/ThresholdDoor";
-import GhostTitleOverlay from "@/components/threshold/GhostTitleOverlay";
+import TextDissolveOverlay from "@/components/threshold/TextDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 
 const doors: DoorData[] = [
@@ -37,7 +37,7 @@ const DOOR_COLORS: Record<string, string> = {
   ispirazione: "38 55% 52%",
 };
 
-type Phase = "idle" | "title-centering" | "petal-burst" | "navigating";
+type Phase = "idle" | "dissolving" | "navigating";
 
 const Threshold = () => {
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const Threshold = () => {
   const [phase, setPhase] = useState<Phase>("idle");
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
   const [titleRect, setTitleRect] = useState<DOMRect | null>(null);
-  const [showPetals, setShowPetals] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const titleRefs = useRef<Record<string, HTMLHeadingElement | null>>({});
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -58,7 +58,6 @@ const Threshold = () => {
     return () => clearTimeout(t);
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
@@ -72,7 +71,6 @@ const Threshold = () => {
       setActiveDoor(door);
 
       if (reducedMotion) {
-        // Reduced motion: simple glow + delayed nav
         setPhase("navigating");
         setTimeout(() => navigate(door.route), 400);
         return;
@@ -84,10 +82,10 @@ const Threshold = () => {
         setTitleRect(titleEl.getBoundingClientRect());
       }
 
-      setPhase("title-centering");
+      setPhase("dissolving");
 
-      // Start petal burst after short delay
-      setTimeout(() => setShowPetals(true), 150);
+      // Start dark overlay after brief delay
+      setTimeout(() => setShowOverlay(true), 300);
 
       // Fallback: navigate after 3s no matter what
       fallbackTimerRef.current = setTimeout(() => {
@@ -97,11 +95,7 @@ const Threshold = () => {
     [phase, navigate, reducedMotion]
   );
 
-  const handleTitleCentered = useCallback(() => {
-    setPhase("petal-burst");
-  }, []);
-
-  const handlePetalComplete = useCallback(() => {
+  const handleDissolveComplete = useCallback(() => {
     if (phase === "navigating") return;
     setPhase("navigating");
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
@@ -110,12 +104,14 @@ const Threshold = () => {
     }
   }, [activeDoor, navigate, phase]);
 
+  const handleOverlayComplete = useCallback(() => {
+    // Overlay finished fading in — dissolve should trigger nav
+  }, []);
+
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
-      {/* Ambient background drift */}
       <div className="absolute inset-0 z-[1] threshold-ambient" aria-hidden="true" />
 
-      {/* Mute/Unmute Button */}
       <button
         onClick={toggleMute}
         className="fixed top-6 right-6 z-50 p-2 text-muted-foreground hover:text-foreground transition-colors duration-300"
@@ -125,7 +121,6 @@ const Threshold = () => {
       </button>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
-        {/* Invocation */}
         <header
           className={`text-center mb-12 md:mb-16 transition-all duration-[1200ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
@@ -142,7 +137,6 @@ const Threshold = () => {
           </p>
         </header>
 
-        {/* Three Doors */}
         <nav
           aria-label="Le tre vie"
           className={`flex flex-col md:flex-row items-center justify-center gap-8 md:gap-10 transition-all duration-[1500ms] ease-out delay-500 ${
@@ -163,7 +157,6 @@ const Threshold = () => {
           ))}
         </nav>
 
-        {/* Bottom subtle text */}
         <p
           className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 ${
             visible ? "opacity-100" : "opacity-0"
@@ -173,23 +166,23 @@ const Threshold = () => {
         </p>
       </div>
 
-      {/* Ghost title overlay */}
+      {/* Text dissolve overlay */}
       {activeDoor && !reducedMotion && (
-        <GhostTitleOverlay
+        <TextDissolveOverlay
           title={activeDoor.title}
           startRect={titleRect}
-          active={phase === "title-centering" || phase === "petal-burst"}
-          onCentered={handleTitleCentered}
-          doorColor={`hsl(${DOOR_COLORS[activeDoor.id]})`}
+          active={phase === "dissolving"}
+          onComplete={handleDissolveComplete}
+          doorColor={DOOR_COLORS[activeDoor.id]}
         />
       )}
 
-      {/* Petal burst overlay */}
-      {showPetals && activeDoor && !reducedMotion && (
+      {/* Dark overlay */}
+      {showOverlay && activeDoor && !reducedMotion && (
         <PetalBurstOverlay
           active={true}
           doorColor={DOOR_COLORS[activeDoor.id]}
-          onComplete={handlePetalComplete}
+          onComplete={handleOverlayComplete}
         />
       )}
     </div>
