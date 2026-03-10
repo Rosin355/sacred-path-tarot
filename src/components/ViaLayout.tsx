@@ -11,6 +11,7 @@ interface ViaLayoutProps {
 
 const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const navigate = useNavigate();
+  const { isMuted, toggleMute } = useBackgroundMusic();
 
   return (
     <div className={`min-h-screen bg-background ${viaClass}`}>
@@ -23,9 +24,18 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
           <ArrowLeft className="w-4 h-4" />
           Torna al Tempio
         </button>
-        <span className="text-muted-foreground/60 text-xs tracking-[0.2em] uppercase hidden sm:block">
-          {title}
-        </span>
+        <div className="flex items-center gap-4">
+          <span className="text-muted-foreground/60 text-xs tracking-[0.2em] uppercase hidden sm:block">
+            {title}
+          </span>
+          <button
+            onClick={toggleMute}
+            className="p-1.5 text-muted-foreground hover:text-foreground transition-colors duration-300"
+            aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
+          >
+            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </button>
+        </div>
       </nav>
 
       {/* Content */}
