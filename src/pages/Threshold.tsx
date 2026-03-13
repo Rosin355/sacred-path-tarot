@@ -11,7 +11,7 @@ const doors: DoorData[] = [
   {
     id: "arcani",
     title: "La Via degli Arcani",
-    subtitle: "Tarocchi, consulti ed eventi esoterici",
+    subtitle: "Tarocchi, simboli, corsi e percorsi di conoscenza",
     route: "/arcani",
     colorClass: "door-arcani",
   },
@@ -25,7 +25,7 @@ const doors: DoorData[] = [
   {
     id: "ispirazione",
     title: "La Via dell'Ispirazione",
-    subtitle: "Arte, musica e letteratura esoterica",
+    subtitle: "Arte esoterica, musica, letteratura simbolica e visioni",
     route: "/ispirazione",
     colorClass: "door-ispirazione",
   },
