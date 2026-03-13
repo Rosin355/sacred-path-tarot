@@ -1,117 +1,98 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { getAudioFileUrl } from '@/lib/audioStorage';
 import { soundEffects } from '@/lib/soundEffects';
+
 const STORAGE_KEY = 'music-muted';
-const INITIAL_VOLUME = 0.12; // 12% volume like richardmattka.com
-const FADE_IN_DURATION = 2000; // 2 seconds fade-in
+const INITIAL_VOLUME = 0.12;
+const FADE_IN_DURATION = 2000;
+
+// ── Persistent singleton ──
+// The audio element lives outside React so it survives route changes.
+let globalAudio: HTMLAudioElement | null = null;
+let globalInitialised = false;
+
+function getOrCreateAudio(): HTMLAudioElement | null {
+  if (globalAudio) return globalAudio;
+
+  const url = getAudioFileUrl();
+  if (!url) return null;
+
+  const audio = new Audio(url);
+  audio.loop = true;
+  audio.volume = 0;
+  globalAudio = audio;
+  return audio;
+}
+
+function fadeIn(audio: HTMLAudioElement) {
+  const startTime = Date.now();
+  const id = setInterval(() => {
+    const progress = Math.min((Date.now() - startTime) / FADE_IN_DURATION, 1);
+    audio.volume = INITIAL_VOLUME * progress;
+    if (progress >= 1) clearInterval(id);
+  }, 50);
+}
 
 export const useBackgroundMusic = () => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isMuted, setIsMuted] = useState(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored === 'true';
-  });
+  const [isMuted, setIsMuted] = useState(() => localStorage.getItem(STORAGE_KEY) === 'true');
   const [isPlaying, setIsPlaying] = useState(false);
+  const mountedRef = useRef(true);
 
+  // On first mount anywhere in the app, start playback once
   useEffect(() => {
-    // Create audio element
-    const audio = new Audio();
-    audio.loop = true;
-    audio.volume = 0; // Start at 0 for fade-in
+    mountedRef.current = true;
+    const audio = getOrCreateAudio();
+    if (!audio) return;
+
     audio.muted = isMuted;
-    
-    // Get audio from Supabase Storage
-    const audioUrl = getAudioFileUrl();
-    if (!audioUrl) {
-      console.log('No audio file available yet');
-      return;
+
+    // Sync UI state if audio is already playing (route change)
+    if (!audio.paused) {
+      setIsPlaying(true);
+      return; // already playing – nothing to do
     }
-    
-    audio.src = audioUrl;
-    audioRef.current = audio;
 
-    // Fade in function
-    const fadeIn = () => {
-      const startTime = Date.now();
-      const fadeInterval = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / FADE_IN_DURATION, 1);
-        audio.volume = INITIAL_VOLUME * progress;
-        
-        if (progress >= 1) {
-          clearInterval(fadeInterval);
-        }
-      }, 50);
-    };
-
-    // Auto-play with fade-in if not muted
-    if (!isMuted) {
+    if (!isMuted && !globalInitialised) {
+      globalInitialised = true;
       audio.play()
         .then(() => {
-          setIsPlaying(true);
-          fadeIn();
+          if (mountedRef.current) setIsPlaying(true);
+          fadeIn(audio);
         })
-        .catch((error) => {
-          console.log('Autoplay blocked:', error);
-          // Autoplay was blocked, wait for user interaction
+        .catch(() => {
+          // autoplay blocked – will start on first user interaction
         });
     }
 
-    // Cleanup
-    return () => {
-      audio.pause();
-      audio.src = '';
-    };
+    return () => { mountedRef.current = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle mute state changes
+  // React to mute toggle
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, String(isMuted));
-    // Sync effects mute immediately in the same tab
     soundEffects.setMuted(isMuted);
 
-    const audio = audioRef.current;
+    const audio = globalAudio;
     if (!audio) return;
 
-    // Toggle element mute property for safety
     audio.muted = isMuted;
 
     if (isMuted) {
-      // Immediately stop sound
       audio.pause();
-      try { audio.currentTime = 0; } catch {}
       setIsPlaying(false);
     } else {
-      // Restart with fade-in
       audio.volume = 0;
       audio.play()
         .then(() => {
           setIsPlaying(true);
-          const startTime = Date.now();
-          const fadeInterval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / FADE_IN_DURATION, 1);
-            if (audioRef.current) {
-              audioRef.current.volume = INITIAL_VOLUME * progress;
-            }
-            if (progress >= 1) {
-              clearInterval(fadeInterval);
-            }
-          }, 50);
+          fadeIn(audio);
         })
-        .catch((error) => {
-          console.log('Play failed:', error);
-        });
+        .catch(() => {});
     }
   }, [isMuted]);
 
-  const toggleMute = () => {
-    setIsMuted(prev => !prev);
-  };
+  const toggleMute = useCallback(() => setIsMuted(prev => !prev), []);
 
-  return {
-    isMuted,
-    isPlaying,
-    toggleMute,
-  };
+  return { isMuted, isPlaying, toggleMute };
 };
