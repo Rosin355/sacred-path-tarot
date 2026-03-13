@@ -141,13 +141,14 @@ const Threshold = () => {
           } ${phase !== "idle" ? "opacity-0 transition-opacity duration-500" : ""}`}
         >
           <p className="text-muted-foreground text-sm tracking-[0.25em] uppercase mb-4 font-caption">
-            Entra in una porta del tempio
+            Il Tempio delle Tre Vie
           </p>
           <h1 className="text-foreground leading-none mb-6 font-display">
-            Tre vie <em className="italic">Per</em> Illuminarsi
+            Tre Vie <em className="italic">Per</em> Illuminarsi
           </h1>
-          <p className="text-muted-foreground text-base italic font-body max-w-md mx-auto leading-relaxed">
-            "Ogni via si apre a chi è pronto ad ascoltare."
+          <p className="text-muted-foreground text-base font-body max-w-lg mx-auto leading-relaxed">
+            Un tempio digitale dedicato ai tarocchi, al respiro e ai percorsi interiori di Jessica Marin.
+            Ogni soglia conduce a un modo diverso di conoscersi: attraverso il simbolo, il corpo e l'ispirazione.
           </p>
         </header>
 
