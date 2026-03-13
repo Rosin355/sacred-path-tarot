@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -49,13 +48,12 @@ const sections = [
 ];
 
 const ctas = [
-  { label: "Scopri il metodo", action: "#metodo" },
-  { label: "Esplora i percorsi", action: "#percorsi" },
-  { label: "Vedi gli eventi", action: "#eventi" },
+  { label: "Scopri il metodo", primary: true },
+  { label: "Esplora i percorsi", primary: false },
+  { label: "Vedi gli eventi", primary: false },
 ];
 
 const ViaArcani = () => {
-  const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -91,7 +89,10 @@ const ViaArcani = () => {
         <div
           className="absolute inset-0 pointer-events-none z-[1]"
           style={{
-            background: "radial-gradient(ellipse at 50% 40%, hsla(270, 55%, 45%, 0.08) 0%, transparent 60%)",
+            background: `
+              radial-gradient(ellipse at 50% 40%, hsla(270, 55%, 45%, 0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 50% 90%, hsla(262, 29%, 5%, 0.7) 0%, transparent 40%)
+            `,
           }}
           aria-hidden="true"
         />
@@ -108,7 +109,7 @@ const ViaArcani = () => {
           >
             La Via degli Arcani
           </h1>
-          <div className="w-16 h-px bg-accent/30 mx-auto mb-8" />
+          <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             La Via degli Arcani è il percorso dedicato a chi desidera entrare davvero nel linguaggio dei tarocchi,
             non solo come strumento divinatorio, ma come via di conoscenza, interpretazione e consapevolezza.
@@ -119,24 +120,15 @@ const ViaArcani = () => {
       </section>
 
       {/* Content sections */}
-      <section className="relative px-6 py-20 md:py-28">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "linear-gradient(180deg, transparent 0%, hsla(262, 25%, 7%, 0.6) 20%, hsla(262, 25%, 7%, 0.6) 80%, transparent 100%)",
-          }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 max-w-3xl mx-auto space-y-12 md:space-y-16">
+      <section className="sacred-section px-6 py-20 md:py-28">
+        <div className="relative z-10 max-w-3xl mx-auto space-y-8 md:space-y-10">
           {sections.map((section) => (
             <div
               key={section.title}
-              className="group p-8 md:p-10 border border-border/20 bg-card/30 backdrop-blur-sm
-                hover:border-accent/20 hover:bg-card/50 transition-all duration-700"
+              className="sacred-card p-8 md:p-10"
             >
               <div className="flex items-start gap-5">
-                <span className="text-accent/50 text-2xl mt-1 shrink-0 select-none">{section.icon}</span>
+                <span className="text-accent/40 text-2xl mt-1 shrink-0 select-none">{section.icon}</span>
                 <div className="space-y-4">
                   <h2 className="text-foreground text-lg md:text-xl tracking-[0.04em] font-display leading-snug">
                     {section.title}
@@ -162,8 +154,8 @@ const ViaArcani = () => {
         />
 
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <div className="w-12 h-px bg-accent/20 mx-auto mb-10" />
-          <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto">
+          <div className="sacred-divider mb-10" />
+          <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
             Ogni percorso è pensato per accompagnarti verso una comprensione più profonda del simbolo e di te stesso.
           </p>
 
@@ -171,22 +163,12 @@ const ViaArcani = () => {
             {ctas.map((cta) => (
               <button
                 key={cta.label}
-                className="px-7 py-3.5 border border-border/30 text-foreground text-sm tracking-wider uppercase
-                  hover:bg-accent/10 hover:border-accent/30 transition-all duration-500 font-caption
-                  backdrop-blur-sm"
+                className={`sacred-cta font-caption ${cta.primary ? "sacred-cta-primary" : ""}`}
               >
                 {cta.label}
               </button>
             ))}
           </div>
-
-          <button
-            onClick={() => navigate("/")}
-            className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-muted-foreground text-sm tracking-wider uppercase
-              hover:text-foreground transition-colors duration-500 font-caption elegant-underline"
-          >
-            ← Torna al Tempio
-          </button>
         </div>
       </section>
     </ViaLayout>
