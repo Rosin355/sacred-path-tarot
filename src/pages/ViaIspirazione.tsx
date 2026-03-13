@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ViaLayout from "@/components/ViaLayout";
 
 const sections = [
@@ -26,14 +25,12 @@ const sections = [
 ];
 
 const ctas = [
-  { label: "Leggi le riflessioni", action: "#riflessioni" },
-  { label: "Esplora le ispirazioni", action: "#ispirazioni" },
-  { label: "Scopri i progetti", action: "#progetti" },
+  { label: "Leggi le riflessioni", primary: true },
+  { label: "Esplora le ispirazioni", primary: false },
+  { label: "Scopri i progetti", primary: false },
 ];
 
 const ViaIspirazione = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     document.title = "La Via dell'Ispirazione | Arte esoterica, musica e letteratura simbolica";
     const meta = document.querySelector('meta[name="description"]');
@@ -51,15 +48,16 @@ const ViaIspirazione = () => {
   return (
     <ViaLayout viaClass="via-ispirazione" title="La Via dell'Ispirazione">
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-6 text-center overflow-hidden">
-        {/* Warm editorial ambient */}
+      <section className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 text-center overflow-hidden">
+        {/* Warm editorial ambient — golden tones */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background: `
-              radial-gradient(ellipse at 50% 30%, hsla(38, 55%, 52%, 0.06) 0%, transparent 55%),
-              radial-gradient(ellipse at 20% 60%, hsla(38, 40%, 40%, 0.03) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, hsla(30, 35%, 45%, 0.03) 0%, transparent 50%)
+              radial-gradient(ellipse at 50% 25%, hsla(38, 55%, 52%, 0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 15% 65%, hsla(38, 40%, 40%, 0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 85% 70%, hsla(30, 35%, 45%, 0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, hsla(38, 30%, 30%, 0.03) 0%, transparent 40%)
             `,
           }}
           aria-hidden="true"
@@ -70,7 +68,7 @@ const ViaIspirazione = () => {
             Arte, parola e contemplazione
           </p>
           <h1 className="text-foreground mb-8 font-display">La Via dell'Ispirazione</h1>
-          <div className="w-16 h-px bg-accent/30 mx-auto mb-8" />
+          <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             La Via dell'Ispirazione è uno spazio editoriale e culturale in cui arte, musica, parola e simbolo si incontrano.
             Qui Jessica Marin raccoglie riflessioni, ascolti, letteratura esoterica e progetti speciali
@@ -80,25 +78,15 @@ const ViaIspirazione = () => {
       </section>
 
       {/* Content sections — editorial grid */}
-      <section className="relative px-6 py-20 md:py-28">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "linear-gradient(180deg, transparent 0%, hsla(262, 20%, 7%, 0.5) 15%, hsla(262, 20%, 7%, 0.5) 85%, transparent 100%)",
-          }}
-          aria-hidden="true"
-        />
-
+      <section className="sacred-section px-6 py-20 md:py-28">
         <div className="relative z-10 max-w-3xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
             {sections.map((section) => (
               <div
                 key={section.title}
-                className="p-8 border border-border/15 bg-card/25 backdrop-blur-sm
-                  hover:border-accent/20 hover:bg-card/40 transition-all duration-700
-                  flex flex-col"
+                className="sacred-card p-8 flex flex-col"
               >
-                <p className="text-[10px] tracking-[0.25em] uppercase text-accent/40 font-caption mb-4">
+                <p className="text-[10px] tracking-[0.25em] uppercase text-accent/35 font-caption mb-5">
                   {section.accent}
                 </p>
                 <h2 className="text-foreground text-lg tracking-[0.04em] font-display mb-4 leading-snug">
@@ -115,9 +103,17 @@ const ViaIspirazione = () => {
 
       {/* CTA section */}
       <section className="relative px-6 py-16 md:py-24">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-12 h-px bg-accent/20 mx-auto mb-10" />
-          <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse at 50% 50%, hsla(38, 50%, 50%, 0.03) 0%, transparent 60%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
+          <div className="sacred-divider mb-10" />
+          <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
             L'ispirazione è il respiro dell'anima: nutre ciò che ancora non ha forma.
           </p>
 
@@ -125,21 +121,12 @@ const ViaIspirazione = () => {
             {ctas.map((cta) => (
               <button
                 key={cta.label}
-                className="px-7 py-3.5 border border-border/30 text-foreground text-sm tracking-wider uppercase
-                  hover:bg-accent/10 hover:border-accent/30 transition-all duration-500 font-caption"
+                className={`sacred-cta font-caption ${cta.primary ? "sacred-cta-primary" : ""}`}
               >
                 {cta.label}
               </button>
             ))}
           </div>
-
-          <button
-            onClick={() => navigate("/")}
-            className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-muted-foreground text-sm tracking-wider uppercase
-              hover:text-foreground transition-colors duration-500 font-caption elegant-underline"
-          >
-            ← Torna al Tempio
-          </button>
         </div>
       </section>
     </ViaLayout>

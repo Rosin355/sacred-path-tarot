@@ -1,63 +1,69 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSoundEffects } from "@/hooks/useSoundEffects";
 const Method = () => {
-  const {
-    playNavigation
-  } = useSoundEffects();
-  const features = [{
-    number: "01",
-    title: "Studio Esoterico Profondo",
-    description: "13 anni di pratica magica e ricerca nelle tradizioni ermetiche, cabalistiche e alchemiche."
-  }, {
-    number: "02",
-    title: "Approccio Magico-Pratico",
-    description: "Non solo teoria: ogni lettura include pratiche concrete, rituali e corrispondenze operative."
-  }, {
-    number: "03",
-    title: "Oltre la Divinazione",
-    description: "I Tarocchi come strumento di illuminazione e crescita spirituale, non semplice predizione."
-  }, {
-    number: "04",
-    title: "Trasformazione Autentica",
-    description: "Percorsi guidati per ricercatori seri della Saggezza, non intrattenimento superficiale."
-  }];
-  return <section id="method-section" className="py-32 lg:py-40 px-6 lg:px-12 relative">
-      <div className="container mx-auto max-w-7xl">
-        <div className="mb-24 space-y-6 animate-fade-in">
+  const features = [
+    {
+      number: "01",
+      title: "Studio Esoterico Profondo",
+      description: "13 anni di pratica magica e ricerca nelle tradizioni ermetiche, cabalistiche e alchemiche.",
+    },
+    {
+      number: "02",
+      title: "Approccio Magico-Pratico",
+      description: "Non solo teoria: ogni lettura include pratiche concrete, rituali e corrispondenze operative.",
+    },
+    {
+      number: "03",
+      title: "Oltre la Divinazione",
+      description: "I Tarocchi come strumento di illuminazione e crescita spirituale, non semplice predizione.",
+    },
+    {
+      number: "04",
+      title: "Trasformazione Autentica",
+      description: "Percorsi guidati per ricercatori seri della Saggezza, non intrattenimento superficiale.",
+    },
+  ];
+
+  return (
+    <section id="method-section" className="sacred-section py-28 lg:py-36 px-6 lg:px-12">
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="mb-20 space-y-6 animate-fade-in">
           <h2 className="text-5xl md:text-6xl font-display tracking-tight lg:text-8xl">
             Il Metodo
             <br />
             <span className="text-accent-gradient">Esoterico</span>
           </h2>
-          
-          <p className="text-muted-foreground max-w-2xl font-light leading-relaxed text-2xl">
+
+          <p className="text-muted-foreground max-w-2xl font-light leading-relaxed text-xl md:text-2xl">
             Un approccio unico che unisce tradizione antica e pratica contemporanea
             per chi cerca vera trasformazione spirituale.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {features.map((feature, index) => <Card key={index} onClick={playNavigation} className="bg-transparent minimal-border hover-lift group cursor-pointer animate-scale-in" style={{
-          animationDelay: `${index * 0.1}s`
-        }}>
-              <CardHeader className="p-8">
-                <div className="flex items-start gap-6">
-                  <span className="text-5xl font-display font-bold text-accent/20 group-hover:text-accent/40 transition-colors">
-                    {feature.number}
-                  </span>
-                  <CardTitle className="font-display tracking-tight pt-2 text-4xl">
+        <div className="grid md:grid-cols-2 gap-6">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="sacred-card p-8 md:p-10 group animate-scale-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="flex items-start gap-6">
+                <span className="text-4xl md:text-5xl font-display font-bold text-accent/15 group-hover:text-accent/30 transition-colors duration-500">
+                  {feature.number}
+                </span>
+                <div className="space-y-3 pt-1">
+                  <h3 className="font-display tracking-tight text-xl md:text-2xl text-foreground">
                     {feature.title}
-                  </CardTitle>
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed font-light text-sm md:text-base">
+                    {feature.description}
+                  </p>
                 </div>
-              </CardHeader>
-              <CardContent className="px-8 pb-8">
-                <p className="text-muted-foreground leading-relaxed font-light pl-20">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Method;

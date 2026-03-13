@@ -24,12 +24,10 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const doorColor = (location.state as any)?.doorColor as string | undefined;
 
   useEffect(() => {
-    // Double rAF ensures the browser paints opacity:1 before we transition to 0
     const frame1 = requestAnimationFrame(() => {
       const frame2 = requestAnimationFrame(() => {
         setOverlayVisible(false);
       });
-      // store for cleanup
       (frame1 as any).__inner = frame2;
     });
     return () => {
@@ -47,7 +45,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
 
   return (
     <div className={`min-h-screen bg-background ${viaClass}`}>
-      {/* Continuity overlay — matches PetalBurstOverlay's final state */}
+      {/* Continuity overlay */}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-[1800ms] ease-out"
         style={{
@@ -59,16 +57,16 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
       />
 
       {/* Top bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/15">
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm tracking-wide"
         >
           <ArrowLeft className="w-4 h-4" />
-          Torna al Tempio
+          <span className="hidden sm:inline">Torna al Tempio</span>
         </button>
         <div className="flex items-center gap-4">
-          <span className="text-muted-foreground/60 text-xs tracking-[0.2em] uppercase hidden sm:block">
+          <span className="text-muted-foreground/50 text-[10px] tracking-[0.25em] uppercase hidden sm:block font-caption">
             {title}
           </span>
           <button
@@ -84,17 +82,28 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
       {/* Content */}
       <main className="pt-20">{children}</main>
 
-      {/* Minimal footer */}
-      <footer className="py-12 px-6 border-t border-border/20 text-center">
-        <button
-          onClick={() => navigate("/")}
-          className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm tracking-wide elegant-underline"
-        >
-          ← Torna al Tempio delle Tre Vie
-        </button>
-        <p className="text-muted-foreground/40 text-xs mt-4">
-          Jessica Marin — Un solo tempio. Tre vie interiori.
-        </p>
+      {/* Refined footer with closing block */}
+      <footer className="relative">
+        {/* Closing reflective block */}
+        <div className="sacred-closing border-t border-border/10">
+          <div className="sacred-divider mb-10" />
+          <p className="text-muted-foreground/60 text-sm font-body italic max-w-md mx-auto leading-relaxed mb-8">
+            "Il cammino è il tempio stesso."
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="sacred-cta-primary sacred-cta font-caption"
+          >
+            ← Torna al Tempio delle Tre Vie
+          </button>
+        </div>
+
+        {/* Bottom line */}
+        <div className="py-6 px-6 text-center border-t border-border/8">
+          <p className="text-muted-foreground/30 text-xs font-caption tracking-[0.15em]">
+            Jessica Marin — Un solo tempio. Tre vie interiori.
+          </p>
+        </div>
       </footer>
     </div>
   );
