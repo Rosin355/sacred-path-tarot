@@ -1,7 +1,34 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Canvas } from "@react-three/fiber";
+import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ViaLayout from "@/components/ViaLayout";
-import CelestialHero from "@/components/arcani/CelestialHero";
+
+const tarotImages = [
+  "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",
+];
 
 const sections = [
   {
@@ -29,6 +56,7 @@ const ctas = [
 
 const ViaArcani = () => {
   const navigate = useNavigate();
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     document.title = "Corso di Tarocchi e Arcani | La Via degli Arcani";
@@ -46,26 +74,40 @@ const ViaArcani = () => {
 
   return (
     <ViaLayout viaClass="via-arcani" title="La Via degli Arcani">
-      {/* Hero with celestial animation */}
-      <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-6 text-center overflow-hidden">
-        {/* Celestial background */}
-        <CelestialHero />
-        
-        {/* Radial ambient glow */}
+      {/* Hero with 3D particle sphere + tarot cards */}
+      <section className="relative flex flex-col items-center justify-center min-h-[80vh] px-6 text-center overflow-hidden">
+        {/* 3D Background — same as original hero */}
+        {!reducedMotion && (
+          <div className="absolute inset-0 z-0" style={{ touchAction: "none" }}>
+            <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%" }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1} />
+              <ParticleSphere images={tarotImages} />
+            </Canvas>
+          </div>
+        )}
+
+        {/* Ambient overlay for readability */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none z-[1]"
           style={{
-            background: "radial-gradient(ellipse at 50% 30%, hsla(270, 55%, 45%, 0.08) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 50% 40%, hsla(270, 55%, 45%, 0.08) 0%, transparent 60%)",
           }}
           aria-hidden="true"
         />
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-3xl mx-auto animate-fade-in">
+        <div className="relative z-10 max-w-3xl mx-auto animate-fade-in pointer-events-none">
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
             Il cammino attraverso i simboli
           </p>
-          <h1 className="text-foreground mb-8 font-display">La Via degli Arcani</h1>
+          <h1 className="text-foreground mb-8 font-display"
+            style={{
+              textShadow: "0 0 50px hsla(270, 55%, 45%, 0.4), 0 0 100px hsla(270, 55%, 45%, 0.2)",
+            }}
+          >
+            La Via degli Arcani
+          </h1>
           <div className="w-16 h-px bg-accent/30 mx-auto mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             La Via degli Arcani è il percorso dedicato a chi desidera entrare davvero nel linguaggio dei tarocchi,
@@ -78,7 +120,6 @@ const ViaArcani = () => {
 
       {/* Content sections */}
       <section className="relative px-6 py-20 md:py-28">
-        {/* Subtle background shift */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -88,7 +129,7 @@ const ViaArcani = () => {
         />
 
         <div className="relative z-10 max-w-3xl mx-auto space-y-12 md:space-y-16">
-          {sections.map((section, i) => (
+          {sections.map((section) => (
             <div
               key={section.title}
               className="group p-8 md:p-10 border border-border/20 bg-card/30 backdrop-blur-sm
