@@ -35,8 +35,8 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-8 lg:py-16">
       {/* 3D Background */}
-      <div className="absolute inset-0 z-0" style={{ touchAction: "none" }}>
-        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%" }}>
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }} style={{ width: "100%", height: "100%", pointerEvents: "none" }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <ParticleSphere images={tarotImages} />
