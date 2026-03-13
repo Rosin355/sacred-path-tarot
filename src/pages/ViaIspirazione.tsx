@@ -6,18 +6,22 @@ const sections = [
   {
     title: "Articoli e riflessioni",
     text: "Scritti contemplativi su simbolismo, alchimia interiore e le correnti invisibili che attraversano l'esistenza. Uno spazio di pensiero lento e profondo.",
+    accent: "editoriale",
   },
   {
     title: "Musica e ascolti",
     text: "Ascolti curati, paesaggi sonori esoterici e musica che risveglia la dimensione sacra del sentire. Un invito a fermarsi e lasciarsi attraversare dal suono.",
+    accent: "sonoro",
   },
   {
     title: "Letteratura esoterica",
     text: "Una biblioteca vivente di testi sacri, poesia mistica e opere che illuminano il cammino interiore. Letture scelte per nutrire la ricerca personale.",
+    accent: "letterario",
   },
   {
     title: "Eventi culturali e progetti speciali",
     text: "Incontri, collaborazioni e iniziative che uniscono arte, simbolo e comunità. Progetti che nascono dall'incontro tra visione interiore e creazione condivisa.",
+    accent: "culturale",
   },
 ];
 
@@ -46,46 +50,93 @@ const ViaIspirazione = () => {
 
   return (
     <ViaLayout viaClass="via-ispirazione" title="La Via dell'Ispirazione">
-      {/* Hero intro */}
-      <section className="flex flex-col items-center justify-center min-h-[55vh] px-6 text-center">
-        <h1 className="text-foreground mb-6 font-display">La Via dell'Ispirazione</h1>
-        <p className="text-muted-foreground font-body max-w-2xl text-base md:text-lg leading-relaxed">
-          La Via dell'Ispirazione è uno spazio editoriale e culturale in cui arte, musica, parola e simbolo si incontrano.
-          Qui Jessica Marin raccoglie riflessioni, ascolti, letteratura esoterica e progetti speciali
-          per nutrire l'immaginazione, la contemplazione e la ricerca interiore.
-        </p>
+      {/* Hero */}
+      <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-6 text-center overflow-hidden">
+        {/* Warm editorial ambient */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              radial-gradient(ellipse at 50% 30%, hsla(38, 55%, 52%, 0.06) 0%, transparent 55%),
+              radial-gradient(ellipse at 20% 60%, hsla(38, 40%, 40%, 0.03) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 70%, hsla(30, 35%, 45%, 0.03) 0%, transparent 50%)
+            `,
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto animate-fade-in">
+          <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
+            Arte, parola e contemplazione
+          </p>
+          <h1 className="text-foreground mb-8 font-display">La Via dell'Ispirazione</h1>
+          <div className="w-16 h-px bg-accent/30 mx-auto mb-8" />
+          <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+            La Via dell'Ispirazione è uno spazio editoriale e culturale in cui arte, musica, parola e simbolo si incontrano.
+            Qui Jessica Marin raccoglie riflessioni, ascolti, letteratura esoterica e progetti speciali
+            per nutrire l'immaginazione, la contemplazione e la ricerca interiore.
+          </p>
+        </div>
       </section>
 
-      {/* Content sections */}
-      <section className="px-6 pb-16 max-w-4xl mx-auto space-y-16">
-        {sections.map((section) => (
-          <div key={section.title} className="space-y-4">
-            <h2 className="text-foreground text-lg md:text-xl tracking-[0.04em] font-display">
-              {section.title}
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base font-body leading-relaxed">
-              {section.text}
-            </p>
+      {/* Content sections — editorial grid */}
+      <section className="relative px-6 py-20 md:py-28">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "linear-gradient(180deg, transparent 0%, hsla(262, 20%, 7%, 0.5) 15%, hsla(262, 20%, 7%, 0.5) 85%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {sections.map((section) => (
+              <div
+                key={section.title}
+                className="p-8 border border-border/15 bg-card/25 backdrop-blur-sm
+                  hover:border-accent/20 hover:bg-card/40 transition-all duration-700
+                  flex flex-col"
+              >
+                <p className="text-[10px] tracking-[0.25em] uppercase text-accent/40 font-caption mb-4">
+                  {section.accent}
+                </p>
+                <h2 className="text-foreground text-lg tracking-[0.04em] font-display mb-4 leading-snug">
+                  {section.title}
+                </h2>
+                <p className="text-muted-foreground text-sm font-body leading-relaxed flex-1">
+                  {section.text}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </section>
 
-      {/* CTAs */}
-      <section className="px-6 pb-24 max-w-4xl mx-auto">
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          {ctas.map((cta) => (
-            <button
-              key={cta.label}
-              className="px-6 py-3 border border-border/40 rounded-sm text-foreground text-sm tracking-wider uppercase
-                hover:bg-accent/10 hover:border-accent/40 transition-all duration-500 font-caption"
-            >
-              {cta.label}
-            </button>
-          ))}
+      {/* CTA section */}
+      <section className="relative px-6 py-16 md:py-24">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-12 h-px bg-accent/20 mx-auto mb-10" />
+          <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto">
+            L'ispirazione è il respiro dell'anima: nutre ciò che ancora non ha forma.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {ctas.map((cta) => (
+              <button
+                key={cta.label}
+                className="px-7 py-3.5 border border-border/30 text-foreground text-sm tracking-wider uppercase
+                  hover:bg-accent/10 hover:border-accent/30 transition-all duration-500 font-caption"
+              >
+                {cta.label}
+              </button>
+            ))}
+          </div>
+
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 text-muted-foreground text-sm tracking-wider uppercase
-              hover:text-foreground transition-colors duration-500 font-caption"
+            className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-muted-foreground text-sm tracking-wider uppercase
+              hover:text-foreground transition-colors duration-500 font-caption elegant-underline"
           >
             ← Torna al Tempio
           </button>
