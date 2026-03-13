@@ -11,6 +11,7 @@ import ViaIspirazione from "./pages/ViaIspirazione";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import FloatingVoiceGuide from "./components/voice/FloatingVoiceGuide";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <FloatingVoiceGuide />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
