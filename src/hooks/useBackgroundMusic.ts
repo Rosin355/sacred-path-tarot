@@ -6,13 +6,10 @@ const STORAGE_KEY = 'music-muted';
 const INITIAL_VOLUME = 0.12;
 const FADE_IN_DURATION = 2000;
 
-// ── Persistent singleton ──
-// The audio element lives outside React so it survives route changes.
-let globalAudio: HTMLAudioElement | null = null;
-let globalInitialised = false;
-
+// Persistent singleton audio – stored on window to survive HMR
 function getOrCreateAudio(): HTMLAudioElement | null {
-  if (globalAudio) return globalAudio;
+  const win = window as any;
+  if (win.__templeAudio) return win.__templeAudio;
 
   const url = getAudioFileUrl();
   if (!url) return null;
@@ -20,7 +17,7 @@ function getOrCreateAudio(): HTMLAudioElement | null {
   const audio = new Audio(url);
   audio.loop = true;
   audio.volume = 0;
-  globalAudio = audio;
+  win.__templeAudio = audio;
   return audio;
 }
 
@@ -28,7 +25,7 @@ function fadeIn(audio: HTMLAudioElement) {
   const startTime = Date.now();
   const id = setInterval(() => {
     const progress = Math.min((Date.now() - startTime) / FADE_IN_DURATION, 1);
-    audio.volume = INITIAL_VOLUME * progress;
+    try { audio.volume = INITIAL_VOLUME * progress; } catch {}
     if (progress >= 1) clearInterval(id);
   }, 50);
 }
@@ -36,35 +33,28 @@ function fadeIn(audio: HTMLAudioElement) {
 export const useBackgroundMusic = () => {
   const [isMuted, setIsMuted] = useState(() => localStorage.getItem(STORAGE_KEY) === 'true');
   const [isPlaying, setIsPlaying] = useState(false);
-  const mountedRef = useRef(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // On first mount anywhere in the app, start playback once
+  // Grab / create audio on mount
   useEffect(() => {
-    mountedRef.current = true;
     const audio = getOrCreateAudio();
+    audioRef.current = audio;
     if (!audio) return;
 
-    audio.muted = isMuted;
-
-    // Sync UI state if audio is already playing (route change)
+    // Sync state if already playing (route change)
     if (!audio.paused) {
       setIsPlaying(true);
-      return; // already playing – nothing to do
+      audio.muted = isMuted;
+      return;
     }
 
-    if (!isMuted && !globalInitialised) {
-      globalInitialised = true;
+    // First mount – try autoplay
+    audio.muted = isMuted;
+    if (!isMuted) {
       audio.play()
-        .then(() => {
-          if (mountedRef.current) setIsPlaying(true);
-          fadeIn(audio);
-        })
-        .catch(() => {
-          // autoplay blocked – will start on first user interaction
-        });
+        .then(() => { setIsPlaying(true); fadeIn(audio); })
+        .catch(() => {});
     }
-
-    return () => { mountedRef.current = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -73,7 +63,7 @@ export const useBackgroundMusic = () => {
     localStorage.setItem(STORAGE_KEY, String(isMuted));
     soundEffects.setMuted(isMuted);
 
-    const audio = globalAudio;
+    const audio = audioRef.current;
     if (!audio) return;
 
     audio.muted = isMuted;
@@ -81,13 +71,10 @@ export const useBackgroundMusic = () => {
     if (isMuted) {
       audio.pause();
       setIsPlaying(false);
-    } else {
+    } else if (audio.paused) {
       audio.volume = 0;
       audio.play()
-        .then(() => {
-          setIsPlaying(true);
-          fadeIn(audio);
-        })
+        .then(() => { setIsPlaying(true); fadeIn(audio); })
         .catch(() => {});
     }
   }, [isMuted]);
