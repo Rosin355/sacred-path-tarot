@@ -69,10 +69,12 @@ const Threshold = () => {
 
   const handleDoorClick = useCallback(
     (door: DoorData) => {
-      if (phase !== "idle") return;
+      // Guard sync to prevent double-trigger on very fast double click/tap
+      if (phaseRef.current !== "idle") return;
 
       setActiveDoor(door);
       activeDoorRef.current = door;
+      setShowOverlay(false);
 
       if (reducedMotion) {
         setPhase("navigating");
@@ -90,16 +92,21 @@ const Threshold = () => {
 
       setPhase("dissolving");
       phaseRef.current = "dissolving";
-      setTimeout(() => setShowOverlay(true), 1200);
 
-      // Fallback: navigate after 3s
+      // Fallback: keep longer than the full dissolve chain to avoid premature route switch
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
       fallbackTimerRef.current = setTimeout(() => {
         const d = activeDoorRef.current;
         if (d) navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
-      }, 3000);
+      }, 5200);
     },
-    [phase, navigate, reducedMotion]
+    [navigate, reducedMotion]
   );
+
+  const handleDissolveComplete = useCallback(() => {
+    if (phaseRef.current !== "dissolving") return;
+    setShowOverlay(true);
+  }, []);
 
   const handleOverlayComplete = useCallback(() => {
     if (phaseRef.current === "navigating") return;
@@ -178,7 +185,7 @@ const Threshold = () => {
         <DoorDissolveOverlay
           doorRect={doorRect}
           active={phase === "dissolving"}
-          onComplete={() => {}}
+          onComplete={handleDissolveComplete}
           doorColor={DOOR_COLORS[activeDoor.id]}
           textRef={activeTextRef as React.RefObject<HTMLDivElement>}
         />
