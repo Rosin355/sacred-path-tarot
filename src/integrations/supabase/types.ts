@@ -14,6 +14,253 @@ export type Database = {
   }
   public: {
     Tables: {
+      assistant_faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          created_by: string | null
+          id: string
+          path: Database["public"]["Enums"]["knowledge_path"]
+          priority: number
+          question: string
+          status: Database["public"]["Enums"]["knowledge_status"]
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          path?: Database["public"]["Enums"]["knowledge_path"]
+          priority?: number
+          question: string
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          path?: Database["public"]["Enums"]["knowledge_path"]
+          priority?: number
+          question?: string
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_faqs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assistant_rules: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          key: string
+          label: string
+          priority: number
+          rule_type: Database["public"]["Enums"]["assistant_rule_type"]
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          key: string
+          label: string
+          priority?: number
+          rule_type?: Database["public"]["Enums"]["assistant_rule_type"]
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          key?: string
+          label?: string
+          priority?: number
+          rule_type?: Database["public"]["Enums"]["assistant_rule_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_rules_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assistant_sources: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          domain: string
+          id: string
+          is_active: boolean
+          label: string
+          source_kind: Database["public"]["Enums"]["assistant_source_kind"]
+          trust_level: number
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain: string
+          id?: string
+          is_active?: boolean
+          label: string
+          source_kind?: Database["public"]["Enums"]["assistant_source_kind"]
+          trust_level?: number
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          source_kind?: Database["public"]["Enums"]["assistant_source_kind"]
+          trust_level?: number
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_sources_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string
+          heading: string | null
+          id: string
+          metadata: Json
+          token_estimate: number
+          updated_at: string
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          created_at?: string
+          document_id: string
+          heading?: string | null
+          id?: string
+          metadata?: Json
+          token_estimate?: number
+          updated_at?: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string
+          heading?: string | null
+          id?: string
+          metadata?: Json
+          token_estimate?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_chunks_document_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_documents: {
+        Row: {
+          content: string
+          content_type: Database["public"]["Enums"]["knowledge_content_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          path: Database["public"]["Enums"]["knowledge_path"]
+          priority: number
+          slug: string
+          source_url: string | null
+          status: Database["public"]["Enums"]["knowledge_status"]
+          summary: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          content_type?: Database["public"]["Enums"]["knowledge_content_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          path?: Database["public"]["Enums"]["knowledge_path"]
+          priority?: number
+          slug: string
+          source_url?: string | null
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          summary?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          content_type?: Database["public"]["Enums"]["knowledge_content_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          path?: Database["public"]["Enums"]["knowledge_path"]
+          priority?: number
+          slug?: string
+          source_url?: string | null
+          status?: Database["public"]["Enums"]["knowledge_status"]
+          summary?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_documents_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -93,6 +340,25 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      assistant_rule_type:
+        | "system"
+        | "tone"
+        | "safety"
+        | "routing"
+        | "retrieval"
+      assistant_source_kind:
+        | "approved_link"
+        | "reference_domain"
+        | "editorial_source"
+      knowledge_content_type:
+        | "page"
+        | "article"
+        | "method"
+        | "faq"
+        | "rule"
+        | "source_note"
+      knowledge_path: "arcani" | "respiro" | "ispirazione" | "tempio"
+      knowledge_status: "draft" | "published" | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -221,6 +487,22 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      assistant_rule_type: ["system", "tone", "safety", "routing", "retrieval"],
+      assistant_source_kind: [
+        "approved_link",
+        "reference_domain",
+        "editorial_source",
+      ],
+      knowledge_content_type: [
+        "page",
+        "article",
+        "method",
+        "faq",
+        "rule",
+        "source_note",
+      ],
+      knowledge_path: ["arcani", "respiro", "ispirazione", "tempio"],
+      knowledge_status: ["draft", "published", "archived"],
     },
   },
 } as const
