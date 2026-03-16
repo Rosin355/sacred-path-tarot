@@ -163,7 +163,6 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         aria-label={`Entra ne ${door.title}`}
       >
         <DoorAuraLayer active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
-        <DoorHoverParticles active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
 
         {/* Arch container */}
         <div className="relative z-10">
@@ -171,9 +170,10 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
             className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 transition-opacity duration-1000"
             aria-hidden="true"
           />
-          <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden">
+          <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden rounded-t-[999px] threshold-door-inner-light">
             <div className="absolute inset-0 divine-light-inner" aria-hidden="true" />
             <div className="absolute bottom-0 left-0 right-0 h-[40%] fog-effect" aria-hidden="true" />
+            <DoorHoverParticles active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
           </div>
           <img
             src={templeArch}

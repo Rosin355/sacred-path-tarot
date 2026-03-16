@@ -215,16 +215,20 @@
 .door-hover-aura,
 .door-hover-particles {
   position: absolute;
-  inset: -14% -16% 6%;
   pointer-events: none;
 }
 
 .door-hover-aura {
+  inset: -14% -16% 6%;
   z-index: 0;
   opacity: 0;
   transform: scale(0.94);
   filter: blur(22px);
   will-change: opacity, transform, filter;
+}
+
+.threshold-door-inner-light {
+  isolation: isolate;
 }
 
 .door-hover-aura-core,
@@ -261,19 +265,20 @@
 }
 
 .door-hover-particles {
-  z-index: 12;
-  overflow: visible;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
   opacity: 1;
 }
 
 .door-hover-particles-glow {
   position: absolute;
-  inset: 8% 10% 4%;
-  border-radius: 999px;
+  inset: 10% 12% 6%;
+  border-radius: 999px 999px 38% 38%;
   background:
-    radial-gradient(circle at 50% 78%, hsla(var(--door-color-bright) / 0.3) 0%, hsla(var(--door-particle-tint) / 0.16) 34%, transparent 72%),
-    radial-gradient(circle at 50% 56%, hsla(var(--door-color) / 0.22) 0%, transparent 62%);
-  filter: blur(26px);
+    radial-gradient(circle at 50% 84%, hsla(var(--door-color-bright) / 0.26) 0%, hsla(var(--door-particle-tint) / 0.14) 28%, transparent 66%),
+    radial-gradient(circle at 50% 62%, hsla(var(--door-color) / 0.18) 0%, transparent 58%);
+  filter: blur(20px);
   opacity: 0;
   transition: opacity 180ms ease-out;
 }
@@ -289,16 +294,16 @@
 }
 
 .door-hover-sparkles-primary {
-  inset: -8% 2% -2%;
-  mask-image: radial-gradient(ellipse at 50% 90%, black 0%, black 52%, rgba(0, 0, 0, 0.94) 72%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 90%, black 0%, black 52%, rgba(0, 0, 0, 0.94) 72%, transparent 100%);
+  inset: 0;
+  mask-image: linear-gradient(to top, black 0%, black 58%, rgba(0, 0, 0, 0.84) 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, black 58%, rgba(0, 0, 0, 0.84) 78%, transparent 100%);
 }
 
 .door-hover-sparkles-secondary {
-  inset: -4% 1% 6%;
+  inset: 0;
   opacity: 0.9;
-  mask-image: radial-gradient(ellipse at 50% 88%, black 0%, black 46%, rgba(0, 0, 0, 0.9) 72%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 88%, black 0%, black 46%, rgba(0, 0, 0, 0.9) 72%, transparent 100%);
+  mask-image: linear-gradient(to top, black 0%, black 48%, rgba(0, 0, 0, 0.78) 72%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, black 48%, rgba(0, 0, 0, 0.78) 72%, transparent 100%);
 }
 
 @keyframes divine-pulse {
