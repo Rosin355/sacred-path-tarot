@@ -17,18 +17,18 @@ interface ParticleSpec {
   driftY: number;
 }
 
-const PARTICLE_COUNT = 8;
+const PARTICLE_COUNT = 14;
 
 const createParticleSpecs = (): ParticleSpec[] =>
   Array.from({ length: PARTICLE_COUNT }, (_, index) => ({
     id: index,
-    left: `${18 + ((index * 11) % 60)}%`,
-    top: `${22 + ((index * 9) % 52)}%`,
-    size: 3 + (index % 3),
-    duration: 2.8 + (index % 4) * 0.45,
-    delay: index * 0.08,
-    driftX: (index % 2 === 0 ? 1 : -1) * (6 + (index % 3) * 2),
-    driftY: -10 - (index % 4) * 4,
+    left: `${12 + ((index * 7) % 72)}%`,
+    top: `${16 + ((index * 6) % 58)}%`,
+    size: 4 + (index % 4),
+    duration: 3 + (index % 5) * 0.42,
+    delay: index * 0.06,
+    driftX: (index % 2 === 0 ? 1 : -1) * (10 + (index % 4) * 2),
+    driftY: -16 - (index % 5) * 4,
   }));
 
 const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
@@ -61,8 +61,8 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
         {
           x: spec.driftX,
           y: spec.driftY,
-          opacity: 0.75,
-          scale: 1,
+          opacity: 0.95,
+          scale: 1.08,
           duration: spec.duration,
           delay: spec.delay,
           yoyo: true,
@@ -70,6 +70,16 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
           repeatRefresh: false,
         },
         0
+      ).to(
+        particle,
+        {
+          opacity: 0.42,
+          scale: 0.92,
+          duration: spec.duration * 0.55,
+          yoyo: true,
+          repeat: 1,
+        },
+        spec.delay
       );
     });
 
@@ -92,17 +102,17 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
 
     if (active) {
       gsap.to(container, {
-        opacity: reducedMotion ? 0.35 : 1,
-        duration: reducedMotion ? 0.2 : 0.28,
+        opacity: reducedMotion ? 0.5 : 1,
+        duration: reducedMotion ? 0.22 : 0.34,
         ease: "power2.out",
       });
 
       gsap.to(particles, {
-        opacity: reducedMotion ? 0.18 : 0.55,
-        scale: 1,
-        duration: reducedMotion ? 0.18 : 0.26,
+        opacity: reducedMotion ? 0.28 : 0.82,
+        scale: reducedMotion ? 0.94 : 1.04,
+        duration: reducedMotion ? 0.2 : 0.32,
         ease: "power2.out",
-        stagger: reducedMotion ? 0 : 0.03,
+        stagger: reducedMotion ? 0 : 0.025,
       });
 
       if (!reducedMotion) {
