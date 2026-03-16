@@ -123,8 +123,8 @@ const Threshold = () => {
   }, [navigate]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden overflow-y-auto bg-background threshold-bg md:fixed md:inset-0 md:h-full md:overflow-hidden">
-      <div className="absolute inset-0 z-[1] threshold-ambient" aria-hidden="true" />
+    <div className="relative h-[100dvh] w-full overflow-x-hidden overflow-y-auto bg-background threshold-bg md:fixed md:inset-0 md:h-full md:overflow-hidden">
+      <div className="absolute inset-0 z-[1] pointer-events-none threshold-ambient" aria-hidden="true" />
 
       <button
         onClick={toggleMute}

@@ -44,7 +44,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
     : "hsl(var(--background))";
 
   return (
-    <div className={`min-h-screen bg-background ${viaClass}`}>
+    <div className={`min-h-screen overflow-x-hidden overflow-y-auto bg-background ${viaClass}`}>
       {/* Continuity overlay */}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-[1800ms] ease-out"
