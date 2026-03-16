@@ -163,7 +163,12 @@ export const SparklesCore = ({
   return (
     <motion.div animate={controls} className={cn("pointer-events-none opacity-0", className)}>
       {init ? (
-        <Particles id={id ?? generatedId} className="h-full w-full" particlesLoaded={particlesLoaded} options={options} />
+        <Particles
+          id={id ?? generatedId}
+          className="h-full w-full"
+          particlesLoaded={particlesLoaded}
+          options={options}
+        />
       ) : null}
     </motion.div>
   );
