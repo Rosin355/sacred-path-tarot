@@ -90,7 +90,6 @@ export const SparklesCore = ({
             enable: false,
             mode: "repulse",
           },
-          resize: true,
         },
       },
       particles: {
