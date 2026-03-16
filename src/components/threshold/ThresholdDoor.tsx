@@ -1,5 +1,10 @@
-import { forwardRef, useRef, useImperativeHandle } from "react";
+import { forwardRef, useRef, useImperativeHandle, useEffect } from "react";
+import gsap from "gsap";
 import templeArch from "@/assets/temple-arch.png";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useDoorHoverState } from "@/hooks/useDoorHoverState";
+import DoorAuraLayer from "@/components/threshold/DoorAuraLayer";
+import DoorHoverParticles from "@/components/threshold/DoorHoverParticles";
 
 export interface DoorData {
   id: string;
@@ -27,6 +32,9 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
     const dimmed = phase !== "idle" && !isActive;
     const buttonRef = useRef<HTMLButtonElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
+    const hoverTimelineRef = useRef<gsap.core.Timeline | null>(null);
+    const reducedMotion = useReducedMotion();
+    const { isHoverActive, hoverBindings } = useDoorHoverState();
 
     useImperativeHandle(ref, () => ({
       getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
@@ -34,12 +42,49 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
       getTextEl: () => textRef.current,
     }));
 
+    useEffect(() => {
+      if (!buttonRef.current || !textRef.current) return;
+
+      const button = buttonRef.current;
+      const text = textRef.current;
+      const archGlow = button.querySelector(".divine-light-glow");
+      const archInner = button.querySelector(".divine-light-inner");
+      const fog = button.querySelector(".fog-effect");
+
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+      tl.to(button, { scale: 1.022, duration: 0.22 }, 0)
+        .to(text, { y: -2, duration: 0.22 }, 0)
+        .to(archGlow, { opacity: reducedMotion ? 0.2 : 0.46, duration: 0.22 }, 0)
+        .to(archInner, { opacity: reducedMotion ? 0.85 : 1, filter: "brightness(1.08)", duration: 0.24 }, 0)
+        .to(fog, { opacity: reducedMotion ? 0.82 : 1, duration: 0.24 }, 0);
+
+      hoverTimelineRef.current = tl;
+
+      return () => {
+        tl.kill();
+        hoverTimelineRef.current = null;
+      };
+    }, [reducedMotion]);
+
+    useEffect(() => {
+      const tl = hoverTimelineRef.current;
+      if (!tl) return;
+
+      if (isHoverActive && phase === "idle") {
+        tl.play();
+      } else {
+        tl.reverse();
+      }
+    }, [isHoverActive, phase]);
+
     return (
       <button
         ref={buttonRef}
         onClick={() => onClick(door)}
         disabled={phase !== "idle"}
-        className={`group relative w-[200px] md:w-[230px] cursor-pointer
+        {...hoverBindings}
+        data-hover-active={isHoverActive ? "true" : "false"}
+        className={`group relative isolate w-[200px] md:w-[230px] cursor-pointer
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
           transition-all duration-700 ease-out hover:scale-[1.03]
           ${door.colorClass}
@@ -52,10 +97,13 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         }}
         aria-label={`Entra ne ${door.title}`}
       >
+        <DoorAuraLayer active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
+        <DoorHoverParticles active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
+
         {/* Arch container */}
-        <div className="relative">
+        <div className="relative z-10">
           <div
-            className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000"
+            className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 transition-opacity duration-1000"
             aria-hidden="true"
           />
           <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden">

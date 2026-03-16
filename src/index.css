@@ -150,14 +150,20 @@
 .door-arcani {
   --door-color: 270 55% 45%;
   --door-color-bright: 270 65% 60%;
+  --door-aura-highlight: 272 58% 68%;
+  --door-aura-shadow: 270 45% 28%;
 }
 .door-respiro {
   --door-color: 175 40% 45%;
   --door-color-bright: 175 50% 60%;
+  --door-aura-highlight: 42 42% 76%;
+  --door-aura-shadow: 175 24% 30%;
 }
 .door-ispirazione {
   --door-color: 38 55% 52%;
   --door-color-bright: 38 65% 65%;
+  --door-aura-highlight: 42 48% 82%;
+  --door-aura-shadow: 36 42% 34%;
 }
 
 /* Divine light glow behind arch on hover */
@@ -201,6 +207,63 @@
     radial-gradient(ellipse at 30% 80%, hsla(var(--door-color-bright) / 0.12) 0%, transparent 60%),
     radial-gradient(ellipse at 70% 90%, hsla(var(--door-color) / 0.1) 0%, transparent 50%);
   animation: fog-drift 12s ease-in-out infinite alternate-reverse;
+}
+
+.door-hover-aura,
+.door-hover-particles {
+  position: absolute;
+  inset: -8% -10% 8%;
+  pointer-events: none;
+}
+
+.door-hover-aura {
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0.96);
+  filter: blur(18px);
+}
+
+.door-hover-aura-core,
+.door-hover-aura-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px 999px 28% 28%;
+}
+
+.door-hover-aura-core {
+  background:
+    radial-gradient(circle at 50% 28%, hsla(var(--door-aura-highlight) / 0.2) 0%, hsla(var(--door-color-bright) / 0.12) 28%, transparent 62%),
+    radial-gradient(ellipse at 50% 58%, hsla(var(--door-color) / 0.14) 0%, transparent 72%);
+}
+
+.door-hover-aura-halo {
+  background:
+    radial-gradient(circle at 50% 36%, hsla(var(--foreground) / 0.08) 0%, transparent 24%),
+    radial-gradient(ellipse at 50% 68%, hsla(var(--door-aura-shadow) / 0.18) 0%, transparent 74%);
+}
+
+.door-hover-aura.is-active {
+  opacity: 1;
+}
+
+.door-hover-aura.is-reduced {
+  filter: blur(12px);
+}
+
+.door-hover-particles {
+  z-index: 5;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.door-hover-particle {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0;
+  background:
+    radial-gradient(circle, hsla(var(--foreground) / 0.9) 0%, hsla(var(--door-color-bright) / 0.46) 42%, transparent 72%);
+  box-shadow: 0 0 12px hsla(var(--door-color-bright) / 0.2);
+  will-change: transform, opacity;
 }
 
 @keyframes divine-pulse {
