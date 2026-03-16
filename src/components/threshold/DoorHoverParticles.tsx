@@ -7,7 +7,11 @@ interface Props {
 
 const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
   return (
-    <div aria-hidden="true" className="door-hover-particles">
+    <div
+      aria-hidden="true"
+      className="door-hover-particles"
+      data-active={active ? "true" : "false"}
+    >
       <div className="door-hover-particles-glow" />
       <SparklesCore
         active={active}
