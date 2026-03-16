@@ -178,6 +178,107 @@ function inferDomain(value: string) {
   }
 }
 
+function normalizeChunkContent(value: string) {
+  return value.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function buildDocumentChunks(content: string) {
+  const normalized = normalizeChunkContent(content);
+  if (!normalized) return [];
+
+  const sections = normalized
+    .split(/\n\s*\n/)
+    .map((section) => section.trim())
+    .filter(Boolean);
+
+  const chunks: Array<{ heading: string | null; content: string; token_estimate: number; metadata: Record<string, string | number | null> }> = [];
+  let currentHeading: string | null = null;
+  let currentContent = '';
+  const maxChunkLength = 900;
+
+  const pushChunk = () => {
+    const prepared = currentContent.trim();
+    if (!prepared) return;
+
+    chunks.push({
+      heading: currentHeading,
+      content: prepared,
+      token_estimate: Math.max(1, Math.ceil(prepared.length / 4)),
+      metadata: {
+        heading: currentHeading,
+        char_count: prepared.length,
+      },
+    });
+
+    currentContent = '';
+  };
+
+  sections.forEach((section) => {
+    const lines = section.split('\n').map((line) => line.trim()).filter(Boolean);
+    const firstLine = lines[0] ?? '';
+    const body = lines.join('\n');
+    const looksLikeHeading = lines.length <= 3 && firstLine.length <= 120 && !/[.!?]$/.test(firstLine);
+
+    if (looksLikeHeading) {
+      pushChunk();
+      currentHeading = firstLine;
+      if (body.length > maxChunkLength) {
+        for (let start = 0; start < body.length; start += maxChunkLength) {
+          const slice = body.slice(start, start + maxChunkLength).trim();
+          if (!slice) continue;
+          chunks.push({
+            heading: currentHeading,
+            content: slice,
+            token_estimate: Math.max(1, Math.ceil(slice.length / 4)),
+            metadata: {
+              heading: currentHeading,
+              char_count: slice.length,
+              section_fragment: Math.floor(start / maxChunkLength) + 1,
+            },
+          });
+        }
+        currentContent = '';
+      } else {
+        currentContent = body;
+      }
+      return;
+    }
+
+    const candidate = currentContent ? `${currentContent}\n\n${body}` : body;
+    if (candidate.length > maxChunkLength && currentContent) {
+      pushChunk();
+      currentContent = body;
+    } else {
+      currentContent = candidate;
+    }
+
+    if (currentContent.length > maxChunkLength) {
+      for (let start = 0; start < currentContent.length; start += maxChunkLength) {
+        const slice = currentContent.slice(start, start + maxChunkLength).trim();
+        if (!slice) continue;
+        chunks.push({
+          heading: currentHeading,
+          content: slice,
+          token_estimate: Math.max(1, Math.ceil(slice.length / 4)),
+          metadata: {
+            heading: currentHeading,
+            char_count: slice.length,
+            overflow_fragment: Math.floor(start / maxChunkLength) + 1,
+          },
+        });
+      }
+      currentContent = '';
+    }
+  });
+
+  pushChunk();
+
+  return chunks.map((chunk, index) => ({
+    ...chunk,
+    chunk_index: index,
+  }));
+}
+
 function SectionShell({
   title,
   description,
@@ -276,7 +377,7 @@ export function AdminKnowledgeManager() {
   const documentsMutation = useMutation({
     mutationFn: async (payload: DocumentFormState) => {
       const preparedSlug = slugify(payload.slug || payload.title);
-      const prepared: TablesInsert<'knowledge_documents'> | TablesUpdate<'knowledge_documents'> = {
+      const preparedDocument: TablesInsert<'knowledge_documents'> | TablesUpdate<'knowledge_documents'> = {
         title: payload.title,
         slug: preparedSlug,
         summary: payload.summary || null,
@@ -289,20 +390,54 @@ export function AdminKnowledgeManager() {
         priority: payload.priority,
       };
 
+      const nextChunks = buildDocumentChunks(payload.content);
+      let documentId = payload.id;
+      let action: 'created' | 'updated' = 'updated';
+
       if (payload.id) {
-        const { error } = await supabase.from('knowledge_documents').update(prepared).eq('id', payload.id);
+        const { error } = await supabase.from('knowledge_documents').update(preparedDocument).eq('id', payload.id);
         if (error) throw error;
-        return 'updated';
+      } else {
+        const { data, error } = await supabase
+          .from('knowledge_documents')
+          .insert(preparedDocument as TablesInsert<'knowledge_documents'>)
+          .select('id')
+          .single();
+        if (error) throw error;
+        documentId = data.id;
+        action = 'created';
       }
 
-      const { error } = await supabase.from('knowledge_documents').insert(prepared as TablesInsert<'knowledge_documents'>);
-      if (error) throw error;
-      return 'created';
+      if (!documentId) {
+        throw new Error('Impossibile determinare il documento da sincronizzare.');
+      }
+
+      const { error: deleteChunksError } = await supabase
+        .from('knowledge_chunks')
+        .delete()
+        .eq('document_id', documentId);
+      if (deleteChunksError) throw deleteChunksError;
+
+      if (nextChunks.length > 0) {
+        const { error: insertChunksError } = await supabase.from('knowledge_chunks').insert(
+          nextChunks.map((chunk) => ({
+            document_id: documentId,
+            chunk_index: chunk.chunk_index,
+            heading: chunk.heading,
+            content: chunk.content,
+            token_estimate: chunk.token_estimate,
+            metadata: chunk.metadata,
+          }))
+        );
+        if (insertChunksError) throw insertChunksError;
+      }
+
+      return { action, chunkCount: nextChunks.length };
     },
-    onSuccess: async (action) => {
+    onSuccess: async ({ action, chunkCount }) => {
       toast({
         title: action === 'created' ? 'Documento creato' : 'Documento aggiornato',
-        description: 'La knowledge base interna è stata raffinata con successo.',
+        description: `Contenuto sincronizzato: ${chunkCount} chunk rigenerati automaticamente.`,
       });
       setDocumentForm(documentDefaults);
       await invalidateAll();
