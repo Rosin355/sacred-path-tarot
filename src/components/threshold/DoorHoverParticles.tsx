@@ -17,10 +17,10 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
         active={active}
         className="door-hover-sparkles door-hover-sparkles-primary"
         background="transparent"
-        minSize={reducedMotion ? 1.2 : 1.6}
-        maxSize={reducedMotion ? 3.2 : 4.8}
-        speed={reducedMotion ? 0.5 : 1.25}
-        particleDensity={reducedMotion ? 56 : 132}
+        minSize={reducedMotion ? 0.9 : 1.1}
+        maxSize={reducedMotion ? 2.2 : 3.1}
+        speed={reducedMotion ? 0.45 : 1.05}
+        particleDensity={reducedMotion ? 48 : 108}
         direction="top"
         particleColor="hsl(var(--door-particle-tint))"
       />
@@ -28,10 +28,10 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
         active={active && !reducedMotion}
         className="door-hover-sparkles door-hover-sparkles-secondary"
         background="transparent"
-        minSize={1}
-        maxSize={2.4}
-        speed={0.9}
-        particleDensity={72}
+        minSize={0.8}
+        maxSize={1.8}
+        speed={0.8}
+        particleDensity={58}
         direction="top-right"
         particleColor="hsl(var(--door-color-bright))"
       />
