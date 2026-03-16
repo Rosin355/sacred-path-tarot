@@ -173,7 +173,7 @@ const Threshold = () => {
         </nav>
 
         <p
-          className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 ${
+          className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 text-center ${
             visible ? "opacity-100" : "opacity-0"
           } ${phase !== "idle" ? "opacity-0" : ""}`}
         >
