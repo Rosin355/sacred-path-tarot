@@ -25,6 +25,12 @@ export default function FloatingVoiceGuide() {
   } = useVoiceAssistant();
   const isMobile = useIsMobile();
 
+  const visualState = state === 'loading'
+    ? 'thinking'
+    : state === 'idle' && isOpen
+      ? 'listening'
+      : state;
+
   return (
     <div
       className="fixed z-[60] flex flex-col items-end gap-3"
@@ -54,6 +60,7 @@ export default function FloatingVoiceGuide() {
 
       <VoiceOrb
         state={state}
+        visualState={visualState}
         analyser={audioAnalyser}
         onClick={() => setIsOpen(!isOpen)}
       />

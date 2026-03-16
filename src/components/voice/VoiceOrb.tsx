@@ -4,17 +4,20 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useOrbEyeTracking } from '@/hooks/useOrbEyeTracking';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
 
+type OrbVisualState = VoiceState | 'hover' | 'listening' | 'thinking';
+
 interface VoiceOrbProps {
   state: VoiceState;
+  visualState?: OrbVisualState;
   analyser: AnalyserNode | null;
   onClick: () => void;
 }
 
 /**
  * Animated sacred voice orb that reacts to audio playback.
- * States: idle, loading, speaking, paused, error
+ * States: idle, listening, thinking, speaking, paused, error
  */
-export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
+export default function VoiceOrb({ state, visualState, analyser, onClick }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const reducedMotion = useReducedMotion();
@@ -24,7 +27,10 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
     disabled: reducedMotion,
   });
 
-  // Compute average amplitude from analyser
+  const effectiveVisualState: OrbVisualState = eyeState.isHovering && state === 'idle'
+    ? 'hover'
+    : (visualState ?? state);
+
   const getAmplitude = useMemo(() => {
     if (!analyser) return () => 0;
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -64,8 +70,6 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
         amplitude = getAmplitude();
       }
 
-      const attentiveBoost = eyeState.isHovering ? 0.04 : 0;
-
       let glowIntensity = 0.2;
       let pulseSpeed = 0.85;
       let hue = 270;
@@ -74,21 +78,43 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
       let ringOpacity = 0.34;
       let ringWidth = 1.6;
       let auraSpread = 2.1;
+      let shimmerOpacity = 0.08;
+      let thinkingArcOpacity = 0;
+      let listeningPulseOpacity = 0;
 
-      switch (state) {
+      switch (effectiveVisualState) {
         case 'idle':
-          glowIntensity = 0.2 + attentiveBoost;
+          glowIntensity = 0.2;
           pulseSpeed = 0.5;
-          ringOpacity = 0.36 + attentiveBoost;
+          ringOpacity = 0.36;
           break;
-        case 'loading':
-          glowIntensity = 0.28;
-          pulseSpeed = 2.2;
-          ringOpacity = 0.5;
+        case 'hover':
+          glowIntensity = 0.25;
+          pulseSpeed = 0.75;
+          ringOpacity = 0.48;
+          lightness = 42;
+          shimmerOpacity = 0.12;
+          break;
+        case 'listening':
+          glowIntensity = 0.24;
+          pulseSpeed = 1.1;
+          ringOpacity = 0.52;
           ringWidth = 1.9;
+          lightness = 43;
+          saturation = 42;
+          listeningPulseOpacity = 0.26;
+          break;
+        case 'thinking':
+          glowIntensity = 0.27;
+          pulseSpeed = 1.35;
+          ringOpacity = 0.46;
+          ringWidth = 1.8;
           hue = 40;
-          saturation = 40;
+          saturation = 38;
           lightness = 54;
+          auraSpread = 2.25;
+          shimmerOpacity = 0.18;
+          thinkingArcOpacity = 0.34;
           break;
         case 'speaking':
           glowIntensity = 0.24 + amplitude * 0.55;
@@ -96,6 +122,7 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
           ringOpacity = 0.42 + amplitude * 0.28;
           ringWidth = 1.7 + amplitude * 1.1;
           auraSpread = 2.35 + amplitude * 0.45;
+          shimmerOpacity = 0.12 + amplitude * 0.1;
           break;
         case 'paused':
           glowIntensity = 0.19;
@@ -110,12 +137,6 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
           pulseSpeed = 0.35;
           ringOpacity = 0.38;
           break;
-      }
-
-      if (eyeState.isHovering && state !== 'error') {
-        glowIntensity += 0.03;
-        ringOpacity += 0.08;
-        lightness += 2;
       }
 
       if (reducedMotion) {
@@ -170,7 +191,7 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
       const internalShimmer = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
       internalShimmer.addColorStop(0, `hsla(${hue}, 55%, 92%, ${0.12 + pulse * 0.06})`);
       internalShimmer.addColorStop(0.5, 'transparent');
-      internalShimmer.addColorStop(1, `hsla(${hue}, ${saturation}%, ${lightness + 10}%, ${state === 'loading' ? 0.18 : 0.08})`);
+      internalShimmer.addColorStop(1, `hsla(${hue}, ${saturation}%, ${lightness + 10}%, ${shimmerOpacity})`);
       ctx.fillStyle = internalShimmer;
       ctx.fillRect(cx - radius - 10, cy - radius - 10, radius * 2 + 20, radius * 2 + 20);
 
@@ -194,10 +215,32 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
       ctx.lineWidth = 0.9;
       ctx.stroke();
 
-      if ((state === 'speaking' || state === 'loading') && !reducedMotion) {
+      if (listeningPulseOpacity > 0 && !reducedMotion) {
         ctx.beginPath();
-        ctx.arc(cx, cy, radius + 6 + pulse * 1.2, time * 1.7, time * 1.7 + Math.PI * (state === 'loading' ? 1.35 : 0.95));
-        ctx.strokeStyle = `hsla(${hue}, ${saturation + 12}%, ${lightness + 18}%, ${state === 'speaking' ? 0.26 + amplitude * 0.24 : 0.34})`;
+        ctx.arc(cx, cy, radius + 7 + pulse * 1.8, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${hue}, ${saturation + 8}%, ${lightness + 18}%, ${listeningPulseOpacity * (0.6 + pulse * 0.4)})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      if (thinkingArcOpacity > 0 && !reducedMotion) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius + 6, time * 1.5, time * 1.5 + Math.PI * 0.82);
+        ctx.strokeStyle = `hsla(${hue}, ${saturation + 10}%, ${lightness + 14}%, ${thinkingArcOpacity})`;
+        ctx.lineWidth = 1.25;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius + 9, -time * 1.15, -time * 1.15 + Math.PI * 0.45);
+        ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness + 8}%, ${thinkingArcOpacity * 0.7})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      if (state === 'speaking' && !reducedMotion) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius + 6 + pulse * 1.2, time * 1.7, time * 1.7 + Math.PI * 0.95);
+        ctx.strokeStyle = `hsla(${hue}, ${saturation + 12}%, ${lightness + 18}%, ${0.26 + amplitude * 0.24})`;
         ctx.lineWidth = 1.35;
         ctx.stroke();
       }
@@ -210,7 +253,7 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
     return () => {
       cancelAnimationFrame(animRef.current);
     };
-  }, [state, analyser, getAmplitude, reducedMotion, eyeState.isHovering]);
+  }, [state, effectiveVisualState, analyser, getAmplitude, reducedMotion]);
 
   const ariaLabel = {
     idle: 'Assistente vocale — apri pannello',
@@ -220,7 +263,7 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
     error: 'Assistente vocale — errore',
   }[state];
 
-  const showAwakeState = eyeState.isHovering || state === 'speaking' || state === 'loading';
+  const showAwakeState = eyeState.isHovering || effectiveVisualState === 'listening' || effectiveVisualState === 'thinking' || state === 'speaking';
 
   return (
     <button
@@ -235,6 +278,7 @@ export default function VoiceOrb({ state, analyser, onClick }: VoiceOrbProps) {
       aria-label={ariaLabel}
       title="Assistente vocale"
       data-state={state}
+      data-visual-state={effectiveVisualState}
       data-hovered={eyeState.isHovering ? 'true' : 'false'}
     >
       <span className="voice-orb-shell" aria-hidden="true" />
