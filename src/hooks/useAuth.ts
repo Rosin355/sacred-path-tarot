@@ -32,7 +32,7 @@ export const useAuth = () => {
   const signUp = async (email: string, password: string, fullName?: string) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
-      
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -79,8 +79,8 @@ export const useAuth = () => {
       if (error) {
         toast({
           title: "Errore durante l'accesso",
-          description: error.message === "Invalid login credentials" 
-            ? "Credenziali non valide" 
+          description: error.message === "Invalid login credentials"
+            ? "Credenziali non valide"
             : error.message,
           variant: "destructive"
         });
@@ -103,10 +103,41 @@ export const useAuth = () => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+
+      if (error) {
+        toast({
+          title: "Recupero password non riuscito",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      toast({
+        title: "Email inviata",
+        description: "Controlla la tua casella di posta per reimpostare la password."
+      });
+
+      return { data, error: null };
+    } catch (error: any) {
+      toast({
+        title: "Errore",
+        description: error.message,
+        variant: "destructive"
+      });
+      return { error };
+    }
+  };
+
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
-      
+
       if (error) {
         toast({
           title: "Errore",
@@ -138,6 +169,7 @@ export const useAuth = () => {
     loading,
     signUp,
     signIn,
+    resetPassword,
     signOut,
     isAuthenticated: !!user
   };

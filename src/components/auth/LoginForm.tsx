@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
-import { Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Email non valida').trim(),
@@ -22,12 +22,15 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ onSuccess, onSignUpClick }: LoginFormProps) => {
-  const { signIn } = useAuth();
+  const { signIn, resetPassword } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors }
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
@@ -42,6 +45,18 @@ export const LoginForm = ({ onSuccess, onSignUpClick }: LoginFormProps) => {
       onSuccess();
     }
   };
+
+  const handleForgotPassword = async () => {
+    const email = getValues('email');
+    const parsed = z.string().email().safeParse(email);
+    if (!parsed.success) return;
+
+    setIsResetLoading(true);
+    await resetPassword(parsed.data);
+    setIsResetLoading(false);
+  };
+
+  const canResetPassword = z.string().email().safeParse(getValues('email')).success;
 
   return (
     <Card className="w-full max-w-md minimal-border bg-card/80 backdrop-blur-sm">
@@ -60,7 +75,7 @@ export const LoginForm = ({ onSuccess, onSignUpClick }: LoginFormProps) => {
               type="email"
               placeholder="la-tua-email@example.com"
               {...register('email')}
-              disabled={isLoading}
+              disabled={isLoading || isResetLoading}
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -68,14 +83,35 @@ export const LoginForm = ({ onSuccess, onSignUpClick }: LoginFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              {...register('password')}
-              disabled={isLoading}
-            />
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="password">Password</Label>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={!canResetPassword || isLoading || isResetLoading}
+                className="text-xs text-muted-foreground transition hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isResetLoading ? 'Invio in corso…' : 'Hai dimenticato la password?'}
+              </button>
+            </div>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                {...register('password')}
+                disabled={isLoading || isResetLoading}
+                className="pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted-foreground transition hover:text-foreground"
+                aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
@@ -84,7 +120,7 @@ export const LoginForm = ({ onSuccess, onSignUpClick }: LoginFormProps) => {
           <Button
             type="submit"
             className="w-full"
-            disabled={isLoading}
+            disabled={isLoading || isResetLoading}
           >
             {isLoading ? (
               <>

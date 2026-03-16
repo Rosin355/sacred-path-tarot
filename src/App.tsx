@@ -10,6 +10,7 @@ import ViaRespiro from "./pages/ViaRespiro";
 import ViaIspirazione from "./pages/ViaIspirazione";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import FloatingVoiceGuide from "./components/voice/FloatingVoiceGuide";
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/respiro" element={<ViaRespiro />} />
           <Route path="/ispirazione" element={<ViaIspirazione />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
