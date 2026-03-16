@@ -61,8 +61,8 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
         {
           x: spec.driftX,
           y: spec.driftY,
-          opacity: 0.75,
-          scale: 1,
+          opacity: 0.95,
+          scale: 1.08,
           duration: spec.duration,
           delay: spec.delay,
           yoyo: true,
@@ -70,6 +70,16 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
           repeatRefresh: false,
         },
         0
+      ).to(
+        particle,
+        {
+          opacity: 0.42,
+          scale: 0.92,
+          duration: spec.duration * 0.55,
+          yoyo: true,
+          repeat: 1,
+        },
+        spec.delay
       );
     });
 
