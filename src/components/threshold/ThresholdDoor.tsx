@@ -34,7 +34,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
     const textRef = useRef<HTMLDivElement>(null);
     const hoverTimelineRef = useRef<gsap.core.Timeline | null>(null);
     const reducedMotion = useReducedMotion();
-    const { isHoverActive, hoverBindings } = useDoorHoverState();
+    const { isHoverActive, deactivateHover, hoverBindings } = useDoorHoverState();
 
     useImperativeHandle(ref, () => ({
       getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
@@ -60,7 +60,16 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         .to(archGlow, { opacity: reducedMotion ? 0.24 : 0.62, duration: 0.24 }, 0)
         .to(archInner, { opacity: reducedMotion ? 0.88 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0)
         .to(fog, { opacity: reducedMotion ? 0.88 : 1, duration: 0.24 }, 0)
-        .to(aura, { opacity: reducedMotion ? 0.5 : 1, scale: 1.03, filter: reducedMotion ? "blur(14px)" : "blur(24px)", duration: 0.28 }, 0)
+        .to(
+          aura,
+          {
+            opacity: reducedMotion ? 0.5 : 1,
+            scale: 1.03,
+            filter: reducedMotion ? "blur(14px)" : "blur(24px)",
+            duration: 0.28,
+          },
+          0
+        )
         .to(auraCore, { scale: 1.08, opacity: reducedMotion ? 0.72 : 1, duration: 0.34 }, 0)
         .to(auraHalo, { scale: 1.14, opacity: reducedMotion ? 0.62 : 0.92, duration: 0.38 }, 0.02);
 
@@ -71,6 +80,12 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         hoverTimelineRef.current = null;
       };
     }, [reducedMotion]);
+
+    useEffect(() => {
+      if (phase !== "idle") {
+        deactivateHover();
+      }
+    }, [phase, deactivateHover]);
 
     useEffect(() => {
       const tl = hoverTimelineRef.current;
