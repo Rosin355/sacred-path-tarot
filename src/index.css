@@ -149,24 +149,24 @@
 /* Divine light colors per door */
 .door-arcani {
   --door-color: 270 55% 45%;
-  --door-color-bright: 270 65% 60%;
-  --door-aura-highlight: 274 42% 74%;
+  --door-color-bright: 272 68% 64%;
+  --door-aura-highlight: 276 58% 80%;
   --door-aura-shadow: 270 40% 24%;
-  --door-particle-tint: 272 54% 76%;
+  --door-particle-tint: 272 72% 86%;
 }
 .door-respiro {
   --door-color: 175 40% 45%;
-  --door-color-bright: 175 50% 60%;
-  --door-aura-highlight: 178 28% 78%;
+  --door-color-bright: 178 54% 68%;
+  --door-aura-highlight: 176 34% 84%;
   --door-aura-shadow: 176 24% 24%;
-  --door-particle-tint: 46 34% 78%;
+  --door-particle-tint: 52 48% 86%;
 }
 .door-ispirazione {
   --door-color: 38 55% 52%;
-  --door-color-bright: 38 65% 65%;
-  --door-aura-highlight: 42 42% 84%;
+  --door-color-bright: 40 72% 68%;
+  --door-aura-highlight: 42 52% 88%;
   --door-aura-shadow: 34 34% 28%;
-  --door-particle-tint: 40 52% 82%;
+  --door-particle-tint: 44 68% 88%;
 }
 
 /* Divine light glow behind arch on hover */

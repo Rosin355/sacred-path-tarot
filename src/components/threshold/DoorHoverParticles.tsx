@@ -17,18 +17,18 @@ interface ParticleSpec {
   driftY: number;
 }
 
-const PARTICLE_COUNT = 8;
+const PARTICLE_COUNT = 14;
 
 const createParticleSpecs = (): ParticleSpec[] =>
   Array.from({ length: PARTICLE_COUNT }, (_, index) => ({
     id: index,
-    left: `${18 + ((index * 11) % 60)}%`,
-    top: `${22 + ((index * 9) % 52)}%`,
-    size: 3 + (index % 3),
-    duration: 2.8 + (index % 4) * 0.45,
-    delay: index * 0.08,
-    driftX: (index % 2 === 0 ? 1 : -1) * (6 + (index % 3) * 2),
-    driftY: -10 - (index % 4) * 4,
+    left: `${12 + ((index * 7) % 72)}%`,
+    top: `${16 + ((index * 6) % 58)}%`,
+    size: 4 + (index % 4),
+    duration: 3 + (index % 5) * 0.42,
+    delay: index * 0.06,
+    driftX: (index % 2 === 0 ? 1 : -1) * (10 + (index % 4) * 2),
+    driftY: -16 - (index % 5) * 4,
   }));
 
 const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
