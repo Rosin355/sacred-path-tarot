@@ -102,33 +102,33 @@ export const SparklesCore = ({
             value: DIRECTION_ANGLE[direction],
           },
           direction: direction === "none" ? "none" : "top",
-          enable: active,
+          enable: true,
           outModes: {
             default: "out",
           },
           random: true,
           speed: {
-            min: speed * 0.45,
-            max: speed * 1.35,
+            min: speed * 0.65,
+            max: speed * 1.75,
           },
           straight: false,
         },
         number: {
           density: {
             enable: true,
-            width: 420,
-            height: 420,
+            width: 560,
+            height: 560,
           },
-          value: active ? particleDensity : 0,
+          value: particleDensity,
         },
         opacity: {
           value: {
-            min: 0.08,
-            max: 0.9,
+            min: 0.16,
+            max: 1,
           },
           animation: {
             enable: true,
-            speed: 0.9,
+            speed: 1.2,
             sync: false,
             startValue: "random",
           },
@@ -145,7 +145,7 @@ export const SparklesCore = ({
         twinkle: {
           particles: {
             enable: true,
-            frequency: 0.08,
+            frequency: 0.18,
             opacity: 1,
           },
         },
@@ -157,7 +157,7 @@ export const SparklesCore = ({
       pauseOnBlur: true,
       pauseOnOutsideViewport: true,
     }),
-    [active, background, direction, maxSize, minSize, particleColor, particleDensity, speed]
+    [background, direction, maxSize, minSize, particleColor, particleDensity, speed]
   );
 
   return (

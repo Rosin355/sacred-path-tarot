@@ -7,16 +7,20 @@ interface Props {
 
 const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
   return (
-    <div aria-hidden="true" className="door-hover-particles">
+    <div
+      aria-hidden="true"
+      className="door-hover-particles"
+      data-active={active ? "true" : "false"}
+    >
       <div className="door-hover-particles-glow" />
       <SparklesCore
         active={active}
         className="door-hover-sparkles door-hover-sparkles-primary"
         background="transparent"
-        minSize={reducedMotion ? 1.2 : 1.4}
-        maxSize={reducedMotion ? 2.2 : 3.2}
-        speed={reducedMotion ? 0.18 : 0.5}
-        particleDensity={reducedMotion ? 16 : 28}
+        minSize={reducedMotion ? 1.4 : 1.8}
+        maxSize={reducedMotion ? 2.8 : 4.2}
+        speed={reducedMotion ? 0.36 : 0.9}
+        particleDensity={reducedMotion ? 28 : 68}
         direction="top"
         particleColor="hsl(var(--door-particle-tint))"
       />
@@ -24,11 +28,11 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
         active={active && !reducedMotion}
         className="door-hover-sparkles door-hover-sparkles-secondary"
         background="transparent"
-        minSize={1}
-        maxSize={2.4}
-        speed={0.75}
-        particleDensity={18}
-        direction="top-right"
+        minSize={1.2}
+        maxSize={2.8}
+        speed={0.72}
+        particleDensity={32}
+        direction="top"
         particleColor="hsl(var(--foreground))"
       />
     </div>
