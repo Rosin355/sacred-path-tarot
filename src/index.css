@@ -434,14 +434,166 @@
   50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
+@keyframes voice-orb-drift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.01); }
+}
+
+@keyframes voice-orb-tooltip-in {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.voice-orb {
+  isolation: isolate;
+  transform: translateZ(0);
+  transition: transform 220ms ease, filter 220ms ease;
+  filter: drop-shadow(0 16px 28px hsla(var(--background) / 0.55));
+}
+
+.voice-orb:hover {
+  transform: translateY(-2px);
+}
+
+.voice-orb-shell,
+.voice-orb-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.voice-orb-shell {
+  background:
+    radial-gradient(circle at 50% 28%, hsla(var(--foreground) / 0.18) 0%, transparent 34%),
+    linear-gradient(180deg, hsla(var(--card) / 0.78) 0%, hsla(var(--background) / 0.88) 100%);
+  border: 1px solid hsla(var(--foreground) / 0.08);
+  box-shadow:
+    0 0 0 1px hsla(var(--primary) / 0.18),
+    0 10px 26px hsla(var(--background) / 0.5),
+    inset 0 1px 0 hsla(var(--foreground) / 0.12),
+    inset 0 -8px 18px hsla(var(--background) / 0.4);
+}
+
+.voice-orb-halo {
+  inset: -8px;
+  background: radial-gradient(circle, hsla(var(--primary) / 0.18) 0%, hsla(var(--accent) / 0.08) 38%, transparent 72%);
+  opacity: 0.9;
+  z-index: -1;
+  animation: voice-orb-drift 4.8s ease-in-out infinite;
+}
+
+.voice-orb[data-state='speaking'] .voice-orb-halo,
+.voice-orb[data-state='loading'] .voice-orb-halo {
+  opacity: 1;
+}
+
+.voice-orb-eye-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding-top: 4px;
+  pointer-events: none;
+}
+
+.voice-orb-eye-socket {
+  position: relative;
+  width: 11px;
+  height: 14px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 38%, hsla(var(--foreground) / 0.92) 0%, hsla(var(--foreground) / 0.82) 56%, hsla(var(--mist-lilac) / 0.62) 100%);
+  box-shadow:
+    0 0 0 1px hsla(var(--background) / 0.2),
+    inset 0 1px 1px hsla(var(--foreground) / 0.26),
+    0 1px 7px hsla(var(--background) / 0.32);
+  transform-origin: center;
+  transition: transform 240ms ease, opacity 180ms ease, filter 240ms ease;
+}
+
+.voice-orb-eye-socket.is-awake {
+  filter: brightness(1.04);
+}
+
+.voice-orb-eye-socket.is-blinking {
+  transform: scaleY(0.14);
+}
+
+.voice-orb-pupil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4.5px;
+  height: 4.5px;
+  margin-left: -2.25px;
+  margin-top: -1px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 35%, hsla(var(--foreground) / 0.95) 0%, hsla(var(--background) / 0.92) 26%, hsla(var(--background) / 1) 100%);
+  box-shadow: 0 0 4px hsla(var(--background) / 0.45);
+  transition: transform 120ms linear;
+  will-change: transform;
+}
+
+.voice-orb-tooltip {
+  position: absolute;
+  right: calc(100% + 0.875rem);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  border: 1px solid hsla(var(--border) / 0.5);
+  background: hsla(var(--card) / 0.82);
+  color: hsl(var(--foreground));
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 32px hsla(var(--background) / 0.4);
+  padding: 0.5rem 0.75rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.voice-orb:hover .voice-orb-tooltip,
+.voice-orb:focus-visible .voice-orb-tooltip {
+  opacity: 1;
+  animation: voice-orb-tooltip-in 220ms ease forwards;
+}
+
+.voice-orb[data-state='error'] .voice-orb-shell {
+  box-shadow:
+    0 0 0 1px hsla(var(--destructive) / 0.28),
+    0 10px 26px hsla(var(--background) / 0.5),
+    inset 0 1px 0 hsla(var(--foreground) / 0.08),
+    inset 0 -8px 18px hsla(var(--background) / 0.4);
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .threshold-ambient,
-  .door-glow-backdrop {
+  .door-glow-backdrop,
+  .voice-orb-halo,
+  .voice-orb:hover .voice-orb-tooltip,
+  .voice-orb-eye-socket,
+  .voice-orb-pupil,
+  [style*="breath-pulse"] {
     animation: none !important;
     transition: none !important;
   }
-  [style*="breath-pulse"] {
-    animation: none !important;
+
+  .voice-orb,
+  .voice-orb:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .voice-orb-tooltip {
+    display: none;
   }
 }

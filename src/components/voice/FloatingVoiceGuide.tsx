@@ -1,4 +1,5 @@
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
+import { useIsMobile } from '@/hooks/use-mobile';
 import VoiceOrb from './VoiceOrb';
 import VoicePanel from './VoicePanel';
 
@@ -22,16 +23,16 @@ export default function FloatingVoiceGuide() {
     audioAnalyser,
     progress,
   } = useVoiceAssistant();
+  const isMobile = useIsMobile();
 
   return (
     <div
       className="fixed z-[60] flex flex-col items-end gap-3"
       style={{
-        bottom: 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
-        right: '1.5rem',
+        bottom: isMobile ? 'max(1rem, env(safe-area-inset-bottom, 1rem))' : 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
+        right: isMobile ? '1rem' : '1.5rem',
       }}
     >
-      {/* Panel */}
       {isOpen && (
         <VoicePanel
           state={state}
@@ -51,7 +52,6 @@ export default function FloatingVoiceGuide() {
         />
       )}
 
-      {/* Orb */}
       <VoiceOrb
         state={state}
         analyser={audioAnalyser}
