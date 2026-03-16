@@ -50,13 +50,19 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
       const archGlow = button.querySelector(".divine-light-glow");
       const archInner = button.querySelector(".divine-light-inner");
       const fog = button.querySelector(".fog-effect");
+      const aura = button.querySelector(".door-hover-aura");
+      const auraCore = button.querySelector(".door-hover-aura-core");
+      const auraHalo = button.querySelector(".door-hover-aura-halo");
 
       const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
       tl.to(button, { scale: 1.022, duration: 0.22 }, 0)
         .to(text, { y: -2, duration: 0.22 }, 0)
-        .to(archGlow, { opacity: reducedMotion ? 0.2 : 0.46, duration: 0.22 }, 0)
-        .to(archInner, { opacity: reducedMotion ? 0.85 : 1, filter: "brightness(1.08)", duration: 0.24 }, 0)
-        .to(fog, { opacity: reducedMotion ? 0.82 : 1, duration: 0.24 }, 0);
+        .to(archGlow, { opacity: reducedMotion ? 0.24 : 0.62, duration: 0.24 }, 0)
+        .to(archInner, { opacity: reducedMotion ? 0.88 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0)
+        .to(fog, { opacity: reducedMotion ? 0.88 : 1, duration: 0.24 }, 0)
+        .to(aura, { opacity: reducedMotion ? 0.5 : 1, scale: 1.03, filter: reducedMotion ? "blur(14px)" : "blur(24px)", duration: 0.28 }, 0)
+        .to(auraCore, { scale: 1.08, opacity: reducedMotion ? 0.72 : 1, duration: 0.34 }, 0)
+        .to(auraHalo, { scale: 1.14, opacity: reducedMotion ? 0.62 : 0.92, duration: 0.38 }, 0.02);
 
       hoverTimelineRef.current = tl;
 

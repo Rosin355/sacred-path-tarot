@@ -102,17 +102,17 @@ const DoorHoverParticles = ({ active, reducedMotion }: Props) => {
 
     if (active) {
       gsap.to(container, {
-        opacity: reducedMotion ? 0.35 : 1,
-        duration: reducedMotion ? 0.2 : 0.28,
+        opacity: reducedMotion ? 0.5 : 1,
+        duration: reducedMotion ? 0.22 : 0.34,
         ease: "power2.out",
       });
 
       gsap.to(particles, {
-        opacity: reducedMotion ? 0.18 : 0.55,
-        scale: 1,
-        duration: reducedMotion ? 0.18 : 0.26,
+        opacity: reducedMotion ? 0.28 : 0.82,
+        scale: reducedMotion ? 0.94 : 1.04,
+        duration: reducedMotion ? 0.2 : 0.32,
         ease: "power2.out",
-        stagger: reducedMotion ? 0 : 0.03,
+        stagger: reducedMotion ? 0 : 0.025,
       });
 
       if (!reducedMotion) {

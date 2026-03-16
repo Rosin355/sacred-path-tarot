@@ -215,36 +215,41 @@
 .door-hover-aura,
 .door-hover-particles {
   position: absolute;
-  inset: -8% -10% 8%;
+  inset: -14% -16% 6%;
   pointer-events: none;
 }
 
 .door-hover-aura {
   z-index: 0;
   opacity: 0;
-  transform: scale(0.96);
-  filter: blur(18px);
+  transform: scale(0.94);
+  filter: blur(22px);
+  will-change: opacity, transform, filter;
 }
 
 .door-hover-aura-core,
 .door-hover-aura-halo {
   position: absolute;
   inset: 0;
-  border-radius: 999px 999px 28% 28%;
+  border-radius: 999px 999px 30% 30%;
+  transform-origin: 50% 42%;
+  will-change: opacity, transform;
 }
 
 .door-hover-aura-core {
+  opacity: 0.88;
   background:
-    radial-gradient(circle at 50% 24%, hsla(var(--door-aura-highlight) / 0.18) 0%, hsla(var(--door-particle-tint) / 0.08) 18%, transparent 42%),
-    radial-gradient(ellipse at 50% 42%, hsla(var(--door-color-bright) / 0.12) 0%, transparent 48%),
-    radial-gradient(ellipse at 50% 66%, hsla(var(--door-color) / 0.11) 0%, transparent 74%);
+    radial-gradient(circle at 50% 24%, hsla(var(--door-aura-highlight) / 0.34) 0%, hsla(var(--door-particle-tint) / 0.14) 16%, transparent 36%),
+    radial-gradient(ellipse at 50% 38%, hsla(var(--door-color-bright) / 0.22) 0%, hsla(var(--door-color-bright) / 0.08) 28%, transparent 52%),
+    radial-gradient(ellipse at 50% 62%, hsla(var(--door-color) / 0.18) 0%, transparent 76%);
 }
 
 .door-hover-aura-halo {
+  opacity: 0.8;
   background:
-    radial-gradient(circle at 50% 34%, hsla(var(--foreground) / 0.06) 0%, transparent 22%),
-    radial-gradient(ellipse at 50% 54%, hsla(var(--door-particle-tint) / 0.07) 0%, transparent 46%),
-    radial-gradient(ellipse at 50% 72%, hsla(var(--door-aura-shadow) / 0.16) 0%, transparent 74%);
+    radial-gradient(circle at 50% 30%, hsla(var(--foreground) / 0.1) 0%, transparent 18%),
+    radial-gradient(ellipse at 50% 50%, hsla(var(--door-particle-tint) / 0.12) 0%, transparent 44%),
+    radial-gradient(ellipse at 50% 72%, hsla(var(--door-aura-shadow) / 0.24) 0%, transparent 76%);
 }
 
 .door-hover-aura.is-active {
@@ -252,7 +257,7 @@
 }
 
 .door-hover-aura.is-reduced {
-  filter: blur(12px);
+  filter: blur(14px);
 }
 
 .door-hover-particles {
@@ -266,8 +271,10 @@
   border-radius: 9999px;
   opacity: 0;
   background:
-    radial-gradient(circle, hsla(var(--foreground) / 0.88) 0%, hsla(var(--door-particle-tint) / 0.44) 42%, transparent 72%);
-  box-shadow: 0 0 12px hsla(var(--door-particle-tint) / 0.16);
+    radial-gradient(circle, hsla(var(--foreground) / 0.96) 0%, hsla(var(--door-particle-tint) / 0.68) 36%, hsla(var(--door-color-bright) / 0.18) 58%, transparent 76%);
+  box-shadow:
+    0 0 18px hsla(var(--door-particle-tint) / 0.34),
+    0 0 36px hsla(var(--door-color-bright) / 0.12);
   will-change: transform, opacity;
 }
 
