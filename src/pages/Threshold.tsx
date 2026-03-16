@@ -123,8 +123,8 @@ const Threshold = () => {
   }, [navigate]);
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden bg-background threshold-bg">
-      <div className="absolute inset-0 z-[1] threshold-ambient" aria-hidden="true" />
+    <div className="relative h-[100dvh] w-full overflow-x-hidden overflow-y-auto bg-background threshold-bg md:fixed md:inset-0 md:h-full md:overflow-hidden">
+      <div className="absolute inset-0 z-[1] pointer-events-none threshold-ambient" aria-hidden="true" />
 
       <button
         onClick={toggleMute}
@@ -134,7 +134,7 @@ const Threshold = () => {
         {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
       </button>
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-start px-6 pt-20 pb-16 md:h-full md:justify-center md:pt-0 md:pb-0">
         <header
           className={`text-center mb-12 md:mb-16 transition-all duration-[1200ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
@@ -173,7 +173,7 @@ const Threshold = () => {
         </nav>
 
         <p
-          className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 ${
+          className={`mt-12 md:mt-16 text-muted-foreground/40 text-xs tracking-[0.3em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 text-center ${
             visible ? "opacity-100" : "opacity-0"
           } ${phase !== "idle" ? "opacity-0" : ""}`}
         >
