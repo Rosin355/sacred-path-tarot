@@ -173,6 +173,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden rounded-t-[999px] threshold-door-inner-light">
             <div className="absolute inset-0 divine-light-inner" aria-hidden="true" />
             <div className="absolute bottom-0 left-0 right-0 h-[40%] fog-effect" aria-hidden="true" />
+            <div className="door-threshold-glow" aria-hidden="true" />
             <DoorHoverParticles active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
           </div>
           <img

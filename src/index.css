@@ -264,6 +264,30 @@
   filter: blur(14px);
 }
 
+.door-threshold-glow {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: -2%;
+  height: 24%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 50% 78%, hsla(var(--door-color-bright) / 0.34) 0%, hsla(var(--door-particle-tint) / 0.18) 34%, hsla(var(--door-color) / 0.1) 56%, transparent 82%),
+    linear-gradient(to top, hsla(var(--door-color) / 0.16) 0%, transparent 100%);
+  filter: blur(14px);
+  opacity: 0.72;
+  transform: translateY(10%);
+  transition: opacity 220ms ease-out, transform 220ms ease-out, filter 220ms ease-out;
+}
+
+.group[data-hover-active="true"] .door-threshold-glow {
+  opacity: 0.94;
+  transform: translateY(0);
+  filter: blur(16px);
+}
+
 .door-hover-particles {
   inset: 0;
   z-index: 2;
