@@ -277,6 +277,8 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       className="voice-orb group relative h-[72px] w-[72px] cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       aria-label={ariaLabel}
       title="Assistente vocale"
+      data-voice-assistant
+      data-voice-orb
       data-state={state}
       data-visual-state={effectiveVisualState}
       data-hovered={eyeState.isHovering ? 'true' : 'false'}

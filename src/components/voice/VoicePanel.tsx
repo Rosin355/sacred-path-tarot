@@ -44,7 +44,7 @@ export default function VoicePanel({
   const isIdle = state === 'idle';
 
   return (
-    <div className="voice-panel animate-fade-in" role="dialog" aria-label="Pannello assistente vocale">
+    <div className="voice-panel animate-fade-in" role="dialog" aria-label="Pannello assistente vocale" data-voice-assistant data-voice-panel>
       <div className="voice-panel__veil" aria-hidden="true" />
 
       <div className="voice-panel__header">

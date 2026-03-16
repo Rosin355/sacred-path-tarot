@@ -18,6 +18,9 @@ const IGNORED_SELECTORS = [
   'svg',
   '[role="navigation"]',
   '.pointer-events-none',
+  '[data-voice-assistant]',
+  '[data-voice-panel]',
+  '[data-voice-orb]',
 ];
 
 const CONTENT_SELECTORS = [
