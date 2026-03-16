@@ -54,11 +54,21 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
       const auraCore = button.querySelector(".door-hover-aura-core");
       const auraHalo = button.querySelector(".door-hover-aura-halo");
 
+      gsap.set([button, text, archGlow, archInner, fog, aura, auraCore, auraHalo], { clearProps: "all" });
+      gsap.set(button, { scale: 1 });
+      gsap.set(text, { y: 0 });
+      gsap.set(archGlow, { opacity: 0 });
+      gsap.set(archInner, { opacity: 0.86, filter: "brightness(1)" });
+      gsap.set(fog, { opacity: 0.82 });
+      gsap.set(aura, { opacity: 0, scale: 0.94, filter: reducedMotion ? "blur(14px)" : "blur(22px)" });
+      gsap.set(auraCore, { opacity: 0.78, scale: 0.96 });
+      gsap.set(auraHalo, { opacity: 0.56, scale: 0.98 });
+
       const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
       tl.to(button, { scale: 1.022, duration: 0.22 }, 0)
         .to(text, { y: -2, duration: 0.22 }, 0)
         .to(archGlow, { opacity: reducedMotion ? 0.24 : 0.62, duration: 0.24 }, 0)
-        .to(archInner, { opacity: reducedMotion ? 0.88 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0)
+        .to(archInner, { opacity: reducedMotion ? 0.9 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0)
         .to(fog, { opacity: reducedMotion ? 0.88 : 1, duration: 0.24 }, 0)
         .to(
           aura,
@@ -89,14 +99,48 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
 
     useEffect(() => {
       const tl = hoverTimelineRef.current;
-      if (!tl) return;
+      if (!tl || !buttonRef.current) return;
+
+      const button = buttonRef.current;
+      const aura = button.querySelector(".door-hover-aura");
+      const auraCore = button.querySelector(".door-hover-aura-core");
+      const auraHalo = button.querySelector(".door-hover-aura-halo");
+      const archGlow = button.querySelector(".divine-light-glow");
+      const archInner = button.querySelector(".divine-light-inner");
+      const fog = button.querySelector(".fog-effect");
+      const text = textRef.current;
 
       if (isHoverActive && phase === "idle") {
         tl.play();
       } else {
         tl.reverse();
+        gsap.to([aura, auraCore, auraHalo, archGlow], {
+          opacity: 0,
+          duration: 0.18,
+          overwrite: true,
+          ease: "power1.out",
+        });
+        gsap.to(aura, {
+          scale: 0.94,
+          filter: reducedMotion ? "blur(14px)" : "blur(22px)",
+          duration: 0.18,
+          overwrite: true,
+          ease: "power1.out",
+        });
+        gsap.to(auraCore, { scale: 0.96, duration: 0.18, overwrite: true, ease: "power1.out" });
+        gsap.to(auraHalo, { scale: 0.98, duration: 0.18, overwrite: true, ease: "power1.out" });
+        gsap.to(archInner, {
+          opacity: 0.86,
+          filter: "brightness(1)",
+          duration: 0.2,
+          overwrite: true,
+          ease: "power1.out",
+        });
+        gsap.to(fog, { opacity: 0.82, duration: 0.2, overwrite: true, ease: "power1.out" });
+        gsap.to(text, { y: 0, duration: 0.18, overwrite: true, ease: "power1.out" });
+        gsap.to(button, { scale: 1, duration: 0.18, overwrite: true, ease: "power1.out" });
       }
-    }, [isHoverActive, phase]);
+    }, [isHoverActive, phase, reducedMotion]);
 
     return (
       <button

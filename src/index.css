@@ -237,7 +237,7 @@
 }
 
 .door-hover-aura-core {
-  opacity: 0.88;
+  opacity: 0.78;
   background:
     radial-gradient(circle at 50% 24%, hsla(var(--door-aura-highlight) / 0.34) 0%, hsla(var(--door-particle-tint) / 0.14) 16%, transparent 36%),
     radial-gradient(ellipse at 50% 38%, hsla(var(--door-color-bright) / 0.22) 0%, hsla(var(--door-color-bright) / 0.08) 28%, transparent 52%),
@@ -245,7 +245,7 @@
 }
 
 .door-hover-aura-halo {
-  opacity: 0.8;
+  opacity: 0.56;
   background:
     radial-gradient(circle at 50% 30%, hsla(var(--foreground) / 0.1) 0%, transparent 18%),
     radial-gradient(ellipse at 50% 50%, hsla(var(--door-particle-tint) / 0.12) 0%, transparent 44%),
@@ -262,19 +262,24 @@
 
 .door-hover-particles {
   z-index: 5;
-  overflow: hidden;
+  overflow: visible;
   opacity: 1;
 }
 
 .door-hover-particles-glow {
   position: absolute;
-  inset: 14% 18% 16%;
+  inset: 10% 14% 10%;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 50% 78%, hsla(var(--door-color-bright) / 0.18) 0%, hsla(var(--door-particle-tint) / 0.08) 26%, transparent 62%),
-    radial-gradient(circle at 50% 56%, hsla(var(--door-color) / 0.14) 0%, transparent 54%);
-  filter: blur(20px);
-  opacity: 0.9;
+    radial-gradient(circle at 50% 78%, hsla(var(--door-color-bright) / 0.28) 0%, hsla(var(--door-particle-tint) / 0.14) 28%, transparent 68%),
+    radial-gradient(circle at 50% 56%, hsla(var(--door-color) / 0.2) 0%, transparent 58%);
+  filter: blur(22px);
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.door-hover-particles[data-active="true"] .door-hover-particles-glow {
+  opacity: 1;
 }
 
 .door-hover-sparkles {
@@ -283,16 +288,16 @@
 }
 
 .door-hover-sparkles-primary {
-  inset: 10% 16% 8%;
-  mask-image: radial-gradient(circle at 50% 82%, black 0%, black 18%, transparent 68%);
-  -webkit-mask-image: radial-gradient(circle at 50% 82%, black 0%, black 18%, transparent 68%);
+  inset: 4% 10% 2%;
+  mask-image: radial-gradient(ellipse at 50% 86%, black 0%, black 34%, rgba(0, 0, 0, 0.92) 56%, transparent 86%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 86%, black 0%, black 34%, rgba(0, 0, 0, 0.92) 56%, transparent 86%);
 }
 
 .door-hover-sparkles-secondary {
-  inset: 4% 18% 16%;
-  opacity: 0.72;
-  mask-image: radial-gradient(ellipse at 50% 78%, black 0%, black 20%, transparent 62%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 78%, black 0%, black 20%, transparent 62%);
+  inset: 0% 8% 10%;
+  opacity: 0.78;
+  mask-image: radial-gradient(ellipse at 50% 84%, black 0%, black 28%, rgba(0, 0, 0, 0.85) 58%, transparent 88%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 84%, black 0%, black 28%, rgba(0, 0, 0, 0.85) 58%, transparent 88%);
 }
 
 @keyframes divine-pulse {
