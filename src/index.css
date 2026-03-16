@@ -261,19 +261,19 @@
 }
 
 .door-hover-particles {
-  z-index: 5;
+  z-index: 12;
   overflow: visible;
   opacity: 1;
 }
 
 .door-hover-particles-glow {
   position: absolute;
-  inset: 10% 14% 10%;
+  inset: 8% 10% 4%;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 50% 78%, hsla(var(--door-color-bright) / 0.28) 0%, hsla(var(--door-particle-tint) / 0.14) 28%, transparent 68%),
-    radial-gradient(circle at 50% 56%, hsla(var(--door-color) / 0.2) 0%, transparent 58%);
-  filter: blur(22px);
+    radial-gradient(circle at 50% 78%, hsla(var(--door-color-bright) / 0.3) 0%, hsla(var(--door-particle-tint) / 0.16) 34%, transparent 72%),
+    radial-gradient(circle at 50% 56%, hsla(var(--door-color) / 0.22) 0%, transparent 62%);
+  filter: blur(26px);
   opacity: 0;
   transition: opacity 180ms ease-out;
 }
@@ -285,19 +285,20 @@
 .door-hover-sparkles {
   position: absolute;
   inset: 0;
+  mix-blend-mode: screen;
 }
 
 .door-hover-sparkles-primary {
-  inset: 4% 10% 2%;
-  mask-image: radial-gradient(ellipse at 50% 86%, black 0%, black 34%, rgba(0, 0, 0, 0.92) 56%, transparent 86%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 86%, black 0%, black 34%, rgba(0, 0, 0, 0.92) 56%, transparent 86%);
+  inset: -8% 2% -2%;
+  mask-image: radial-gradient(ellipse at 50% 90%, black 0%, black 52%, rgba(0, 0, 0, 0.94) 72%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 90%, black 0%, black 52%, rgba(0, 0, 0, 0.94) 72%, transparent 100%);
 }
 
 .door-hover-sparkles-secondary {
-  inset: 0% 8% 10%;
-  opacity: 0.78;
-  mask-image: radial-gradient(ellipse at 50% 84%, black 0%, black 28%, rgba(0, 0, 0, 0.85) 58%, transparent 88%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 84%, black 0%, black 28%, rgba(0, 0, 0, 0.85) 58%, transparent 88%);
+  inset: -4% 1% 6%;
+  opacity: 0.9;
+  mask-image: radial-gradient(ellipse at 50% 88%, black 0%, black 46%, rgba(0, 0, 0, 0.9) 72%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 88%, black 0%, black 46%, rgba(0, 0, 0, 0.9) 72%, transparent 100%);
 }
 
 @keyframes divine-pulse {
