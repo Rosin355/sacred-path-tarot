@@ -150,20 +150,23 @@
 .door-arcani {
   --door-color: 270 55% 45%;
   --door-color-bright: 270 65% 60%;
-  --door-aura-highlight: 272 58% 68%;
-  --door-aura-shadow: 270 45% 28%;
+  --door-aura-highlight: 274 42% 74%;
+  --door-aura-shadow: 270 40% 24%;
+  --door-particle-tint: 272 54% 76%;
 }
 .door-respiro {
   --door-color: 175 40% 45%;
   --door-color-bright: 175 50% 60%;
-  --door-aura-highlight: 42 42% 76%;
-  --door-aura-shadow: 175 24% 30%;
+  --door-aura-highlight: 178 28% 78%;
+  --door-aura-shadow: 176 24% 24%;
+  --door-particle-tint: 46 34% 78%;
 }
 .door-ispirazione {
   --door-color: 38 55% 52%;
   --door-color-bright: 38 65% 65%;
-  --door-aura-highlight: 42 48% 82%;
-  --door-aura-shadow: 36 42% 34%;
+  --door-aura-highlight: 42 42% 84%;
+  --door-aura-shadow: 34 34% 28%;
+  --door-particle-tint: 40 52% 82%;
 }
 
 /* Divine light glow behind arch on hover */
@@ -232,14 +235,16 @@
 
 .door-hover-aura-core {
   background:
-    radial-gradient(circle at 50% 28%, hsla(var(--door-aura-highlight) / 0.2) 0%, hsla(var(--door-color-bright) / 0.12) 28%, transparent 62%),
-    radial-gradient(ellipse at 50% 58%, hsla(var(--door-color) / 0.14) 0%, transparent 72%);
+    radial-gradient(circle at 50% 24%, hsla(var(--door-aura-highlight) / 0.18) 0%, hsla(var(--door-particle-tint) / 0.08) 18%, transparent 42%),
+    radial-gradient(ellipse at 50% 42%, hsla(var(--door-color-bright) / 0.12) 0%, transparent 48%),
+    radial-gradient(ellipse at 50% 66%, hsla(var(--door-color) / 0.11) 0%, transparent 74%);
 }
 
 .door-hover-aura-halo {
   background:
-    radial-gradient(circle at 50% 36%, hsla(var(--foreground) / 0.08) 0%, transparent 24%),
-    radial-gradient(ellipse at 50% 68%, hsla(var(--door-aura-shadow) / 0.18) 0%, transparent 74%);
+    radial-gradient(circle at 50% 34%, hsla(var(--foreground) / 0.06) 0%, transparent 22%),
+    radial-gradient(ellipse at 50% 54%, hsla(var(--door-particle-tint) / 0.07) 0%, transparent 46%),
+    radial-gradient(ellipse at 50% 72%, hsla(var(--door-aura-shadow) / 0.16) 0%, transparent 74%);
 }
 
 .door-hover-aura.is-active {
@@ -261,8 +266,8 @@
   border-radius: 9999px;
   opacity: 0;
   background:
-    radial-gradient(circle, hsla(var(--foreground) / 0.9) 0%, hsla(var(--door-color-bright) / 0.46) 42%, transparent 72%);
-  box-shadow: 0 0 12px hsla(var(--door-color-bright) / 0.2);
+    radial-gradient(circle, hsla(var(--foreground) / 0.88) 0%, hsla(var(--door-particle-tint) / 0.44) 42%, transparent 72%);
+  box-shadow: 0 0 12px hsla(var(--door-particle-tint) / 0.16);
   will-change: transform, opacity;
 }
 
