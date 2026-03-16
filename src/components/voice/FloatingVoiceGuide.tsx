@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { VoiceState } from '@/hooks/useVoiceAssistant';
 import VoiceOrb from './VoiceOrb';
 import VoicePanel from './VoicePanel';
 
@@ -24,6 +26,17 @@ export default function FloatingVoiceGuide() {
     progress,
   } = useVoiceAssistant();
   const isMobile = useIsMobile();
+  const previousStateRef = useRef<VoiceState>('idle');
+
+  useEffect(() => {
+    const previousState = previousStateRef.current;
+
+    if (state === 'speaking' && previousState !== 'speaking') {
+      setIsOpen(false);
+    }
+
+    previousStateRef.current = state;
+  }, [state, setIsOpen]);
 
   const visualState = state === 'loading'
     ? 'thinking'
@@ -34,6 +47,7 @@ export default function FloatingVoiceGuide() {
   return (
     <div
       className="fixed z-[60] flex flex-col items-end gap-3"
+      data-voice-assistant
       style={{
         bottom: isMobile ? 'max(1rem, env(safe-area-inset-bottom, 1rem))' : 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
         right: isMobile ? '1rem' : '1.5rem',
@@ -49,12 +63,7 @@ export default function FloatingVoiceGuide() {
           onResume={resume}
           onStop={stop}
           onRestart={restart}
-          onClose={() => {
-            if (state === 'speaking' || state === 'loading') {
-              stop();
-            }
-            setIsOpen(false);
-          }}
+          onClose={() => setIsOpen(false)}
         />
       )}
 
