@@ -573,6 +573,8 @@ export function AdminKnowledgeManager() {
     sources: sourcesQuery.data?.length ?? 0,
   }), [documentsQuery.data, faqsQuery.data, rulesQuery.data, sourcesQuery.data]);
 
+  const previewChunks = useMemo(() => buildDocumentChunks(documentForm.content), [documentForm.content]);
+
   if (loading) {
     return (
       <Card className="minimal-border bg-card/80 backdrop-blur-sm">
@@ -608,46 +610,81 @@ export function AdminKnowledgeManager() {
 
         <TabsContent value="documents" className="space-y-6">
           <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-            <Card className="minimal-border bg-background/40">
-              <CardHeader>
-                <CardTitle className="font-serif text-xl">{documentForm.id ? 'Modifica documento' : 'Nuovo documento'}</CardTitle>
-                <CardDescription>Testi lunghi, pagine, metodo e contenuti editoriali che la guida deve privilegiare.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Input placeholder="Titolo" value={documentForm.title} onChange={(e) => setDocumentForm((prev) => ({ ...prev, title: e.target.value, slug: prev.id ? prev.slug : slugify(e.target.value) }))} />
-                  <Input placeholder="Slug" value={documentForm.slug} onChange={(e) => setDocumentForm((prev) => ({ ...prev, slug: slugify(e.target.value) }))} />
-                </div>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <Select value={documentForm.path} onValueChange={(value: KnowledgePath) => setDocumentForm((prev) => ({ ...prev, path: value }))}>
-                    <SelectTrigger><SelectValue placeholder="Via" /></SelectTrigger>
-                    <SelectContent>{Object.entries(pathLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
-                  </Select>
-                  <Select value={documentForm.status} onValueChange={(value: KnowledgeStatus) => setDocumentForm((prev) => ({ ...prev, status: value }))}>
-                    <SelectTrigger><SelectValue placeholder="Stato" /></SelectTrigger>
-                    <SelectContent>{Object.entries(statusLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
-                  </Select>
-                  <Select value={documentForm.content_type} onValueChange={(value: KnowledgeContentType) => setDocumentForm((prev) => ({ ...prev, content_type: value }))}>
-                    <SelectTrigger><SelectValue placeholder="Tipo" /></SelectTrigger>
-                    <SelectContent>{Object.entries(contentTypeLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
-                  </Select>
-                </div>
-                <Input placeholder="Summary breve" value={documentForm.summary} onChange={(e) => setDocumentForm((prev) => ({ ...prev, summary: e.target.value }))} />
-                <Textarea className="min-h-[280px]" placeholder="Contenuto completo" value={documentForm.content} onChange={(e) => setDocumentForm((prev) => ({ ...prev, content: e.target.value }))} />
-                <div className="grid gap-4 md:grid-cols-[1fr_220px]">
-                  <Input placeholder="Tag separati da virgola" value={documentForm.tags} onChange={(e) => setDocumentForm((prev) => ({ ...prev, tags: e.target.value }))} />
-                  <Input type="number" min={0} max={100} placeholder="Priorità" value={documentForm.priority} onChange={(e) => setDocumentForm((prev) => ({ ...prev, priority: Number(e.target.value) || 0 }))} />
-                </div>
-                <Input placeholder="URL sorgente opzionale" value={documentForm.source_url} onChange={(e) => setDocumentForm((prev) => ({ ...prev, source_url: e.target.value }))} />
-                <div className="flex flex-wrap gap-3">
-                  <Button onClick={() => documentsMutation.mutate(documentForm)} disabled={documentsMutation.isPending || !documentForm.title || !documentForm.content}>
-                    {documentsMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                    {documentForm.id ? 'Aggiorna documento' : 'Salva documento'}
-                  </Button>
-                  <Button variant="outline" onClick={() => setDocumentForm(documentDefaults)}>Nuovo</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              <Card className="minimal-border bg-background/40">
+                <CardHeader>
+                  <CardTitle className="font-serif text-xl">{documentForm.id ? 'Modifica documento' : 'Nuovo documento'}</CardTitle>
+                  <CardDescription>Testi lunghi, pagine, metodo e contenuti editoriali che la guida deve privilegiare.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Input placeholder="Titolo" value={documentForm.title} onChange={(e) => setDocumentForm((prev) => ({ ...prev, title: e.target.value, slug: prev.id ? prev.slug : slugify(e.target.value) }))} />
+                    <Input placeholder="Slug" value={documentForm.slug} onChange={(e) => setDocumentForm((prev) => ({ ...prev, slug: slugify(e.target.value) }))} />
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <Select value={documentForm.path} onValueChange={(value: KnowledgePath) => setDocumentForm((prev) => ({ ...prev, path: value }))}>
+                      <SelectTrigger><SelectValue placeholder="Via" /></SelectTrigger>
+                      <SelectContent>{Object.entries(pathLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
+                    </Select>
+                    <Select value={documentForm.status} onValueChange={(value: KnowledgeStatus) => setDocumentForm((prev) => ({ ...prev, status: value }))}>
+                      <SelectTrigger><SelectValue placeholder="Stato" /></SelectTrigger>
+                      <SelectContent>{Object.entries(statusLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
+                    </Select>
+                    <Select value={documentForm.content_type} onValueChange={(value: KnowledgeContentType) => setDocumentForm((prev) => ({ ...prev, content_type: value }))}>
+                      <SelectTrigger><SelectValue placeholder="Tipo" /></SelectTrigger>
+                      <SelectContent>{Object.entries(contentTypeLabels).map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <Input placeholder="Summary breve" value={documentForm.summary} onChange={(e) => setDocumentForm((prev) => ({ ...prev, summary: e.target.value }))} />
+                  <Textarea className="min-h-[280px]" placeholder="Contenuto completo" value={documentForm.content} onChange={(e) => setDocumentForm((prev) => ({ ...prev, content: e.target.value }))} />
+                  <div className="grid gap-4 md:grid-cols-[1fr_220px]">
+                    <Input placeholder="Tag separati da virgola" value={documentForm.tags} onChange={(e) => setDocumentForm((prev) => ({ ...prev, tags: e.target.value }))} />
+                    <Input type="number" min={0} max={100} placeholder="Priorità" value={documentForm.priority} onChange={(e) => setDocumentForm((prev) => ({ ...prev, priority: Number(e.target.value) || 0 }))} />
+                  </div>
+                  <Input placeholder="URL sorgente opzionale" value={documentForm.source_url} onChange={(e) => setDocumentForm((prev) => ({ ...prev, source_url: e.target.value }))} />
+                  <div className="flex flex-wrap gap-3">
+                    <Button onClick={() => documentsMutation.mutate(documentForm)} disabled={documentsMutation.isPending || !documentForm.title || !documentForm.content}>
+                      {documentsMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                      {documentForm.id ? 'Aggiorna documento' : 'Salva documento'}
+                    </Button>
+                    <Button variant="outline" onClick={() => setDocumentForm(documentDefaults)}>Nuovo</Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="minimal-border bg-background/20">
+                <CardHeader>
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <CardTitle className="font-serif text-xl">Anteprima chunk generati</CardTitle>
+                      <CardDescription>Controlla ordine, heading e lunghezza dei frammenti che alimentano il retrieval prima del salvataggio.</CardDescription>
+                    </div>
+                    <Badge variant="outline" className="border-accent/40 bg-accent/10 text-foreground">
+                      {previewChunks.length} chunk
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {previewChunks.length ? previewChunks.map((chunk) => (
+                    <div key={`${chunk.chunk_index}-${chunk.heading ?? 'body'}`} className="rounded-lg border border-border/60 bg-card/50 p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="space-y-2">
+                          <div className="flex flex-wrap gap-2 text-xs">
+                            <Badge variant="outline">#{chunk.chunk_index + 1}</Badge>
+                            <Badge variant="outline">~{chunk.token_estimate} token</Badge>
+                            <Badge variant="outline">{chunk.content.length} caratteri</Badge>
+                          </div>
+                          <p className="text-sm font-medium text-foreground">{chunk.heading || 'Senza heading'}</p>
+                        </div>
+                      </div>
+                      <p className="mt-3 line-clamp-4 text-sm leading-6 text-muted-foreground">{chunk.content}</p>
+                    </div>
+                  )) : (
+                    <div className="rounded-lg border border-dashed border-border/70 bg-background/30 p-6 text-sm text-muted-foreground">Inserisci contenuto nel documento per vedere l’anteprima dei chunk.</div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
 
             <Card className="minimal-border bg-background/20">
               <CardHeader>
