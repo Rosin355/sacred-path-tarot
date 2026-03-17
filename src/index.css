@@ -768,6 +768,7 @@
   box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 0 6px hsla(var(--background) / 0.92);
 }
 
+.voice-siri-glyph__outer-ring,
 .voice-siri-glyph__rim,
 .voice-siri-glyph__spin,
 .voice-siri-glyph__surface {
@@ -776,11 +777,27 @@
   pointer-events: none;
 }
 
+.voice-siri-glyph__outer-ring {
+  inset: 3px;
+  border: 1px solid hsla(var(--foreground) / 0.18);
+  background:
+    linear-gradient(180deg, hsla(var(--foreground) / 0.26) 0%, hsla(var(--foreground) / 0.06) 26%, hsla(var(--background) / 0.08) 52%, hsla(var(--foreground) / 0.16) 100%);
+  box-shadow:
+    0 0 0 1px hsla(var(--foreground) / 0.06),
+    0 10px 22px hsla(var(--background) / 0.28),
+    inset 0 1px 0 hsla(var(--foreground) / 0.34),
+    inset 0 -1px 0 hsla(var(--background) / 0.32);
+}
+
 .voice-siri-glyph__rim {
   inset: 8px;
-  border: 1px solid hsla(var(--foreground) / 0.22);
-  background: linear-gradient(180deg, hsla(var(--foreground) / 0.14), hsla(var(--foreground) / 0.03));
-  box-shadow: 0 0 0 1px hsla(var(--foreground) / 0.08), inset 0 1px 0 hsla(var(--foreground) / 0.16);
+  border: 1px solid hsla(var(--foreground) / 0.2);
+  background:
+    linear-gradient(180deg, hsla(var(--foreground) / 0.12) 0%, hsla(var(--foreground) / 0.03) 42%, hsla(var(--background) / 0.04) 100%);
+  box-shadow:
+    0 0 0 1px hsla(var(--foreground) / 0.06),
+    inset 0 1px 0 hsla(var(--foreground) / 0.14),
+    inset 0 -1px 0 hsla(var(--background) / 0.2);
 }
 
 .voice-siri-glyph__spin {
@@ -788,21 +805,22 @@
   background:
     conic-gradient(from 0deg,
       hsla(var(--foreground) / 0) 0deg,
-      hsla(205 100% 72% / 0.96) 55deg,
-      hsla(272 100% 76% / 0.98) 130deg,
-      hsla(328 100% 76% / 0.82) 188deg,
-      hsla(164 88% 62% / 0.9) 250deg,
-      hsla(43 96% 70% / 0.78) 300deg,
+      hsla(206 100% 74% / 0.9) 48deg,
+      hsla(248 100% 76% / 0.96) 108deg,
+      hsla(286 100% 77% / 0.98) 164deg,
+      hsla(328 98% 78% / 0.86) 214deg,
+      hsla(178 84% 66% / 0.88) 280deg,
+      hsla(206 100% 74% / 0.9) 334deg,
       hsla(var(--foreground) / 0) 360deg);
-  animation: voice-siri-spin 5.6s linear infinite;
-  filter: saturate(1.1) blur(0.5px);
+  animation: voice-siri-spin 6.2s linear infinite;
+  filter: saturate(1.02) blur(0.35px);
 }
 
 .voice-siri-glyph__surface {
   inset: 14px;
   background:
-    radial-gradient(circle at 35% 28%, hsla(var(--foreground) / 0.2) 0%, transparent 20%),
-    radial-gradient(circle at 50% 50%, hsla(var(--background) / 0.12) 0%, hsla(var(--background) / 0.62) 58%, hsla(var(--background) / 0.92) 100%);
+    radial-gradient(circle at 35% 28%, hsla(var(--foreground) / 0.18) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, hsla(var(--background) / 0.08) 0%, hsla(var(--background) / 0.58) 58%, hsla(var(--background) / 0.92) 100%);
   box-shadow: inset 0 0 24px hsla(var(--background) / 0.55), inset 0 1px 0 hsla(var(--foreground) / 0.08);
 }
 
@@ -811,7 +829,7 @@
   z-index: -1;
   opacity: 0.95;
   filter: blur(20px);
-  background: radial-gradient(circle, hsla(210 100% 74% / 0.12) 0%, hsla(272 100% 76% / 0.16) 26%, hsla(164 88% 62% / 0.08) 50%, transparent 78%);
+  background: radial-gradient(circle, hsla(210 100% 76% / 0.1) 0%, hsla(272 100% 78% / 0.14) 24%, hsla(178 84% 66% / 0.08) 48%, transparent 78%);
   animation: voice-orb-drift 6s ease-in-out infinite;
 }
 
@@ -827,12 +845,20 @@
 .voice-siri-glyph[data-state='speaking'] .voice-siri-glyph__spin,
 .voice-siri-glyph[data-state='loading'] .voice-siri-glyph__spin,
 .voice-siri-glyph[data-visual-state='thinking'] .voice-siri-glyph__spin {
-  animation-duration: 3.6s;
+  animation-duration: 4.2s;
 }
 
 .voice-siri-glyph[data-state='speaking'] .voice-streak-glyph__halo {
   inset: -22px;
   filter: blur(24px);
+}
+
+.voice-siri-glyph[data-state='speaking'] .voice-siri-glyph__outer-ring {
+  box-shadow:
+    0 0 0 1px hsla(var(--foreground) / 0.08),
+    0 14px 28px hsla(var(--background) / 0.34),
+    inset 0 1px 0 hsla(var(--foreground) / 0.38),
+    inset 0 -1px 0 hsla(var(--background) / 0.4);
 }
 
 .voice-siri-glyph[data-state='error'] .voice-siri-glyph__spin {
