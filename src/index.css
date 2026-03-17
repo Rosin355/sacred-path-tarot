@@ -1066,42 +1066,42 @@
   }
 
   .voice-assistant-shell[data-route-context='default'][data-display-mode='orb'] {
-    right: 1.32rem;
+    right: 1.78rem;
     bottom: max(1.32rem, env(safe-area-inset-bottom, 1.32rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-display-mode='siri'] {
-    right: 1.4rem;
+    right: 1.88rem;
     bottom: max(1.36rem, env(safe-area-inset-bottom, 1.36rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='orb'] {
-    right: 1.46rem;
+    right: 1.96rem;
     bottom: max(1.4rem, env(safe-area-inset-bottom, 1.4rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='siri'] {
-    right: 1.68rem;
+    right: 2.08rem;
     bottom: max(1.46rem, env(safe-area-inset-bottom, 1.46rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='orb'] {
-    right: 1.62rem;
+    right: 2.08rem;
     bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='siri'] {
-    right: 1.8rem;
+    right: 2.2rem;
     bottom: max(1.58rem, env(safe-area-inset-bottom, 1.58rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='orb'] {
-    right: 1.08rem;
+    right: 1.72rem;
     bottom: max(1.18rem, env(safe-area-inset-bottom, 1.18rem));
   }
 
   .voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='siri'] {
-    right: 0.96rem;
+    right: 1.6rem;
     bottom: max(1.08rem, env(safe-area-inset-bottom, 1.08rem));
   }
 
