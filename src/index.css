@@ -610,8 +610,8 @@
 .voice-orb-halo,
 .voice-streak-glyph__shell,
 .voice-streak-glyph__halo,
-.voice-siri-orb__spin,
-.voice-siri-orb__surface {
+.voice-siri-orb__surface,
+.voice-orb-webgl {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
@@ -628,77 +628,61 @@
   background: transparent;
   cursor: pointer;
   overflow: visible;
-  filter: drop-shadow(0 22px 40px hsla(var(--background) / 0.48));
-}
-
-.voice-siri-orb__spin {
-  inset: 18px;
-  background:
-    conic-gradient(from 0deg,
-      hsla(var(--foreground) / 0) 0deg,
-      hsla(206 100% 74% / 0.7) 56deg,
-      hsla(248 100% 77% / 0.8) 124deg,
-      hsla(286 100% 79% / 0.84) 184deg,
-      hsla(328 92% 79% / 0.66) 236deg,
-      hsla(178 82% 68% / 0.68) 304deg,
-      hsla(var(--foreground) / 0) 360deg);
-  animation: voice-siri-spin 7.1s linear infinite;
-  filter: saturate(1.01) blur(0.3px);
+  isolation: isolate;
+  filter: drop-shadow(0 22px 40px hsla(var(--background) / 0.42));
 }
 
 .voice-siri-orb__surface {
-  inset: 21px;
+  inset: 17px;
+  z-index: 3;
   background:
-    radial-gradient(circle at 35% 27%, hsla(var(--foreground) / 0.1) 0%, transparent 16%),
-    radial-gradient(circle at 50% 50%, hsla(var(--background) / 0.04) 0%, hsla(var(--background) / 0.4) 56%, hsla(var(--background) / 0.76) 100%);
+    radial-gradient(circle at 34% 28%, hsla(var(--foreground) / 0.14) 0%, transparent 17%),
+    radial-gradient(circle at 60% 72%, hsla(var(--foreground) / 0.05) 0%, transparent 22%),
+    radial-gradient(circle at 50% 52%, hsla(var(--background) / 0.06) 0%, hsla(var(--background) / 0.18) 46%, hsla(var(--background) / 0.36) 74%, hsla(var(--background) / 0.58) 100%);
   box-shadow:
-    inset 0 0 18px hsla(var(--background) / 0.34),
-    inset 0 1px 0 hsla(var(--foreground) / 0.05);
+    inset 0 1px 0 hsla(var(--foreground) / 0.09),
+    inset 0 0 22px hsla(var(--background) / 0.22);
+  mix-blend-mode: screen;
 }
 
 .voice-orb-halo {
-  inset: -12px;
-  background: radial-gradient(circle, hsla(210 100% 76% / 0.06) 0%, hsla(272 100% 78% / 0.08) 26%, hsla(178 84% 66% / 0.05) 48%, transparent 76%);
-  opacity: 0.88;
-  z-index: -1;
-  filter: blur(14px);
-  animation: voice-orb-drift 6.4s ease-in-out infinite;
+  inset: -10px;
+  z-index: 0;
+  background:
+    radial-gradient(circle, hsla(206 100% 76% / 0.08) 0%, hsla(272 100% 78% / 0.08) 30%, hsla(178 84% 66% / 0.06) 52%, transparent 76%);
+  opacity: 0.8;
+  filter: blur(16px);
+  animation: voice-orb-drift 6.6s ease-in-out infinite;
 }
 
-.voice-orb-canvas {
-  position: relative;
+.voice-orb-webgl {
+  inset: 0;
   z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.voice-orb-webgl canvas {
+  width: 108px !important;
+  height: 108px !important;
   display: block;
-  width: 100%;
-  height: 100%;
+  border-radius: 9999px;
 }
 
 .voice-orb[data-state='speaking'] .voice-orb-halo,
 .voice-orb[data-state='loading'] .voice-orb-halo,
 .voice-orb[data-visual-state='listening'] .voice-orb-halo,
 .voice-orb[data-visual-state='thinking'] .voice-orb-halo {
-  opacity: 0.96;
-}
-
-.voice-orb[data-state='speaking'] .voice-siri-orb__spin,
-.voice-orb[data-state='loading'] .voice-siri-orb__spin,
-.voice-orb[data-visual-state='thinking'] .voice-siri-orb__spin {
-  animation-duration: 5.2s;
+  opacity: 0.98;
 }
 
 .voice-orb[data-state='speaking'] .voice-orb-halo {
-  inset: -16px;
+  inset: -14px;
   filter: blur(18px);
 }
 
-.voice-orb[data-state='error'] .voice-siri-orb__spin {
-  background:
-    conic-gradient(from 0deg,
-      hsla(var(--foreground) / 0) 0deg,
-      hsla(var(--destructive) / 0.72) 78deg,
-      hsla(12 88% 70% / 0.8) 168deg,
-      hsla(var(--destructive) / 0.66) 292deg,
-      hsla(var(--foreground) / 0) 360deg);
+.voice-orb[data-state='error'] .voice-orb-halo {
+  background: radial-gradient(circle, hsla(var(--destructive) / 0.12) 0%, hsla(var(--destructive) / 0.08) 36%, transparent 78%);
 }
 
 .voice-orb-tooltip,
