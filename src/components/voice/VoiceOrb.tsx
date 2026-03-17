@@ -60,58 +60,60 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       let amplitude = effectiveState === 'speaking' ? getAmplitude() : 0;
       if (reducedMotion) amplitude = 0;
 
-      let ringOpacity = 0.3;
-      let lineWidth = 2.25;
-      let radius = 23;
-      let warp = 2.6;
-      let spin = 0.56;
-      let pulse = 0.12;
+      let ringOpacity = 0.24;
+      let lineWidth = 1.35;
+      let radius = 22.5;
+      let warp = 2.1;
+      let spin = 0.52;
+      let pulse = 0.08;
       let hueShift = 0;
-      let verticalStretch = 0.84;
+      let verticalStretch = 0.82;
+      let tailLength = 0.9;
 
       switch (effectiveState) {
         case 'listening':
-          ringOpacity = 0.36;
-          lineWidth = 2.45;
-          radius = 24;
-          warp = 3.2;
-          spin = 0.8;
-          pulse = 0.18;
+          ringOpacity = 0.3;
+          lineWidth = 1.5;
+          radius = 23.5;
+          warp = 2.7;
+          spin = 0.72;
+          pulse = 0.12;
           break;
         case 'thinking':
         case 'loading':
-          ringOpacity = 0.38;
-          lineWidth = 2.55;
+          ringOpacity = 0.32;
+          lineWidth = 1.58;
           radius = 22;
-          warp = 2.4;
-          spin = 1.02;
-          pulse = 0.2;
-          hueShift = -10;
+          warp = 2.2;
+          spin = 0.9;
+          pulse = 0.14;
+          hueShift = -8;
           break;
         case 'speaking':
-          ringOpacity = 0.4 + amplitude * 0.3;
-          lineWidth = 2.5 + amplitude * 1.45;
-          radius = 24 + amplitude * 3.6;
-          warp = 3.6 + amplitude * 8.5;
-          spin = 0.95 + amplitude * 1.35;
-          pulse = 0.18 + amplitude * 0.28;
-          verticalStretch = 0.8;
+          ringOpacity = 0.34 + amplitude * 0.24;
+          lineWidth = 1.5 + amplitude * 0.9;
+          radius = 23.5 + amplitude * 4.2;
+          warp = 3.2 + amplitude * 9.8;
+          spin = 0.88 + amplitude * 1.42;
+          pulse = 0.16 + amplitude * 0.24;
+          verticalStretch = 0.78;
+          tailLength = 1.32 + amplitude * 0.42;
           break;
         case 'paused':
-          ringOpacity = 0.22;
-          lineWidth = 2;
+          ringOpacity = 0.18;
+          lineWidth = 1.2;
           radius = 22;
-          warp = 1.4;
-          spin = 0.34;
-          pulse = 0.06;
+          warp = 1.2;
+          spin = 0.28;
+          pulse = 0.04;
           break;
         case 'error':
-          ringOpacity = 0.3;
-          lineWidth = 2.25;
-          radius = 23;
-          warp = 2.1;
-          spin = 0.48;
-          pulse = 0.1;
+          ringOpacity = 0.24;
+          lineWidth = 1.35;
+          radius = 22.5;
+          warp = 1.8;
+          spin = 0.44;
+          pulse = 0.08;
           hueShift = 88;
           break;
         default:
