@@ -6,6 +6,8 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
+import FullscreenDoorSubtitlePopup from "@/components/threshold/FullscreenDoorSubtitlePopup";
+import { useDoorSubtitlePopup } from "@/hooks/useDoorSubtitlePopup";
 
 const doors: DoorData[] = [
   {
