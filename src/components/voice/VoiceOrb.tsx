@@ -4,12 +4,14 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
 
 type OrbVisualState = VoiceState | 'listening' | 'thinking';
+type VoiceOrbVariant = 'default' | 'mini';
 
 interface VoiceOrbProps {
   state: VoiceState;
   visualState?: OrbVisualState;
   analyser: AnalyserNode | null;
   onClick: () => void;
+  variant?: VoiceOrbVariant;
 }
 
 const STATE_LABELS: Record<VoiceState, string> = {
@@ -20,12 +22,13 @@ const STATE_LABELS: Record<VoiceState, string> = {
   error: 'Assistente vocale — errore',
 };
 
-export default function VoiceOrb({ state, visualState, analyser, onClick }: VoiceOrbProps) {
+export default function VoiceOrb({ state, visualState, analyser, onClick, variant = 'default' }: VoiceOrbProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number>(0);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const reducedMotion = useReducedMotion();
   const effectiveState = visualState ?? state;
+  const isMini = variant === 'mini';
 
   const getAmplitude = useMemo(() => {
     if (!analyser) return () => 0;
@@ -43,11 +46,14 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
     const host = mountRef.current;
     if (!host) return;
 
-    const width = 108;
-    const height = 108;
+    const width = isMini ? 84 : 108;
+    const height = width;
+    const orbRadius = isMini ? 4.1 : 5.2;
+    const glowRadius = orbRadius + (isMini ? 0.1 : 0.14);
+    const cameraDistance = isMini ? 14.8 : 18;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 100);
-    camera.position.set(0, 0, 18);
+    camera.position.set(0, 0, cameraDistance);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -60,14 +66,14 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
     const group = new THREE.Group();
     scene.add(group);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-    const keyLight = new THREE.PointLight(0xaed5ff, 1.6, 80, 2);
+    const ambient = new THREE.AmbientLight(0xffffff, isMini ? 0.62 : 0.7);
+    const keyLight = new THREE.PointLight(0xaed5ff, isMini ? 1.3 : 1.6, 80, 2);
     keyLight.position.set(8, 10, 16);
-    const fillLight = new THREE.PointLight(0xd6b8ff, 1.2, 80, 2);
+    const fillLight = new THREE.PointLight(0xd6b8ff, isMini ? 0.96 : 1.2, 80, 2);
     fillLight.position.set(-10, -6, 12);
     scene.add(ambient, keyLight, fillLight);
 
-    const geometry = new THREE.IcosahedronGeometry(5.2, 18);
+    const geometry = new THREE.IcosahedronGeometry(orbRadius, 18);
     const positionAttribute = geometry.getAttribute('position');
     const originalPositions = Float32Array.from(positionAttribute.array as ArrayLike<number>);
     const originalVectors = Array.from({ length: positionAttribute.count }, (_, index) => {
@@ -83,7 +89,7 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       color: new THREE.Color('hsl(0, 0%, 100%)'),
       wireframe: true,
       transparent: true,
-      opacity: effectiveState === 'paused' ? 0.44 : 0.78,
+      opacity: effectiveState === 'paused' ? 0.44 : isMini ? 0.68 : 0.78,
       roughness: 0.24,
       metalness: 0.02,
       clearcoat: 1,
@@ -93,11 +99,11 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
     const orb = new THREE.Mesh(geometry, orbMaterial);
     group.add(orb);
 
-    const glowGeometry = new THREE.IcosahedronGeometry(5.34, 10);
+    const glowGeometry = new THREE.IcosahedronGeometry(glowRadius, 10);
     const glowMaterial = new THREE.MeshBasicMaterial({
       color: new THREE.Color('hsl(0, 0%, 100%)'),
       transparent: true,
-      opacity: effectiveState === 'paused' ? 0.05 : 0.1,
+      opacity: effectiveState === 'paused' ? 0.05 : isMini ? 0.08 : 0.1,
       wireframe: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -140,59 +146,59 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       const time = performance.now() * 0.001;
       const liveAmplitude = reducedMotion ? 0 : effectiveState === 'speaking' ? getAmplitude() : 0;
 
-      let morphBase = 0.08;
+      let morphBase = isMini ? 0.06 : 0.08;
       let morphAudioBoost = 0;
-      let rotationSpeed = 0.0035;
-      let pulseSpeed = 1.6;
-      let noiseScale = 1.2;
-      let glowOpacity = 0.08;
-      let wireOpacity = 0.72;
-      let zBob = 0.18;
+      let rotationSpeed = isMini ? 0.0028 : 0.0035;
+      let pulseSpeed = isMini ? 1.35 : 1.6;
+      let noiseScale = isMini ? 1.08 : 1.2;
+      let glowOpacity = isMini ? 0.06 : 0.08;
+      let wireOpacity = isMini ? 0.62 : 0.72;
+      let zBob = isMini ? 0.12 : 0.18;
 
       switch (effectiveState) {
         case 'listening':
-          morphBase = 0.12;
-          rotationSpeed = 0.0058;
-          pulseSpeed = 2.2;
-          glowOpacity = 0.11;
-          wireOpacity = 0.78;
-          zBob = 0.26;
+          morphBase = isMini ? 0.09 : 0.12;
+          rotationSpeed = isMini ? 0.0044 : 0.0058;
+          pulseSpeed = isMini ? 1.9 : 2.2;
+          glowOpacity = isMini ? 0.09 : 0.11;
+          wireOpacity = isMini ? 0.72 : 0.78;
+          zBob = isMini ? 0.18 : 0.26;
           break;
         case 'thinking':
         case 'loading':
-          morphBase = 0.15;
-          rotationSpeed = 0.008;
-          pulseSpeed = 2.8;
-          noiseScale = 1.45;
-          glowOpacity = 0.12;
-          wireOpacity = 0.82;
-          zBob = 0.24;
+          morphBase = isMini ? 0.12 : 0.15;
+          rotationSpeed = isMini ? 0.0062 : 0.008;
+          pulseSpeed = isMini ? 2.35 : 2.8;
+          noiseScale = isMini ? 1.28 : 1.45;
+          glowOpacity = isMini ? 0.1 : 0.12;
+          wireOpacity = isMini ? 0.76 : 0.82;
+          zBob = isMini ? 0.18 : 0.24;
           break;
         case 'speaking':
-          morphBase = 0.16;
-          morphAudioBoost = liveAmplitude * 1.45;
-          rotationSpeed = 0.0105 + liveAmplitude * 0.012;
-          pulseSpeed = 3.1 + liveAmplitude * 2.4;
-          noiseScale = 1.75 + liveAmplitude * 0.6;
-          glowOpacity = 0.12 + liveAmplitude * 0.12;
-          wireOpacity = 0.8 + liveAmplitude * 0.18;
-          zBob = 0.34 + liveAmplitude * 0.22;
+          morphBase = isMini ? 0.14 : 0.16;
+          morphAudioBoost = liveAmplitude * (isMini ? 1.1 : 1.45);
+          rotationSpeed = (isMini ? 0.0084 : 0.0105) + liveAmplitude * (isMini ? 0.009 : 0.012);
+          pulseSpeed = (isMini ? 2.7 : 3.1) + liveAmplitude * (isMini ? 1.8 : 2.4);
+          noiseScale = (isMini ? 1.5 : 1.75) + liveAmplitude * (isMini ? 0.42 : 0.6);
+          glowOpacity = (isMini ? 0.1 : 0.12) + liveAmplitude * (isMini ? 0.08 : 0.12);
+          wireOpacity = (isMini ? 0.76 : 0.8) + liveAmplitude * (isMini ? 0.12 : 0.18);
+          zBob = (isMini ? 0.22 : 0.34) + liveAmplitude * (isMini ? 0.14 : 0.22);
           break;
         case 'paused':
           morphBase = 0.03;
           rotationSpeed = 0.0015;
           pulseSpeed = 1;
-          glowOpacity = 0.04;
-          wireOpacity = 0.4;
-          zBob = 0.1;
+          glowOpacity = isMini ? 0.03 : 0.04;
+          wireOpacity = isMini ? 0.34 : 0.4;
+          zBob = isMini ? 0.08 : 0.1;
           break;
         case 'error':
-          morphBase = 0.07;
-          rotationSpeed = 0.0046;
-          pulseSpeed = 1.8;
-          glowOpacity = 0.09;
-          wireOpacity = 0.74;
-          zBob = 0.14;
+          morphBase = isMini ? 0.06 : 0.07;
+          rotationSpeed = isMini ? 0.0036 : 0.0046;
+          pulseSpeed = isMini ? 1.45 : 1.8;
+          glowOpacity = isMini ? 0.08 : 0.09;
+          wireOpacity = isMini ? 0.68 : 0.74;
+          zBob = isMini ? 0.1 : 0.14;
           break;
         default:
           break;
@@ -219,12 +225,12 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       glowMaterial.opacity = glowOpacity;
 
       group.rotation.y += reducedMotion ? 0.001 : rotationSpeed;
-      group.rotation.x = Math.sin(time * 0.7) * 0.16;
-      group.rotation.z = Math.cos(time * 0.55) * 0.1;
+      group.rotation.x = Math.sin(time * 0.7) * (isMini ? 0.12 : 0.16);
+      group.rotation.z = Math.cos(time * 0.55) * (isMini ? 0.072 : 0.1);
       group.position.z = Math.sin(time * 1.2) * zBob;
       glowOrb.rotation.y = -group.rotation.y * 1.14;
       glowOrb.rotation.x = group.rotation.x * 0.8;
-      glowOrb.scale.setScalar(1.008 + Math.sin(time * 1.8) * 0.012 + liveAmplitude * 0.08);
+      glowOrb.scale.setScalar(1.008 + Math.sin(time * 1.8) * 0.012 + liveAmplitude * (isMini ? 0.05 : 0.08));
 
       renderer.render(scene, camera);
       animationFrameRef.current = requestAnimationFrame(render);
@@ -249,7 +255,7 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       }
       rendererRef.current = null;
     };
-  }, [effectiveState, getAmplitude, reducedMotion]);
+  }, [effectiveState, getAmplitude, isMini, reducedMotion]);
 
   return (
     <button
@@ -262,6 +268,7 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       data-voice-orb
       data-state={state}
       data-visual-state={effectiveState}
+      data-variant={variant}
     >
       <span className="voice-orb-halo" aria-hidden="true" />
       <span className="voice-siri-orb__surface" aria-hidden="true" />
