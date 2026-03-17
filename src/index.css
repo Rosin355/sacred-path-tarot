@@ -1042,6 +1042,16 @@
   flex-shrink: 0;
 }
 
+@media (min-width: 768px) {
+  .threshold-intro-copy {
+    max-width: 39rem;
+  }
+
+  .threshold-intro-copy__veil {
+    padding: 0.9rem 1rem;
+  }
+}
+
 @media (max-width: 767px) {
   .threshold-intro-copy {
     max-width: 31rem;
