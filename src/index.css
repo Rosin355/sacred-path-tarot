@@ -575,23 +575,28 @@
 }
 
 @keyframes voice-star-twinkle {
-  0%, 100% { transform: translateY(0) scale(0.98) rotate(0deg); opacity: 0.88; }
-  50% { transform: translateY(-1px) scale(1.04) rotate(8deg); opacity: 1; }
+  0%, 100% { transform: translateY(0) scale(0.96) rotate(0deg); opacity: 0.92; }
+  50% { transform: translateY(-2px) scale(1.08) rotate(10deg); opacity: 1; }
 }
 
 @keyframes voice-star-ray-pulse {
-  0%, 100% { opacity: 0.26; transform: translate(-50%, -50%) scale(0.94); }
-  50% { opacity: 0.54; transform: translate(-50%, -50%) scale(1.03); }
+  0%, 100% { opacity: 0.34; transform: translate(-50%, -50%) scale(0.92); }
+  50% { opacity: 0.76; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 @keyframes voice-star-aura-breathe {
-  0%, 100% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.22; }
-  50% { transform: translate(-50%, -50%) scale(1.02); opacity: 0.4; }
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.28; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.56; }
 }
 
 @keyframes voice-star-ring-turn {
-  from { transform: translate(-50%, -50%) rotate(0deg) scale(0.98); }
-  to { transform: translate(-50%, -50%) rotate(360deg) scale(1.02); }
+  from { transform: translate(-50%, -50%) rotate(0deg) scale(0.96); }
+  to { transform: translate(-50%, -50%) rotate(360deg) scale(1.04); }
+}
+
+@keyframes voice-eq-breathe {
+  0%, 100% { opacity: 0.54; transform: scaleX(0.96); }
+  50% { opacity: 0.92; transform: scaleX(1); }
 }
 
 @keyframes voice-siri-spin {
