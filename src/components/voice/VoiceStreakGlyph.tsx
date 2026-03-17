@@ -45,7 +45,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
     const context = canvas.getContext('2d');
     if (!context) return;
 
-    const size = 80;
+    const size = 92;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
@@ -95,7 +95,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
         gradient.addColorStop(1, 'transparent');
 
         context.strokeStyle = gradient;
-        context.lineWidth = Math.max(0.45, width * (1 - progress * 0.82));
+        context.lineWidth = Math.max(0.5, width * (1 - progress * 0.82));
         context.lineCap = 'round';
         context.beginPath();
         context.moveTo(x, y);
@@ -114,76 +114,76 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       if (reducedMotion) amplitude = 0;
 
       let speed = 0.62;
-      let opacity = 0.22;
-      let width = 1.55;
-      let radius = 18;
-      let drift = 1.8;
-      let coreOpacity = 0.18;
-      let auraOpacity = 0.16;
-      let auraRadius = 26;
-      let tailSweep = Math.PI * 1.46;
+      let opacity = 0.26;
+      let width = 1.75;
+      let radius = 21;
+      let drift = 1.95;
+      let coreOpacity = 0.22;
+      let auraOpacity = 0.2;
+      let auraRadius = 30;
+      let tailSweep = Math.PI * 1.52;
       let taper = 1.85;
       let hueShift = 0;
 
       switch (effectiveState) {
         case 'listening':
           speed = 0.92;
-          opacity = 0.28;
-          width = 1.65;
-          radius = 18.5;
-          drift = 2.2;
-          coreOpacity = 0.22;
-          auraOpacity = 0.2;
-          tailSweep = Math.PI * 1.62;
+          opacity = 0.32;
+          width = 1.9;
+          radius = 21.5;
+          drift = 2.35;
+          coreOpacity = 0.28;
+          auraOpacity = 0.24;
+          tailSweep = Math.PI * 1.68;
           taper = 1.95;
           break;
         case 'thinking':
         case 'loading':
           speed = 1.18;
-          opacity = 0.3;
-          width = 1.7;
-          radius = 16.2;
-          drift = 1.5;
-          coreOpacity = 0.28;
-          auraOpacity = 0.22;
-          auraRadius = 24;
-          tailSweep = Math.PI * 1.72;
+          opacity = 0.34;
+          width = 1.95;
+          radius = 18.8;
+          drift = 1.7;
+          coreOpacity = 0.34;
+          auraOpacity = 0.28;
+          auraRadius = 28;
+          tailSweep = Math.PI * 1.78;
           taper = 2.05;
           hueShift = -18;
           break;
         case 'speaking':
           speed = 1.38 + amplitude * 0.95;
-          opacity = 0.34 + amplitude * 0.32;
-          width = 1.78 + amplitude * 0.52;
-          radius = 19 + amplitude * 2.8;
-          drift = 2.5 + amplitude * 4.2;
-          coreOpacity = 0.24 + amplitude * 0.18;
-          auraOpacity = 0.24 + amplitude * 0.24;
-          auraRadius = 28 + amplitude * 5;
-          tailSweep = Math.PI * (1.95 + amplitude * 0.85);
-          taper = 2.35 + amplitude * 0.45;
+          opacity = 0.4 + amplitude * 0.34;
+          width = 2.05 + amplitude * 0.6;
+          radius = 22 + amplitude * 3.4;
+          drift = 2.8 + amplitude * 4.6;
+          coreOpacity = 0.3 + amplitude * 0.2;
+          auraOpacity = 0.3 + amplitude * 0.28;
+          auraRadius = 33 + amplitude * 6;
+          tailSweep = Math.PI * (2.05 + amplitude * 0.95);
+          taper = 2.4 + amplitude * 0.45;
           break;
         case 'paused':
           speed = 0.26;
-          opacity = 0.16;
-          width = 1.3;
-          radius = 17;
-          drift = 0.9;
-          coreOpacity = 0.12;
-          auraOpacity = 0.12;
-          tailSweep = Math.PI * 1.28;
+          opacity = 0.18;
+          width = 1.45;
+          radius = 19.5;
+          drift = 1.05;
+          coreOpacity = 0.14;
+          auraOpacity = 0.14;
+          tailSweep = Math.PI * 1.3;
           taper = 1.75;
           break;
         case 'error':
           speed = 0.42;
-          opacity = 0.2;
-          width = 1.45;
-          radius = 16.6;
-          drift = 1.2;
-          coreOpacity = 0.16;
-          auraOpacity = 0.16;
-          auraRadius = 24;
-          tailSweep = Math.PI * 1.42;
+          opacity = 0.22;
+          width = 1.6;
+          radius = 19;
+          drift = 1.35;
+          coreOpacity = 0.18;
+          auraOpacity = 0.18;
+          auraRadius = 27;
+          tailSweep = Math.PI * 1.46;
           taper = 1.9;
           hueShift = 84;
           break;
@@ -201,13 +201,13 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       context.arc(centerX, centerY, auraRadius, 0, Math.PI * 2);
       context.fill();
 
-      const innerBloom = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, 16 + amplitude * 4);
-      innerBloom.addColorStop(0, `hsla(${42 + hueShift * 0.12}, 70%, 86%, ${coreOpacity * 0.95})`);
-      innerBloom.addColorStop(0.34, `hsla(${270 + hueShift}, 58%, 74%, ${coreOpacity * 0.52})`);
+      const innerBloom = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, 18 + amplitude * 4.5);
+      innerBloom.addColorStop(0, `hsla(${42 + hueShift * 0.12}, 70%, 86%, ${coreOpacity * 0.98})`);
+      innerBloom.addColorStop(0.34, `hsla(${270 + hueShift}, 58%, 74%, ${coreOpacity * 0.56})`);
       innerBloom.addColorStop(1, 'transparent');
       context.fillStyle = innerBloom;
       context.beginPath();
-      context.arc(centerX, centerY, 16 + amplitude * 4, 0, Math.PI * 2);
+      context.arc(centerX, centerY, 18 + amplitude * 4.5, 0, Math.PI * 2);
       context.fill();
 
       drawTrail({
@@ -226,7 +226,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
         radius: radius - 0.8,
         sweep: tailSweep * 0.88,
         opacity: opacity * 0.8,
-        width: Math.max(0.7, width - 0.18),
+        width: Math.max(0.78, width - 0.2),
         hueShift: hueShift + 6,
         drift: drift * 0.82,
         taper: taper + 0.1,
@@ -234,22 +234,22 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
 
       drawTrail({
         phase: Math.PI / 2 + time * speed * 0.48,
-        radius: radius + 2.2,
-        sweep: tailSweep * 0.52,
-        opacity: opacity * 0.34,
-        width: Math.max(0.5, width - 0.58),
+        radius: radius + 2.6,
+        sweep: tailSweep * 0.54,
+        opacity: opacity * 0.36,
+        width: Math.max(0.58, width - 0.62),
         hueShift: hueShift - 10,
         drift: drift * 0.46,
         taper: taper + 0.28,
       });
 
-      const core = context.createRadialGradient(centerX - 1.5, centerY - 2, 0, centerX, centerY, 8 + amplitude * 1.8);
-      core.addColorStop(0, `hsla(${38 + hueShift * 0.1}, 72%, 92%, ${0.88 + amplitude * 0.08})`);
-      core.addColorStop(0.38, `hsla(${270 + hueShift}, 54%, 82%, ${0.24 + amplitude * 0.1})`);
+      const core = context.createRadialGradient(centerX - 1.5, centerY - 2, 0, centerX, centerY, 9 + amplitude * 2.2);
+      core.addColorStop(0, `hsla(${38 + hueShift * 0.1}, 72%, 92%, ${0.9 + amplitude * 0.08})`);
+      core.addColorStop(0.38, `hsla(${270 + hueShift}, 54%, 82%, ${0.28 + amplitude * 0.12})`);
       core.addColorStop(1, 'transparent');
       context.fillStyle = core;
       context.beginPath();
-      context.arc(centerX, centerY, 8 + amplitude * 1.8, 0, Math.PI * 2);
+      context.arc(centerX, centerY, 9 + amplitude * 2.2, 0, Math.PI * 2);
       context.fill();
 
       frameRef.current = requestAnimationFrame(render);
@@ -274,7 +274,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
     >
       <span className="voice-streak-glyph__shell" aria-hidden="true" />
       <span className="voice-streak-glyph__halo" aria-hidden="true" />
-      <canvas ref={canvasRef} className="voice-streak-glyph__canvas" style={{ width: 80, height: 80 }} />
+      <canvas ref={canvasRef} className="voice-streak-glyph__canvas" style={{ width: 92, height: 92 }} />
       <span className="voice-streak-glyph__tooltip" aria-hidden="true">Ascolta o chiedi guida</span>
     </button>
   );
