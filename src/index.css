@@ -998,6 +998,18 @@
     inset 0 1px 0 hsla(var(--foreground) / 0.08);
 }
 
+.voice-assistant-shell[data-route-context='threshold'] .voice-panel {
+  width: min(20rem, calc(100vw - 2rem));
+  box-shadow:
+    0 20px 64px -28px hsla(var(--background) / 0.78),
+    0 0 36px -16px hsla(var(--primary) / 0.12),
+    inset 0 1px 0 hsla(var(--foreground) / 0.06);
+}
+
+.voice-assistant-shell[data-route-context='threshold'][data-mobile='true'] .voice-panel {
+  width: min(100%, 22rem);
+}
+
 .voice-panel__veil {
   position: absolute;
   inset: 0;

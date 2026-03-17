@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
@@ -28,7 +29,9 @@ export default function FloatingVoiceGuide() {
     progress,
   } = useVoiceAssistant();
   const isMobile = useIsMobile();
+  const location = useLocation();
   const previousStateRef = useRef<VoiceState>('idle');
+  const isThresholdRoute = location.pathname === '/';
 
   useEffect(() => {
     const previousState = previousStateRef.current;
@@ -48,12 +51,10 @@ export default function FloatingVoiceGuide() {
 
   return (
     <div
-      className="fixed z-[60] flex flex-col items-end gap-3"
+      className="voice-assistant-shell fixed z-[60] flex flex-col items-end gap-3"
       data-voice-assistant
-      style={{
-        bottom: isMobile ? 'max(1rem, env(safe-area-inset-bottom, 1rem))' : 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
-        right: isMobile ? '1rem' : '1.5rem',
-      }}
+      data-route-context={isThresholdRoute ? 'threshold' : 'default'}
+      data-mobile={isMobile ? 'true' : 'false'}
     >
       {isOpen && (
         <VoicePanel
@@ -74,6 +75,7 @@ export default function FloatingVoiceGuide() {
         visualState={visualState}
         analyser={audioAnalyser}
         onClick={() => setIsOpen(!isOpen)}
+        variant={isThresholdRoute ? 'compact' : 'default'}
       />
 
       <div className="hidden" aria-hidden="true">
