@@ -192,6 +192,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       data-state={state}
       data-visual-state={effectiveState}
     >
+      <span className="voice-siri-glyph__outer-ring" aria-hidden="true" />
       <span className="voice-siri-glyph__rim" aria-hidden="true" />
       <span className="voice-siri-glyph__spin" aria-hidden="true" />
       <span className="voice-siri-glyph__surface" aria-hidden="true" />
