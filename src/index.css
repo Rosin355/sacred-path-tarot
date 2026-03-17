@@ -633,6 +633,8 @@
 .voice-siri-orb__surface,
 .voice-orb-webgl,
 .voice-star,
+.voice-star__aura,
+.voice-star__ring,
 .voice-star__core,
 .voice-star__ray {
   position: absolute;
