@@ -641,36 +641,23 @@
 .voice-star__aura,
 .voice-star__ring,
 .voice-star__core,
-.voice-star__ray {
+.voice-star__ray,
+.voice-siri-preview__rail {
   position: absolute;
   pointer-events: none;
 }
-
-.voice-siri-orb {
-  position: relative;
-  width: 108px;
-  height: 108px;
-  padding: 0;
-  border: 0;
-  border-radius: 9999px;
-  background: transparent;
-  cursor: pointer;
-  overflow: visible;
-  isolation: isolate;
-  filter: drop-shadow(0 22px 40px hsla(var(--background) / 0.42));
-}
-
+...
 .voice-orb[data-variant='mini'] {
-  width: 52px;
-  height: 52px;
-  filter: drop-shadow(0 10px 16px hsla(var(--background) / 0.2));
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 12px 22px hsla(var(--background) / 0.24));
 }
 ...
 .voice-orb[data-variant='mini'] .voice-orb-halo {
-  inset: -10px;
-  background: radial-gradient(circle, hsla(var(--foreground) / 0.09) 0%, hsla(var(--accent) / 0.09) 26%, hsla(var(--primary) / 0.05) 48%, transparent 72%);
-  opacity: 0.22;
-  filter: blur(10px);
+  inset: -14px;
+  background: radial-gradient(circle, hsla(var(--foreground) / 0.16) 0%, hsla(var(--accent) / 0.15) 26%, hsla(var(--primary) / 0.1) 52%, transparent 78%);
+  opacity: 0.48;
+  filter: blur(16px);
 }
 
 .voice-star {
