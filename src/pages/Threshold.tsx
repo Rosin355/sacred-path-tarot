@@ -6,6 +6,8 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
+import FullscreenDoorSubtitlePopup from "@/components/threshold/FullscreenDoorSubtitlePopup";
+import { useDoorSubtitlePopup } from "@/hooks/useDoorSubtitlePopup";
 
 const doors: DoorData[] = [
   {
@@ -45,7 +47,7 @@ const Threshold = () => {
   const [visible, setVisible] = useState(false);
   const { isMuted, toggleMute } = useBackgroundMusic();
   const reducedMotion = useReducedMotion();
-
+  const subtitle = useDoorSubtitlePopup();
   const [phase, setPhase] = useState<Phase>("idle");
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
@@ -180,6 +182,10 @@ const Threshold = () => {
               phase={phase}
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
+              onPointerEnter={() => subtitle.onDoorPointerEnter(door)}
+              onPointerLeave={subtitle.onDoorPointerLeave}
+              onFocus={() => subtitle.onDoorFocus(door)}
+              onBlur={subtitle.onDoorBlur}
               ref={(el) => {
                 doorHandleRefs.current[door.id] = el;
               }}
@@ -211,6 +217,19 @@ const Threshold = () => {
       {showOverlay && activeDoor && !reducedMotion && (
         <PetalBurstOverlay active={true} doorColor={DOOR_COLORS[activeDoor.id]} onComplete={handleOverlayComplete} />
       )}
+
+      {/* Fullscreen subtitle popup (desktop only) */}
+      <FullscreenDoorSubtitlePopup
+        text={subtitle.activeSubtitleText}
+        visible={subtitle.popupVisible}
+        closing={subtitle.popupClosing}
+        doorId={subtitle.hoveredDoorId}
+        onPopupPointerEnter={subtitle.onPopupPointerEnter}
+        onPopupPointerLeave={subtitle.onPopupPointerLeave}
+        onCloseClick={subtitle.onCloseClick}
+        onExitComplete={subtitle.onExitComplete}
+        onEscapeKey={subtitle.onEscapeKey}
+      />
     </div>
   );
 };

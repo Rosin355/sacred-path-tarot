@@ -25,10 +25,14 @@ interface Props {
   phase: "idle" | "dissolving" | "navigating";
   isActive: boolean;
   onClick: (door: DoorData) => void;
+  onPointerEnter?: () => void;
+  onPointerLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const ThresholdDoor = forwardRef<DoorHandle, Props>(
-  ({ door, phase, isActive, onClick }, ref) => {
+  ({ door, phase, isActive, onClick, onPointerEnter, onPointerLeave, onFocus, onBlur }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
     const buttonRef = useRef<HTMLButtonElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
@@ -148,6 +152,10 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         onClick={() => onClick(door)}
         disabled={phase !== "idle"}
         {...hoverBindings}
+        onPointerEnter={() => { hoverBindings.onPointerEnter(); onPointerEnter?.(); }}
+        onPointerLeave={() => { hoverBindings.onPointerLeave(); onPointerLeave?.(); }}
+        onFocus={() => { hoverBindings.onFocus(); onFocus?.(); }}
+        onBlur={() => { hoverBindings.onBlur(); onBlur?.(); }}
         data-hover-active={isHoverActive ? "true" : "false"}
         className={`group relative isolate w-[178px] sm:w-[190px] md:w-[198px] lg:w-[222px] cursor-pointer
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
