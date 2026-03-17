@@ -52,6 +52,9 @@ export default function Siri({ state, visualState, analyser, onClick, variant = 
   }, [effectiveState, getAmplitude]);
 
   const isCompact = variant === 'compact';
+  const isActiveCapsule = effectiveState === 'speaking' || effectiveState === 'thinking' || effectiveState === 'loading' || effectiveState === 'paused';
+  const waveWidth = isCompact ? (isActiveCapsule ? 196 : 182) : 220;
+  const waveHeight = isCompact ? (isActiveCapsule ? 62 : 54) : 70;
 
   const waveConfig: IReactSiriwaveProps = {
     theme: 'ios9',
@@ -61,8 +64,8 @@ export default function Siri({ state, visualState, analyser, onClick, variant = 
     frequency: effectiveState === 'speaking' ? 5 + amplitude * 3 : effectiveState === 'thinking' || effectiveState === 'loading' ? 4.2 : 3.2,
     color: 'hsl(var(--foreground))',
     cover: true,
-    width: isCompact ? 172 : 220,
-    height: isCompact ? 52 : 70,
+    width: waveWidth,
+    height: waveHeight,
     autostart: true,
     pixelDepth: 0.02,
     lerpSpeed: 0.08,

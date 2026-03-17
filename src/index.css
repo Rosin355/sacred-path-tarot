@@ -1131,9 +1131,15 @@
     bottom: max(0.78rem, env(safe-area-inset-bottom, 0.78rem));
   }
 
-  .voice-siri-preview,
+  .voice-siri-preview {
+    width: min(100%, 15rem);
+    height: 80px;
+  }
+
   .voice-siri-preview--compact {
-    width: min(100%, 13.75rem);
+    width: min(100%, 14.5rem);
+    min-width: min(14.5rem, calc(100vw - 1.8rem));
+    height: 68px;
   }
 
   .voice-orb[data-variant='mini'] {

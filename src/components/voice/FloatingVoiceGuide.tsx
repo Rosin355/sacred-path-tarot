@@ -154,7 +154,7 @@ export default function FloatingVoiceGuide() {
           visualState={visualState}
           analyser={audioAnalyser}
           onClick={handleToggleAssistant}
-          variant={isThresholdRoute ? 'compact' : 'default'}
+          variant={siriVariant}
         />
       )}
 
