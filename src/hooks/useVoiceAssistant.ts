@@ -18,6 +18,8 @@ export interface UseVoiceAssistantReturn {
   progress: number; // 0-1 progress through chunks
 }
 
+const SILENT_AUDIO_DATA_URI = 'data:audio/wav;base64,UklGRlIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YS4AAAAA';
+
 export function useVoiceAssistant(): UseVoiceAssistantReturn {
   const [state, setState] = useState<VoiceState>('idle');
   const [isOpen, setIsOpen] = useState(false);
@@ -34,17 +36,44 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
   const currentChunkRef = useRef(0);
   const abortRef = useRef(false);
   const audioUrlsRef = useRef<string[]>([]);
+  const playbackUnlockedRef = useRef(false);
+
+  const cleanupAudioUrls = useCallback(() => {
+    audioUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    audioUrlsRef.current = [];
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    abortRef.current = true;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.removeAttribute('src');
+      audioRef.current.load();
+    }
+    cleanupAudioUrls();
+    setState('idle');
+    setProgress(0);
+    setErrorMessage(null);
+  }, [cleanupAudioUrls]);
 
   // Stop on route change
   useEffect(() => {
     return () => {
       stopPlayback();
     };
-  }, [location.pathname]);
+  }, [location.pathname, stopPlayback]);
 
-  const cleanupAudioUrls = useCallback(() => {
-    audioUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
-    audioUrlsRef.current = [];
+  const ensureAudioElement = useCallback(() => {
+    if (!audioRef.current) {
+      const audio = new Audio();
+      audio.crossOrigin = 'anonymous';
+      audio.preload = 'auto';
+      audio.setAttribute('playsinline', 'true');
+      audioRef.current = audio;
+    }
+
+    return audioRef.current;
   }, []);
 
   const setupAnalyser = useCallback((audioEl: HTMLAudioElement) => {
@@ -55,11 +84,11 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
         audioContextRef.current = new AudioContext();
       }
       const ctx = audioContextRef.current;
-      
+
       if (!sourceRef.current) {
         sourceRef.current = ctx.createMediaElementSource(audioEl);
       }
-      
+
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 256;
       analyser.smoothingTimeConstant = 0.8;
@@ -76,6 +105,42 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
     }
   }, []);
 
+  const unlockPlayback = useCallback(async () => {
+    if (playbackUnlockedRef.current) return;
+
+    const audio = ensureAudioElement();
+
+    try {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new AudioContext();
+      }
+
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+
+      const previousMuted = audio.muted;
+      const previousSrc = audio.currentSrc || audio.src;
+
+      audio.muted = true;
+      audio.src = SILENT_AUDIO_DATA_URI;
+      await audio.play();
+      audio.pause();
+      audio.currentTime = 0;
+      audio.removeAttribute('src');
+      audio.load();
+      audio.muted = previousMuted;
+
+      if (previousSrc) {
+        audio.src = previousSrc;
+      }
+
+      playbackUnlockedRef.current = true;
+    } catch (error) {
+      console.warn('Unable to pre-unlock audio playback:', error);
+    }
+  }, [ensureAudioElement]);
+
   const fetchChunkAudio = useCallback(async (
     text: string,
     chunkIndex: number,
@@ -84,13 +149,13 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
     nextText?: string
   ): Promise<Blob> => {
     const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-read-page`;
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
       body: JSON.stringify({ text, chunkIndex, totalChunks, previousText, nextText }),
     });
@@ -132,17 +197,12 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
       const audioUrl = URL.createObjectURL(blob);
       audioUrlsRef.current.push(audioUrl);
 
-      if (!audioRef.current) {
-        audioRef.current = new Audio();
-        audioRef.current.crossOrigin = 'anonymous';
-      }
-
-      const audio = audioRef.current;
+      const audio = ensureAudioElement();
       audio.src = audioUrl;
+      audio.muted = false;
 
       setupAnalyser(audio);
 
-      // Resume AudioContext if suspended
       if (audioContextRef.current?.state === 'suspended') {
         await audioContextRef.current.resume();
       }
@@ -154,7 +214,7 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
           cleanup();
           resolve();
         };
-        const onError = (e: Event) => {
+        const onError = () => {
           cleanup();
           reject(new Error('Audio playback error'));
         };
@@ -164,7 +224,10 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
         };
         audio.addEventListener('ended', onEnded);
         audio.addEventListener('error', onError);
-        audio.play().catch(reject);
+        audio.play().catch((error) => {
+          cleanup();
+          reject(error);
+        });
       });
 
       if (!abortRef.current) {
@@ -173,27 +236,24 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
     } catch (error) {
       if (!abortRef.current) {
         console.error('Voice playback error:', error);
+        const isAutoplayError = error instanceof DOMException && error.name === 'NotAllowedError';
         setState('error');
-        setErrorMessage(error instanceof Error ? error.message : 'Errore nella riproduzione vocale');
+        setErrorMessage(
+          isAutoplayError
+            ? 'Il browser ha bloccato l’audio. Tocca di nuovo “Leggi il contenuto” per autorizzare la riproduzione.'
+            : error instanceof Error
+              ? error.message
+              : 'Errore nella riproduzione vocale'
+        );
       }
     }
-  }, [fetchChunkAudio, setupAnalyser, cleanupAudioUrls]);
-
-  const stopPlayback = useCallback(() => {
-    abortRef.current = true;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    cleanupAudioUrls();
-    setState('idle');
-    setProgress(0);
-    setErrorMessage(null);
-  }, [cleanupAudioUrls]);
+  }, [cleanupAudioUrls, ensureAudioElement, fetchChunkAudio, setupAnalyser]);
 
   const readPage = useCallback(async () => {
     abortRef.current = false;
     setErrorMessage(null);
+
+    await unlockPlayback();
 
     const content = extractPageContent();
     if (!content || content.length < 10) {
@@ -207,7 +267,7 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
     currentChunkRef.current = 0;
 
     await playChunk(0);
-  }, [playChunk]);
+  }, [playChunk, unlockPlayback]);
 
   const pause = useCallback(() => {
     if (audioRef.current && state === 'speaking') {
@@ -218,7 +278,11 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
 
   const resume = useCallback(() => {
     if (audioRef.current && state === 'paused') {
-      audioRef.current.play();
+      audioRef.current.play().catch((error) => {
+        console.error('Voice resume error:', error);
+        setState('error');
+        setErrorMessage('Il browser ha bloccato la ripresa audio. Tocca di nuovo play.');
+      });
       setState('speaking');
     }
   }, [state]);
@@ -230,8 +294,7 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
   const restart = useCallback(async () => {
     stopPlayback();
     abortRef.current = false;
-    // Small delay to let state settle
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
     await readPage();
   }, [stopPlayback, readPage]);
 
