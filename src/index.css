@@ -832,6 +832,21 @@
   bottom: max(2.15rem, env(safe-area-inset-bottom, 2.15rem));
 }
 
+.voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='orb'] {
+  right: 2.45rem;
+  bottom: max(2.35rem, env(safe-area-inset-bottom, 2.35rem));
+}
+
+.voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='orb'] {
+  right: 2.7rem;
+  bottom: max(2.55rem, env(safe-area-inset-bottom, 2.55rem));
+}
+
+.voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='orb'] {
+  right: 1.85rem;
+  bottom: max(1.95rem, env(safe-area-inset-bottom, 1.95rem));
+}
+
 .voice-assistant-shell[data-morphing='true'] .voice-orb[data-variant='mini'] {
   transform: translateZ(0) scale(1.18);
   opacity: 0.14;
@@ -1033,6 +1048,21 @@
   .voice-assistant-shell[data-route-context='default'][data-display-mode='orb'] {
     right: 1.32rem;
     bottom: max(1.32rem, env(safe-area-inset-bottom, 1.32rem));
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='orb'] {
+    right: 1.46rem;
+    bottom: max(1.4rem, env(safe-area-inset-bottom, 1.4rem));
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='orb'] {
+    right: 1.62rem;
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='orb'] {
+    right: 1.08rem;
+    bottom: max(1.18rem, env(safe-area-inset-bottom, 1.18rem));
   }
 
   .voice-siri-preview,

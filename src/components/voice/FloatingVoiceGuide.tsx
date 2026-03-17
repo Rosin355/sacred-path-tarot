@@ -36,6 +36,13 @@ export default function FloatingVoiceGuide() {
   const morphTimeoutRef = useRef<number | null>(null);
   const [isMorphing, setIsMorphing] = useState(false);
   const isThresholdRoute = location.pathname === '/';
+  const voicePathTheme = location.pathname.startsWith('/arcani')
+    ? 'arcani'
+    : location.pathname.startsWith('/respiro')
+      ? 'respiro'
+      : location.pathname.startsWith('/ispirazione')
+        ? 'ispirazione'
+        : 'default';
 
   useEffect(() => {
     const previousState = previousStateRef.current;
@@ -113,6 +120,7 @@ export default function FloatingVoiceGuide() {
       className="voice-assistant-shell fixed z-[60] flex flex-col items-end gap-3"
       data-voice-assistant
       data-route-context={isThresholdRoute ? 'threshold' : 'default'}
+      data-path-theme={voicePathTheme}
       data-mobile={isMobile ? 'true' : 'false'}
       data-display-mode={showOrbOnly ? 'orb' : 'siri'}
       data-morphing={isMorphing ? 'true' : 'false'}
