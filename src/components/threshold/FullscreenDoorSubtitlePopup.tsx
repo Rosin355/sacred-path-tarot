@@ -51,18 +51,16 @@ export default function FullscreenDoorSubtitlePopup({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center"
+      className="fixed inset-0 z-40 hidden md:flex items-center justify-center"
       style={{ pointerEvents: "none" }}
       aria-live="polite"
       role="status"
     >
-      {/* Atmospheric veil — non-blocking */}
+      {/* Dark veil — uniform black for all doors */}
       <div
         className="absolute inset-0 transition-opacity duration-700"
         style={{
-          background: accentHsl
-            ? `radial-gradient(ellipse at center, hsl(${accentHsl} / 0.12) 0%, hsl(0 0% 4% / 0.55) 70%, hsl(0 0% 2% / 0.7) 100%)`
-            : "radial-gradient(ellipse at center, hsl(0 0% 10% / 0.3) 0%, hsl(0 0% 2% / 0.65) 100%)",
+          background: "hsl(0 0% 0% / 0.78)",
           opacity: closing ? 0 : 1,
           pointerEvents: "none",
         }}
