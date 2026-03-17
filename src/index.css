@@ -899,8 +899,9 @@
 }
 
 .voice-siri-preview--compact {
-  width: min(13.5rem, calc(100vw - 2rem));
-  height: 62px;
+  width: min(14.5rem, calc(100vw - 1.5rem));
+  min-width: 13.75rem;
+  height: 68px;
   filter: drop-shadow(0 14px 24px hsla(var(--background) / 0.34));
 }
 
