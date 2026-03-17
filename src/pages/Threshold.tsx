@@ -182,6 +182,10 @@ const Threshold = () => {
               phase={phase}
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
+              onPointerEnter={() => subtitle.onDoorPointerEnter(door)}
+              onPointerLeave={subtitle.onDoorPointerLeave}
+              onFocus={() => subtitle.onDoorFocus(door)}
+              onBlur={subtitle.onDoorBlur}
               ref={(el) => {
                 doorHandleRefs.current[door.id] = el;
               }}
