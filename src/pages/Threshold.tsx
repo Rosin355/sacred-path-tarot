@@ -217,6 +217,19 @@ const Threshold = () => {
       {showOverlay && activeDoor && !reducedMotion && (
         <PetalBurstOverlay active={true} doorColor={DOOR_COLORS[activeDoor.id]} onComplete={handleOverlayComplete} />
       )}
+
+      {/* Fullscreen subtitle popup (desktop only) */}
+      <FullscreenDoorSubtitlePopup
+        text={subtitle.activeSubtitleText}
+        visible={subtitle.popupVisible}
+        closing={subtitle.popupClosing}
+        doorId={subtitle.hoveredDoorId}
+        onPopupPointerEnter={subtitle.onPopupPointerEnter}
+        onPopupPointerLeave={subtitle.onPopupPointerLeave}
+        onCloseClick={subtitle.onCloseClick}
+        onExitComplete={subtitle.onExitComplete}
+        onEscapeKey={subtitle.onEscapeKey}
+      />
     </div>
   );
 };
