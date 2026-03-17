@@ -61,6 +61,7 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       width,
       hueShift,
       drift,
+      taper,
     }: {
       phase: number;
       radius: number;
@@ -69,39 +70,42 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       width: number;
       hueShift: number;
       drift: number;
+      taper: number;
     }) => {
       const centerX = size / 2;
       const centerY = size / 2;
-      const steps = reducedMotion ? 18 : 36;
+      const steps = reducedMotion ? 26 : 68;
 
       for (let i = 0; i < steps; i += 1) {
         const progress = i / steps;
         const angle = phase + progress * sweep;
-        const modulation = reducedMotion ? 0 : Math.sin(time * 1.2 + progress * 7 + phase) * drift;
-        const x = centerX + Math.cos(angle) * (radius + modulation);
-        const y = centerY + Math.sin(angle) * (radius * 0.58 + modulation * 0.35);
+        const curveWave = reducedMotion ? 0 : Math.sin(time * 1.45 + progress * 9 + phase) * drift;
+        const x = centerX + Math.cos(angle) * (radius + curveWave);
+        const y = centerY + Math.sin(angle) * (radius * 0.42 + curveWave * 0.24);
         const nextAngle = phase + (progress + 1 / steps) * sweep;
-        const nx = centerX + Math.cos(nextAngle) * (radius + modulation * 0.7);
-        const ny = centerY + Math.sin(nextAngle) * (radius * 0.58 + modulation * 0.25);
+        const nextWave = reducedMotion ? 0 : Math.sin(time * 1.45 + (progress + 1 / steps) * 9 + phase) * drift;
+        const nx = centerX + Math.cos(nextAngle) * (radius + nextWave);
+        const ny = centerY + Math.sin(nextAngle) * (radius * 0.42 + nextWave * 0.24);
 
-        const segmentOpacity = opacity * (1 - progress) * 0.95;
+        const segmentOpacity = opacity * Math.pow(1 - progress, taper);
         const gradient = context.createLinearGradient(x, y, nx, ny);
-        gradient.addColorStop(0, `hsla(${270 + hueShift}, 48%, 88%, ${segmentOpacity})`);
-        gradient.addColorStop(0.55, `hsla(${266 + hueShift}, 52%, 68%, ${segmentOpacity * 0.85})`);
-        gradient.addColorStop(1, `hsla(${40 + hueShift * 0.2}, 46%, 58%, 0)`);
+        gradient.addColorStop(0, `hsla(${272 + hueShift}, 58%, 94%, ${segmentOpacity})`);
+        gradient.addColorStop(0.3, `hsla(${266 + hueShift}, 56%, 76%, ${segmentOpacity * 0.95})`);
+        gradient.addColorStop(0.7, `hsla(${42 + hueShift * 0.18}, 54%, 66%, ${segmentOpacity * 0.35})`);
+        gradient.addColorStop(1, 'transparent');
 
         context.strokeStyle = gradient;
-        context.lineWidth = width * (1 - progress * 0.55);
+        context.lineWidth = Math.max(0.45, width * (1 - progress * 0.82));
         context.lineCap = 'round';
         context.beginPath();
         context.moveTo(x, y);
-        context.quadraticCurveTo((x + nx) / 2, (y + ny) / 2 + modulation * 0.1, nx, ny);
+        context.quadraticCurveTo((x + nx) / 2, (y + ny) / 2 + curveWave * 0.08, nx, ny);
         context.stroke();
       }
     };
 
     const render = () => {
-      time += reducedMotion ? 0.006 : 0.018;
+      time += reducedMotion ? 0.005 : 0.017;
       context.clearRect(0, 0, size, size);
 
       const centerX = size / 2;
@@ -109,56 +113,78 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
       let amplitude = effectiveState === 'speaking' ? getAmplitude() : 0;
       if (reducedMotion) amplitude = 0;
 
-      let speed = 0.7;
-      let opacity = 0.28;
-      let width = 2.3;
-      let radius = 17;
-      let drift = 2.2;
-      let coreOpacity = 0.24;
+      let speed = 0.62;
+      let opacity = 0.22;
+      let width = 1.55;
+      let radius = 18;
+      let drift = 1.8;
+      let coreOpacity = 0.18;
+      let auraOpacity = 0.16;
+      let auraRadius = 26;
+      let tailSweep = Math.PI * 1.46;
+      let taper = 1.85;
       let hueShift = 0;
 
       switch (effectiveState) {
         case 'listening':
-          speed = 1.05;
-          opacity = 0.34;
-          width = 2.5;
-          radius = 17.5;
-          drift = 2.6;
-          coreOpacity = 0.28;
+          speed = 0.92;
+          opacity = 0.28;
+          width = 1.65;
+          radius = 18.5;
+          drift = 2.2;
+          coreOpacity = 0.22;
+          auraOpacity = 0.2;
+          tailSweep = Math.PI * 1.62;
+          taper = 1.95;
           break;
         case 'thinking':
         case 'loading':
-          speed = 1.28;
-          opacity = 0.38;
-          width = 2.6;
-          radius = 15.5;
-          drift = 2;
-          coreOpacity = 0.34;
+          speed = 1.18;
+          opacity = 0.3;
+          width = 1.7;
+          radius = 16.2;
+          drift = 1.5;
+          coreOpacity = 0.28;
+          auraOpacity = 0.22;
+          auraRadius = 24;
+          tailSweep = Math.PI * 1.72;
+          taper = 2.05;
           hueShift = -18;
           break;
         case 'speaking':
-          speed = 1.55 + amplitude * 0.85;
-          opacity = 0.34 + amplitude * 0.34;
-          width = 2.6 + amplitude * 1.4;
-          radius = 18 + amplitude * 2.6;
-          drift = 2.8 + amplitude * 3.8;
-          coreOpacity = 0.28 + amplitude * 0.18;
+          speed = 1.38 + amplitude * 0.95;
+          opacity = 0.34 + amplitude * 0.32;
+          width = 1.78 + amplitude * 0.52;
+          radius = 19 + amplitude * 2.8;
+          drift = 2.5 + amplitude * 4.2;
+          coreOpacity = 0.24 + amplitude * 0.18;
+          auraOpacity = 0.24 + amplitude * 0.24;
+          auraRadius = 28 + amplitude * 5;
+          tailSweep = Math.PI * (1.95 + amplitude * 0.85);
+          taper = 2.35 + amplitude * 0.45;
           break;
         case 'paused':
-          speed = 0.32;
-          opacity = 0.22;
-          width = 2.1;
-          radius = 16.5;
-          drift = 1.2;
-          coreOpacity = 0.18;
+          speed = 0.26;
+          opacity = 0.16;
+          width = 1.3;
+          radius = 17;
+          drift = 0.9;
+          coreOpacity = 0.12;
+          auraOpacity = 0.12;
+          tailSweep = Math.PI * 1.28;
+          taper = 1.75;
           break;
         case 'error':
-          speed = 0.48;
-          opacity = 0.26;
-          width = 2.2;
-          radius = 16;
-          drift = 1.6;
-          coreOpacity = 0.22;
+          speed = 0.42;
+          opacity = 0.2;
+          width = 1.45;
+          radius = 16.6;
+          drift = 1.2;
+          coreOpacity = 0.16;
+          auraOpacity = 0.16;
+          auraRadius = 24;
+          tailSweep = Math.PI * 1.42;
+          taper = 1.9;
           hueShift = 84;
           break;
         case 'idle':
@@ -166,52 +192,64 @@ export default function VoiceStreakGlyph({ state, visualState, analyser, onClick
           break;
       }
 
-      const aura = context.createRadialGradient(centerX, centerY, 1, centerX, centerY, 30);
-      aura.addColorStop(0, `hsla(${270 + hueShift}, 42%, 76%, ${coreOpacity})`);
-      aura.addColorStop(0.45, `hsla(${262 + hueShift}, 40%, 40%, ${coreOpacity * 0.45})`);
-      aura.addColorStop(1, 'transparent');
-      context.fillStyle = aura;
+      const outerAura = context.createRadialGradient(centerX, centerY, 2, centerX, centerY, auraRadius);
+      outerAura.addColorStop(0, `hsla(${270 + hueShift}, 46%, 74%, ${auraOpacity})`);
+      outerAura.addColorStop(0.42, `hsla(${262 + hueShift}, 42%, 44%, ${auraOpacity * 0.45})`);
+      outerAura.addColorStop(1, 'transparent');
+      context.fillStyle = outerAura;
       context.beginPath();
-      context.arc(centerX, centerY, 30, 0, Math.PI * 2);
+      context.arc(centerX, centerY, auraRadius, 0, Math.PI * 2);
+      context.fill();
+
+      const innerBloom = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, 16 + amplitude * 4);
+      innerBloom.addColorStop(0, `hsla(${42 + hueShift * 0.12}, 70%, 86%, ${coreOpacity * 0.95})`);
+      innerBloom.addColorStop(0.34, `hsla(${270 + hueShift}, 58%, 74%, ${coreOpacity * 0.52})`);
+      innerBloom.addColorStop(1, 'transparent');
+      context.fillStyle = innerBloom;
+      context.beginPath();
+      context.arc(centerX, centerY, 16 + amplitude * 4, 0, Math.PI * 2);
       context.fill();
 
       drawTrail({
         phase: time * speed,
         radius,
-        sweep: Math.PI * 1.12,
+        sweep: tailSweep,
         opacity,
         width,
         hueShift,
         drift,
+        taper,
       });
 
       drawTrail({
-        phase: Math.PI + time * speed * -0.82,
-        radius: radius - 1.5,
-        sweep: Math.PI * 0.94,
-        opacity: opacity * 0.82,
-        width: Math.max(1.4, width - 0.5),
-        hueShift: hueShift + 8,
-        drift: drift * 0.78,
+        phase: Math.PI + time * speed * -0.7,
+        radius: radius - 0.8,
+        sweep: tailSweep * 0.88,
+        opacity: opacity * 0.8,
+        width: Math.max(0.7, width - 0.18),
+        hueShift: hueShift + 6,
+        drift: drift * 0.82,
+        taper: taper + 0.1,
       });
 
       drawTrail({
-        phase: Math.PI / 2 + time * speed * 0.56,
-        radius: radius + 2.6,
-        sweep: Math.PI * 0.62,
-        opacity: opacity * 0.5,
-        width: Math.max(1.2, width - 1),
+        phase: Math.PI / 2 + time * speed * 0.48,
+        radius: radius + 2.2,
+        sweep: tailSweep * 0.52,
+        opacity: opacity * 0.34,
+        width: Math.max(0.5, width - 0.58),
         hueShift: hueShift - 10,
-        drift: drift * 0.52,
+        drift: drift * 0.46,
+        taper: taper + 0.28,
       });
 
-      const core = context.createRadialGradient(centerX - 2, centerY - 3, 0, centerX, centerY, 10);
-      core.addColorStop(0, `hsla(${36 + hueShift * 0.15}, 55%, 88%, ${0.7 + amplitude * 0.2})`);
-      core.addColorStop(0.4, `hsla(${270 + hueShift}, 48%, 80%, ${0.2 + amplitude * 0.12})`);
+      const core = context.createRadialGradient(centerX - 1.5, centerY - 2, 0, centerX, centerY, 8 + amplitude * 1.8);
+      core.addColorStop(0, `hsla(${38 + hueShift * 0.1}, 72%, 92%, ${0.88 + amplitude * 0.08})`);
+      core.addColorStop(0.38, `hsla(${270 + hueShift}, 54%, 82%, ${0.24 + amplitude * 0.1})`);
       core.addColorStop(1, 'transparent');
       context.fillStyle = core;
       context.beginPath();
-      context.arc(centerX, centerY, 9.5 + amplitude * 2, 0, Math.PI * 2);
+      context.arc(centerX, centerY, 8 + amplitude * 1.8, 0, Math.PI * 2);
       context.fill();
 
       frameRef.current = requestAnimationFrame(render);

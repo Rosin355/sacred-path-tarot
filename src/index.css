@@ -762,21 +762,22 @@
 }
 
 .voice-streak-glyph__shell {
-  inset: 8px;
-  border: 1px solid hsla(var(--foreground) / 0.06);
+  inset: 10px;
+  border: 1px solid hsla(var(--foreground) / 0.05);
   background:
-    radial-gradient(circle at 50% 50%, hsla(var(--foreground) / 0.05) 0%, hsla(var(--primary) / 0.04) 24%, transparent 64%),
-    linear-gradient(145deg, hsla(var(--foreground) / 0.03), hsla(var(--background) / 0.02));
-  backdrop-filter: blur(10px);
+    radial-gradient(circle at 50% 50%, hsla(var(--foreground) / 0.035) 0%, hsla(var(--primary) / 0.03) 22%, transparent 62%),
+    linear-gradient(145deg, hsla(var(--foreground) / 0.02), hsla(var(--background) / 0.01));
+  backdrop-filter: blur(12px);
 }
 
 .voice-streak-glyph__halo {
-  inset: -10px;
+  inset: -16px;
   z-index: -1;
-  opacity: 0.78;
-  filter: blur(10px);
-  background: radial-gradient(circle, hsla(var(--primary) / 0.18) 0%, hsla(var(--accent) / 0.08) 36%, transparent 72%);
-  animation: voice-orb-drift 5.8s ease-in-out infinite;
+  opacity: 0.86;
+  filter: blur(14px);
+  background:
+    radial-gradient(circle, hsla(var(--foreground) / 0.08) 0%, hsla(var(--primary) / 0.16) 24%, hsla(var(--accent) / 0.06) 44%, transparent 78%);
+  animation: voice-orb-drift 6.8s ease-in-out infinite;
 }
 
 .voice-streak-glyph__canvas {
@@ -785,6 +786,7 @@
   display: block;
   width: 100%;
   height: 100%;
+  opacity: 0.98;
 }
 
 .voice-streak-glyph[data-state='speaking'] .voice-streak-glyph__halo,
@@ -794,8 +796,13 @@
   opacity: 1;
 }
 
+.voice-streak-glyph[data-state='speaking'] .voice-streak-glyph__halo {
+  inset: -18px;
+  filter: blur(16px);
+}
+
 .voice-streak-glyph[data-state='error'] .voice-streak-glyph__halo {
-  background: radial-gradient(circle, hsla(var(--destructive) / 0.22) 0%, hsla(var(--accent) / 0.06) 38%, transparent 72%);
+  background: radial-gradient(circle, hsla(var(--destructive) / 0.24) 0%, hsla(var(--accent) / 0.06) 38%, transparent 72%);
 }
 
 .voice-panel {
