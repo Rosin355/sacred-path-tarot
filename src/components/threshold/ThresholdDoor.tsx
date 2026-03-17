@@ -39,7 +39,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
     useImperativeHandle(ref, () => ({
       getTextRect: () => textRef.current?.getBoundingClientRect() ?? null,
       getButtonEl: () => buttonRef.current,
-      getTextEl: () => textRef.current,
+      getTextEl: () => textRef.current
     }));
 
     useEffect(() => {
@@ -65,23 +65,23 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
       gsap.set(auraHalo, { opacity: 0.56, scale: 0.98 });
 
       const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
-      tl.to(button, { scale: 1.022, duration: 0.22 }, 0)
-        .to(text, { y: -2, duration: 0.22 }, 0)
-        .to(archGlow, { opacity: reducedMotion ? 0.24 : 0.62, duration: 0.24 }, 0)
-        .to(archInner, { opacity: reducedMotion ? 0.9 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0)
-        .to(fog, { opacity: reducedMotion ? 0.88 : 1, duration: 0.24 }, 0)
-        .to(
-          aura,
-          {
-            opacity: reducedMotion ? 0.5 : 1,
-            scale: 1.03,
-            filter: reducedMotion ? "blur(14px)" : "blur(24px)",
-            duration: 0.28,
-          },
-          0
-        )
-        .to(auraCore, { scale: 1.08, opacity: reducedMotion ? 0.72 : 1, duration: 0.34 }, 0)
-        .to(auraHalo, { scale: 1.14, opacity: reducedMotion ? 0.62 : 0.92, duration: 0.38 }, 0.02);
+      tl.to(button, { scale: 1.022, duration: 0.22 }, 0).
+      to(text, { y: -2, duration: 0.22 }, 0).
+      to(archGlow, { opacity: reducedMotion ? 0.24 : 0.62, duration: 0.24 }, 0).
+      to(archInner, { opacity: reducedMotion ? 0.9 : 1, filter: "brightness(1.12)", duration: 0.24 }, 0).
+      to(fog, { opacity: reducedMotion ? 0.88 : 1, duration: 0.24 }, 0).
+      to(
+        aura,
+        {
+          opacity: reducedMotion ? 0.5 : 1,
+          scale: 1.03,
+          filter: reducedMotion ? "blur(14px)" : "blur(24px)",
+          duration: 0.28
+        },
+        0
+      ).
+      to(auraCore, { scale: 1.08, opacity: reducedMotion ? 0.72 : 1, duration: 0.34 }, 0).
+      to(auraHalo, { scale: 1.14, opacity: reducedMotion ? 0.62 : 0.92, duration: 0.38 }, 0.02);
 
       hoverTimelineRef.current = tl;
 
@@ -118,14 +118,14 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           opacity: 0,
           duration: 0.18,
           overwrite: true,
-          ease: "power1.out",
+          ease: "power1.out"
         });
         gsap.to(aura, {
           scale: 0.94,
           filter: reducedMotion ? "blur(14px)" : "blur(22px)",
           duration: 0.18,
           overwrite: true,
-          ease: "power1.out",
+          ease: "power1.out"
         });
         gsap.to(auraCore, { scale: 0.96, duration: 0.18, overwrite: true, ease: "power1.out" });
         gsap.to(auraHalo, { scale: 0.98, duration: 0.18, overwrite: true, ease: "power1.out" });
@@ -134,7 +134,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           filter: "brightness(1)",
           duration: 0.2,
           overwrite: true,
-          ease: "power1.out",
+          ease: "power1.out"
         });
         gsap.to(fog, { opacity: 0.82, duration: 0.2, overwrite: true, ease: "power1.out" });
         gsap.to(text, { y: 0, duration: 0.18, overwrite: true, ease: "power1.out" });
@@ -156,19 +156,19 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           ${dimmed ? "opacity-0 scale-95 pointer-events-none" : ""}
         `}
         style={{
-          transition: dimmed
-            ? "opacity 600ms ease-out, transform 600ms ease-out"
-            : "transform 700ms ease-out",
+          transition: dimmed ?
+          "opacity 600ms ease-out, transform 600ms ease-out" :
+          "transform 700ms ease-out"
         }}
-        aria-label={`Entra ne ${door.title}`}
-      >
+        aria-label={`Entra ne ${door.title}`}>
+        
         <DoorAuraLayer active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
 
         <div className="relative z-10">
           <div
             className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 transition-opacity duration-1000"
-            aria-hidden="true"
-          />
+            aria-hidden="true" />
+          
           <div className="absolute inset-[8%] top-[5%] bottom-[3%] overflow-hidden rounded-t-[999px] threshold-door-inner-light">
             <div className="absolute inset-0 divine-light-inner" aria-hidden="true" />
             <div className="absolute bottom-0 left-0 right-0 h-[40%] fog-effect" aria-hidden="true" />
@@ -179,20 +179,20 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
             src={templeArch}
             alt=""
             className="relative z-10 w-full h-auto pointer-events-none select-none"
-            draggable={false}
-          />
+            draggable={false} />
+          
         </div>
 
         <div ref={textRef} className="relative z-10 mt-3 text-center space-y-1.5 md:mt-4 md:space-y-2">
           <h3 className="text-foreground text-[0.95rem] md:text-base lg:text-lg tracking-[0.05em] font-display group-hover:text-accent transition-colors duration-500">
             {door.title}
           </h3>
-          <p className="text-muted-foreground text-[0.62rem] sm:text-[0.64rem] md:text-[0.65rem] tracking-[0.025em] font-caption leading-relaxed max-w-[20ch] mx-auto">
+          <p className="text-muted-foreground text-[0.62rem] sm:text-[0.64rem] md:text-[0.65rem] tracking-[0.025em] font-caption leading-relaxed max-w-[20ch] mx-auto px-0 my-px py-0">
             {door.subtitle}
           </p>
         </div>
-      </button>
-    );
+      </button>);
+
   }
 );
 
