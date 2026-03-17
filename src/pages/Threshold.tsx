@@ -11,7 +11,7 @@ const doors: DoorData[] = [
   {
     id: "arcani",
     title: "La Via degli Arcani",
-    subtitle: "Tarocchi, simboli, corsi e percorsi di conoscenza",
+    subtitle: "TAROCCHI, SIMBOLI, CONSULTI PERSONALI, CORSI E PERCORSI DI FORMAZIONE PER DIVENTARE UN INTERPRETE PREPARATO",
     route: "/arcani",
     colorClass: "door-arcani",
   },
