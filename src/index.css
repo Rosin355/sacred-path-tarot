@@ -759,10 +759,6 @@
 .voice-orb:focus-visible {
   box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 0 6px hsla(var(--background) / 0.92);
 }
-    0 10px 26px hsla(var(--background) / 0.5),
-    inset 0 1px 0 hsla(var(--foreground) / 0.08),
-    inset 0 -8px 18px hsla(var(--background) / 0.4);
-}
 
 .voice-streak-glyph,
 .voice-siri-glyph {
