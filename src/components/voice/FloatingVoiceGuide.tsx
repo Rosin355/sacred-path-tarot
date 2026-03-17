@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
+import Siri from './Siri';
 import VoiceOrb from './VoiceOrb';
 import VoicePanel from './VoicePanel';
 import VoiceStreakGlyph from './VoiceStreakGlyph';
@@ -68,7 +69,7 @@ export default function FloatingVoiceGuide() {
         />
       )}
 
-      <VoiceOrb
+      <Siri
         state={state}
         visualState={visualState}
         analyser={audioAnalyser}
@@ -76,6 +77,12 @@ export default function FloatingVoiceGuide() {
       />
 
       <div className="hidden" aria-hidden="true">
+        <VoiceOrb
+          state={state}
+          visualState={visualState}
+          analyser={audioAnalyser}
+          onClick={() => setIsOpen(!isOpen)}
+        />
         <VoiceStreakGlyph
           state={state}
           visualState={visualState}
@@ -86,3 +93,4 @@ export default function FloatingVoiceGuide() {
     </div>
   );
 }
+
