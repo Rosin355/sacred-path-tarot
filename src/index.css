@@ -1043,6 +1043,7 @@
 
   .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
     bottom: max(0.68rem, env(safe-area-inset-bottom, 0.68rem));
+    right: 0.82rem;
   }
 
   .voice-siri-preview,
