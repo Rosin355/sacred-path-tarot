@@ -1020,6 +1020,11 @@
 .threshold-door-grid {
   width: 100%;
   max-width: 58rem;
+  align-items: flex-start;
+}
+
+.threshold-door-grid > * {
+  flex-shrink: 0;
 }
 
 @keyframes voice-orb-to-capsule {
