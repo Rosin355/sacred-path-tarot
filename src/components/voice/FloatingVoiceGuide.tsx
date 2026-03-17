@@ -49,12 +49,16 @@ export default function FloatingVoiceGuide() {
       ? 'listening'
       : state;
 
+  const showOrbOnly = isThresholdRoute && state === 'idle' && !isOpen;
+  const handleToggleAssistant = () => setIsOpen(!isOpen);
+
   return (
     <div
       className="voice-assistant-shell fixed z-[60] flex flex-col items-end gap-3"
       data-voice-assistant
       data-route-context={isThresholdRoute ? 'threshold' : 'default'}
       data-mobile={isMobile ? 'true' : 'false'}
+      data-display-mode={showOrbOnly ? 'orb' : 'siri'}
     >
       {isOpen && (
         <VoicePanel
@@ -70,26 +74,38 @@ export default function FloatingVoiceGuide() {
         />
       )}
 
-      <Siri
-        state={state}
-        visualState={visualState}
-        analyser={audioAnalyser}
-        onClick={() => setIsOpen(!isOpen)}
-        variant={isThresholdRoute ? 'compact' : 'default'}
-      />
-
-      <div className="hidden" aria-hidden="true">
+      {showOrbOnly ? (
         <VoiceOrb
           state={state}
           visualState={visualState}
           analyser={audioAnalyser}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleToggleAssistant}
+          variant="mini"
         />
+      ) : (
+        <Siri
+          state={state}
+          visualState={visualState}
+          analyser={audioAnalyser}
+          onClick={handleToggleAssistant}
+          variant={isThresholdRoute ? 'compact' : 'default'}
+        />
+      )}
+
+      <div className="hidden" aria-hidden="true">
+        {!showOrbOnly && (
+          <VoiceOrb
+            state={state}
+            visualState={visualState}
+            analyser={audioAnalyser}
+            onClick={handleToggleAssistant}
+          />
+        )}
         <VoiceStreakGlyph
           state={state}
           visualState={visualState}
           analyser={audioAnalyser}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleToggleAssistant}
         />
       </div>
     </div>
