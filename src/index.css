@@ -1017,6 +1017,21 @@
   padding-inline: 1rem;
 }
 
+.threshold-intro-copy {
+  width: 100%;
+  padding-inline: 0.25rem;
+}
+
+.threshold-intro-copy__veil {
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 1.1rem 1rem;
+  border: 1px solid hsla(var(--border) / 0.22);
+  background: linear-gradient(180deg, hsla(var(--background) / 0.56) 0%, hsla(var(--card) / 0.32) 100%);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 40px -28px hsla(var(--background) / 0.72);
+}
+
 .threshold-door-grid {
   width: 100%;
   max-width: 58rem;
@@ -1028,6 +1043,15 @@
 }
 
 @media (max-width: 767px) {
+  .threshold-intro-copy {
+    max-width: 31rem;
+  }
+
+  .threshold-intro-copy__veil {
+    max-width: 31rem;
+    text-wrap: pretty;
+  }
+
   .threshold-door-grid {
     align-items: center;
     justify-items: center;

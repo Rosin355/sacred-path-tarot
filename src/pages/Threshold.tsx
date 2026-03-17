@@ -136,25 +136,36 @@ const Threshold = () => {
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-start px-4 pt-14 pb-24 sm:px-6 sm:pt-16 md:h-full md:justify-center md:px-6 md:pt-0 md:pb-8 lg:pb-0">
         <header
-          className={`threshold-hero-header text-center mb-8 max-w-4xl md:mb-10 lg:mb-14 transition-all duration-[1200ms] ease-out ${
+          className={`threshold-hero-header order-1 text-center mb-6 max-w-4xl md:mb-6 lg:mb-8 transition-all duration-[1200ms] ease-out ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
           } ${phase !== "idle" ? "opacity-0 transition-opacity duration-500" : ""}`}
         >
           <p className="text-muted-foreground text-[0.68rem] tracking-[0.24em] uppercase mb-3 font-caption sm:text-xs md:mb-4">
-            Il Tempio delle Tre Vie
+            Benvenuto nel Tempio
           </p>
-          <h1 className="text-foreground leading-[0.92] mb-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] md:mb-5">
-            Tre Vie <em className="italic">Per</em> Illuminarsi
+          <h1 className="text-foreground leading-[0.92] mb-0 font-display text-[clamp(2.35rem,5vw,4.6rem)] md:mb-0">
+            Tarocchi e Yoga <em className="italic">per</em> Illuminarsi
           </h1>
-          <p className="text-muted-foreground text-sm font-body max-w-2xl mx-auto leading-relaxed sm:text-[0.98rem] md:text-base">
-            Un tempio digitale dedicato ai tarocchi, al respiro e ai percorsi interiori di Jessica Marin.
-            Ogni soglia conduce a un modo diverso di conoscersi: attraverso il simbolo, il corpo e l'ispirazione.
-          </p>
         </header>
+
+        <div
+          className={`threshold-intro-copy order-3 mt-7 mb-8 max-w-[34rem] text-center md:order-2 md:mt-0 md:mb-8 lg:mb-10 transition-all duration-[1400ms] ease-out delay-200 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          } ${phase !== "idle" ? "opacity-0" : ""}`}
+        >
+          <div className="threshold-intro-copy__veil">
+            <p className="text-muted-foreground text-[0.98rem] font-body leading-relaxed md:text-[0.94rem] lg:text-[1rem]">
+              Sono Jessica Marin, la Sacerdotessa che ti guiderà verso le profondità della tua anima e dell’inconscio collettivo umano, costellato di simboli e chiavi segrete che ti aiuterò a reintegrare per far emergere la pienezza realizzativa del tuo essere!
+            </p>
+            <p className="mt-4 text-muted-foreground text-[0.98rem] font-body leading-relaxed md:text-[0.94rem] lg:text-[1rem]">
+              Nei miei Corsi, Percorsi e Workshop trasmetto le conoscenze Esoteriche e Yogiche-motorie dai livelli basi a quelli avanzati. Sei pronto a trovare la tua luce interiore? Scegli la tua via!
+            </p>
+          </div>
+        </div>
 
         <nav
           aria-label="Le tre vie"
-          className={`threshold-door-grid flex flex-col md:flex-row items-center justify-center gap-5 md:gap-6 lg:gap-8 transition-all duration-[1500ms] ease-out delay-500 ${
+          className={`threshold-door-grid order-2 md:order-3 flex flex-col md:flex-row items-center justify-center gap-5 md:gap-6 lg:gap-8 transition-all duration-[1500ms] ease-out delay-500 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
         >
@@ -173,7 +184,7 @@ const Threshold = () => {
         </nav>
 
         <p
-          className={`mt-8 md:mt-10 lg:mt-12 text-muted-foreground/40 text-[0.62rem] tracking-[0.28em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 text-center ${
+          className={`order-4 mt-8 md:mt-10 lg:mt-12 text-muted-foreground/40 text-[0.62rem] tracking-[0.28em] uppercase font-caption transition-all duration-[1800ms] ease-out delay-1000 text-center ${
             visible ? "opacity-100" : "opacity-0"
           } ${phase !== "idle" ? "opacity-0" : ""}`}
         >
