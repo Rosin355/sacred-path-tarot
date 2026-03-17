@@ -646,13 +646,24 @@
   position: absolute;
   pointer-events: none;
 }
-...
+
 .voice-orb[data-variant='mini'] {
+  position: relative;
   width: 60px;
   height: 60px;
+  padding: 10px;
+  border-radius: 9999px;
+  overflow: visible;
   filter: drop-shadow(0 12px 22px hsla(var(--background) / 0.24));
 }
-...
+
+.voice-orb[data-variant='mini']::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+}
+
 .voice-orb[data-variant='mini'] .voice-orb-halo {
   inset: -14px;
   background: radial-gradient(circle, hsla(var(--foreground) / 0.16) 0%, hsla(var(--accent) / 0.15) 26%, hsla(var(--primary) / 0.1) 52%, transparent 78%);
