@@ -1038,12 +1038,14 @@
 
 .threshold-door-grid {
   width: 100%;
-  max-width: 58rem;
+  max-width: 68rem;
   align-items: flex-start;
 }
 
 .threshold-door-grid > * {
-  flex-shrink: 0;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
 }
 
 @media (min-width: 768px) {
@@ -1069,10 +1071,13 @@
   .threshold-door-grid {
     align-items: center;
     justify-items: center;
+    max-width: 31rem;
   }
 
   .threshold-door-grid > * {
     align-self: center;
+    width: 100%;
+    flex: 0 0 auto;
   }
 }
 
