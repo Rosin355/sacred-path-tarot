@@ -49,7 +49,7 @@ export default function FloatingVoiceGuide() {
       ? 'listening'
       : state;
 
-  const showOrbOnly = isThresholdRoute && state === 'idle' && !isOpen;
+  const showOrbOnly = state === 'idle' && !isOpen;
   const handleToggleAssistant = () => setIsOpen(!isOpen);
 
   return (
