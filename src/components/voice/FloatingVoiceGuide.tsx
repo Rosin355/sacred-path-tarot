@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
 import Siri from './Siri';
 import VoiceOrb from './VoiceOrb';
@@ -28,6 +29,7 @@ export default function FloatingVoiceGuide() {
     audioAnalyser,
     progress,
   } = useVoiceAssistant();
+  const { playStarInvocation, playCapsuleOpen } = useSoundEffects();
   const isMobile = useIsMobile();
   const location = useLocation();
   const previousStateRef = useRef<VoiceState>('idle');
@@ -62,8 +64,10 @@ export default function FloatingVoiceGuide() {
 
   const handleToggleAssistant = () => {
     if (showOrbOnly) {
+      void playStarInvocation();
       setIsMorphing(true);
       morphTimeoutRef.current = window.setTimeout(() => {
+        void playCapsuleOpen();
         setIsOpen(true);
         setIsMorphing(false);
       }, 180);
