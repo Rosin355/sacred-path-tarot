@@ -83,6 +83,7 @@ export default function Siri({ state, visualState, analyser, onClick, variant = 
     >
       <span className="voice-siri-preview__glow" aria-hidden="true" />
       <span className="voice-siri-preview__surface" aria-hidden="true" />
+      <span className="voice-siri-preview__rail" aria-hidden="true" />
       <span className="voice-siri-preview__wave" aria-hidden="true">
         <ReactSiriwave {...waveConfig} />
       </span>
