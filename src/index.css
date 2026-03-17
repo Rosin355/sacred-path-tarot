@@ -811,8 +811,8 @@
 }
 
 .voice-assistant-shell {
-  right: 1.5rem;
-  bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+  right: 2rem;
+  bottom: max(2rem, env(safe-area-inset-bottom, 2rem));
 }
 
 .voice-assistant-shell[data-route-context='threshold'] {
@@ -822,19 +822,14 @@
   transform: none;
   align-items: flex-end;
 }
-
-.voice-assistant-shell[data-route-context='threshold'][data-mobile='true'] {
-  left: auto;
-  right: 1rem;
-  align-items: flex-end;
-}
-
-.voice-assistant-shell[data-route-context='threshold'][data-mobile='false'] {
-  gap: 0.85rem;
-}
-
+...
 .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
   bottom: max(0.82rem, env(safe-area-inset-bottom, 0.82rem));
+}
+
+.voice-assistant-shell[data-route-context='default'][data-display-mode='orb'] {
+  right: 2.15rem;
+  bottom: max(2.15rem, env(safe-area-inset-bottom, 2.15rem));
 }
 
 .voice-assistant-shell[data-morphing='true'] .voice-orb[data-variant='mini'] {
@@ -1020,8 +1015,8 @@
 
 @media (max-width: 767px) {
   .voice-assistant-shell {
-    right: 1rem;
-    bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+    right: 1.2rem;
+    bottom: max(1.2rem, env(safe-area-inset-bottom, 1.2rem));
   }
 
   .voice-assistant-shell[data-route-context='threshold'] {
@@ -1033,6 +1028,11 @@
   .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
     bottom: max(0.68rem, env(safe-area-inset-bottom, 0.68rem));
     right: 0.82rem;
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-display-mode='orb'] {
+    right: 1.32rem;
+    bottom: max(1.32rem, env(safe-area-inset-bottom, 1.32rem));
   }
 
   .voice-siri-preview,
