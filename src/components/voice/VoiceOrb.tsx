@@ -1,10 +1,8 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useOrbEyeTracking } from '@/hooks/useOrbEyeTracking';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
 
-type OrbVisualState = VoiceState | 'hover' | 'listening' | 'thinking';
+type OrbVisualState = VoiceState | 'listening' | 'thinking';
 
 interface VoiceOrbProps {
   state: VoiceState;
@@ -13,32 +11,29 @@ interface VoiceOrbProps {
   onClick: () => void;
 }
 
-/**
- * Animated sacred voice orb that reacts to audio playback.
- * States: idle, listening, thinking, speaking, paused, error
- */
+const STATE_LABELS: Record<VoiceState, string> = {
+  idle: 'Assistente vocale — apri pannello',
+  loading: 'Assistente vocale — caricamento in corso',
+  speaking: 'Assistente vocale — in riproduzione',
+  paused: 'Assistente vocale — in pausa',
+  error: 'Assistente vocale — errore',
+};
+
 export default function VoiceOrb({ state, visualState, analyser, onClick }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
+  const frameRef = useRef<number>(0);
   const reducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-  const isInteractiveTracking = !reducedMotion && !isMobile;
-  const { orbRef, eyeState, setHovering, reactToTap } = useOrbEyeTracking<HTMLButtonElement>({
-    disabled: reducedMotion,
-  });
-
-  const effectiveVisualState: OrbVisualState = eyeState.isHovering && state === 'idle'
-    ? 'hover'
-    : (visualState ?? state);
+  const effectiveState = visualState ?? state;
 
   const getAmplitude = useMemo(() => {
     if (!analyser) return () => 0;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const data = new Uint8Array(analyser.frequencyBinCount);
+
     return () => {
-      analyser.getByteFrequencyData(dataArray);
+      analyser.getByteFrequencyData(data);
       let sum = 0;
-      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-      return sum / (dataArray.length * 255);
+      for (let i = 0; i < data.length; i += 1) sum += data[i];
+      return sum / (data.length * 255);
     };
   }, [analyser]);
 
@@ -46,274 +41,166 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
 
+    const size = 108;
     const dpr = window.devicePixelRatio || 1;
-    const size = 72;
     canvas.width = size * dpr;
     canvas.height = size * dpr;
-    ctx.scale(dpr, dpr);
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     let time = 0;
 
-    const draw = () => {
-      time += 0.016;
-      ctx.clearRect(0, 0, size, size);
+    const render = () => {
+      time += reducedMotion ? 0.007 : 0.018;
+      context.clearRect(0, 0, size, size);
 
-      const cx = size / 2;
-      const cy = size / 2;
-      const baseRadius = 22;
+      const center = size / 2;
+      let amplitude = effectiveState === 'speaking' ? getAmplitude() : 0;
+      if (reducedMotion) amplitude = 0;
 
-      let amplitude = 0;
-      if (state === 'speaking' && analyser) {
-        amplitude = getAmplitude();
-      }
+      let ringOpacity = 0.3;
+      let lineWidth = 2.25;
+      let radius = 23;
+      let warp = 2.6;
+      let spin = 0.56;
+      let pulse = 0.12;
+      let hueShift = 0;
+      let verticalStretch = 0.84;
 
-      let glowIntensity = 0.2;
-      let pulseSpeed = 0.85;
-      let hue = 270;
-      let saturation = 48;
-      let lightness = 39;
-      let ringOpacity = 0.34;
-      let ringWidth = 1.6;
-      let auraSpread = 2.1;
-      let shimmerOpacity = 0.08;
-      let thinkingArcOpacity = 0;
-      let listeningPulseOpacity = 0;
-
-      switch (effectiveVisualState) {
-        case 'idle':
-          glowIntensity = 0.2;
-          pulseSpeed = 0.5;
-          ringOpacity = 0.36;
-          break;
-        case 'hover':
-          glowIntensity = 0.25;
-          pulseSpeed = 0.75;
-          ringOpacity = 0.48;
-          lightness = 42;
-          shimmerOpacity = 0.12;
-          break;
+      switch (effectiveState) {
         case 'listening':
-          glowIntensity = 0.24;
-          pulseSpeed = 1.1;
-          ringOpacity = 0.52;
-          ringWidth = 1.9;
-          lightness = 43;
-          saturation = 42;
-          listeningPulseOpacity = 0.26;
+          ringOpacity = 0.36;
+          lineWidth = 2.45;
+          radius = 24;
+          warp = 3.2;
+          spin = 0.8;
+          pulse = 0.18;
           break;
         case 'thinking':
-          glowIntensity = 0.27;
-          pulseSpeed = 1.35;
-          ringOpacity = 0.46;
-          ringWidth = 1.8;
-          hue = 40;
-          saturation = 38;
-          lightness = 54;
-          auraSpread = 2.25;
-          shimmerOpacity = 0.18;
-          thinkingArcOpacity = 0.34;
+        case 'loading':
+          ringOpacity = 0.38;
+          lineWidth = 2.55;
+          radius = 22;
+          warp = 2.4;
+          spin = 1.02;
+          pulse = 0.2;
+          hueShift = -10;
           break;
         case 'speaking':
-          glowIntensity = 0.24 + amplitude * 0.55;
-          pulseSpeed = 1.35;
-          ringOpacity = 0.42 + amplitude * 0.28;
-          ringWidth = 1.7 + amplitude * 1.1;
-          auraSpread = 2.35 + amplitude * 0.45;
-          shimmerOpacity = 0.12 + amplitude * 0.1;
+          ringOpacity = 0.4 + amplitude * 0.3;
+          lineWidth = 2.5 + amplitude * 1.45;
+          radius = 24 + amplitude * 3.6;
+          warp = 3.6 + amplitude * 8.5;
+          spin = 0.95 + amplitude * 1.35;
+          pulse = 0.18 + amplitude * 0.28;
+          verticalStretch = 0.8;
           break;
         case 'paused':
-          glowIntensity = 0.19;
-          pulseSpeed = 0.24;
-          ringOpacity = 0.32;
+          ringOpacity = 0.22;
+          lineWidth = 2;
+          radius = 22;
+          warp = 1.4;
+          spin = 0.34;
+          pulse = 0.06;
           break;
         case 'error':
-          hue = 0;
-          saturation = 52;
-          lightness = 47;
-          glowIntensity = 0.22;
-          pulseSpeed = 0.35;
-          ringOpacity = 0.38;
+          ringOpacity = 0.3;
+          lineWidth = 2.25;
+          radius = 23;
+          warp = 2.1;
+          spin = 0.48;
+          pulse = 0.1;
+          hueShift = 88;
+          break;
+        default:
           break;
       }
 
-      if (reducedMotion) {
-        pulseSpeed = 0;
-        amplitude = 0;
-      }
+      const halo = context.createRadialGradient(center, center, 4, center, center, 40 + amplitude * 10);
+      halo.addColorStop(0, `hsla(${210 + hueShift}, 100%, 78%, ${0.16 + pulse})`);
+      halo.addColorStop(0.28, `hsla(${272 + hueShift}, 98%, 77%, ${0.14 + pulse * 0.82})`);
+      halo.addColorStop(0.56, `hsla(${178 + hueShift}, 84%, 66%, ${0.09 + pulse * 0.56})`);
+      halo.addColorStop(1, 'transparent');
+      context.fillStyle = halo;
+      context.beginPath();
+      context.arc(center, center, 40 + amplitude * 8, 0, Math.PI * 2);
+      context.fill();
 
-      const pulse = Math.sin(time * pulseSpeed) * 0.5 + 0.5;
-      const radius = baseRadius + pulse * 1.8 + amplitude * 6;
+      const drawRibbon = (offset: number, alpha: number) => {
+        const points = 180;
+        context.beginPath();
 
-      const shadowGlow = ctx.createRadialGradient(cx, cy + 5, radius * 0.25, cx, cy + 5, radius * 2.7);
-      shadowGlow.addColorStop(0, `hsla(${hue}, ${saturation}%, ${Math.max(lightness - 8, 10)}%, ${0.22 + pulse * 0.08})`);
-      shadowGlow.addColorStop(1, 'transparent');
-      ctx.fillStyle = shadowGlow;
-      ctx.fillRect(0, 0, size, size);
-
-      const outerGlow = ctx.createRadialGradient(cx, cy, radius * 0.55, cx, cy, radius * auraSpread);
-      outerGlow.addColorStop(0, `hsla(${hue}, ${saturation}%, ${lightness + 8}%, ${glowIntensity * (0.5 + pulse * 0.6)})`);
-      outerGlow.addColorStop(0.55, `hsla(${hue}, ${saturation}%, ${lightness}%, ${glowIntensity * 0.38})`);
-      outerGlow.addColorStop(1, 'transparent');
-      ctx.fillStyle = outerGlow;
-      ctx.fillRect(0, 0, size, size);
-
-      ctx.save();
-      ctx.beginPath();
-      if (state === 'speaking' && !reducedMotion) {
-        const points = 72;
-        for (let i = 0; i <= points; i++) {
-          const angle = (i / points) * Math.PI * 2;
-          const wave1 = Math.sin(angle * 3 + time * 2.1) * amplitude * 2.9;
-          const wave2 = Math.sin(angle * 5 + time * 1.6) * amplitude * 1.35;
-          const r = radius + wave1 + wave2;
-          const x = cx + Math.cos(angle) * r;
-          const y = cy + Math.sin(angle) * r;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+        for (let i = 0; i <= points; i += 1) {
+          const t = (i / points) * Math.PI * 2;
+          const waveA = Math.sin(t * 2 + time * spin + offset) * warp;
+          const waveB = Math.cos(t * 3 - time * (spin * 0.82) + offset) * (warp * 0.42);
+          const r = radius + waveA + waveB;
+          const x = center + Math.cos(t) * r;
+          const y = center + Math.sin(t) * (r * verticalStretch);
+          if (i === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
         }
-        ctx.closePath();
-      } else {
-        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      }
-      ctx.clip();
 
-      const gradient = ctx.createRadialGradient(cx - 5, cy - 7, 0, cx, cy, radius * 1.1);
-      gradient.addColorStop(0, `hsla(${hue}, ${Math.min(saturation + 16, 100)}%, ${lightness + 27}%, 0.98)`);
-      gradient.addColorStop(0.28, `hsla(${hue}, ${saturation + 7}%, ${lightness + 12}%, 0.9)`);
-      gradient.addColorStop(0.68, `hsla(${hue}, ${saturation}%, ${lightness - 4}%, 0.74)`);
-      gradient.addColorStop(1, `hsla(${hue}, ${Math.max(saturation - 8, 18)}%, ${Math.max(lightness - 17, 10)}%, 0.84)`);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(cx - radius - 10, cy - radius - 10, radius * 2 + 20, radius * 2 + 20);
+        const gradient = context.createConicGradient(time * 0.48 + offset, center, center);
+        gradient.addColorStop(0, `hsla(${202 + hueShift}, 100%, 78%, ${ringOpacity * alpha})`);
+        gradient.addColorStop(0.2, `hsla(${246 + hueShift}, 100%, 77%, ${ringOpacity * 0.94 * alpha})`);
+        gradient.addColorStop(0.42, `hsla(${286 + hueShift}, 100%, 78%, ${ringOpacity * 0.96 * alpha})`);
+        gradient.addColorStop(0.64, `hsla(${328 + hueShift}, 98%, 79%, ${ringOpacity * 0.78 * alpha})`);
+        gradient.addColorStop(0.82, `hsla(${178 + hueShift}, 84%, 68%, ${ringOpacity * 0.86 * alpha})`);
+        gradient.addColorStop(1, `hsla(${202 + hueShift}, 100%, 78%, ${ringOpacity * alpha})`);
 
-      const internalShimmer = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
-      internalShimmer.addColorStop(0, `hsla(${hue}, 55%, 92%, ${0.12 + pulse * 0.06})`);
-      internalShimmer.addColorStop(0.5, 'transparent');
-      internalShimmer.addColorStop(1, `hsla(${hue}, ${saturation}%, ${lightness + 10}%, ${shimmerOpacity})`);
-      ctx.fillStyle = internalShimmer;
-      ctx.fillRect(cx - radius - 10, cy - radius - 10, radius * 2 + 20, radius * 2 + 20);
+        context.strokeStyle = gradient;
+        context.lineWidth = lineWidth;
+        context.lineJoin = 'round';
+        context.lineCap = 'round';
+        context.shadowBlur = 18 + amplitude * 16;
+        context.shadowColor = `hsla(${252 + hueShift}, 88%, 74%, ${0.34 * alpha})`;
+        context.stroke();
+        context.shadowBlur = 0;
+      };
 
-      const innerGlow = ctx.createRadialGradient(cx - 6, cy - 8, 0, cx, cy, radius * 0.9);
-      innerGlow.addColorStop(0, `hsla(${hue}, 32%, 94%, ${0.28 + pulse * 0.06})`);
-      innerGlow.addColorStop(0.45, `hsla(${hue}, ${saturation}%, ${lightness + 18}%, 0.14)`);
-      innerGlow.addColorStop(1, 'transparent');
-      ctx.fillStyle = innerGlow;
-      ctx.fillRect(cx - radius - 10, cy - radius - 10, radius * 2 + 20, radius * 2 + 20);
-      ctx.restore();
+      drawRibbon(0, 1);
+      drawRibbon(Math.PI / 3.2, 0.54);
+      drawRibbon(-Math.PI / 2.6, 0.3);
 
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius + 1.5, 0, Math.PI * 2);
-      ctx.strokeStyle = `hsla(${hue}, ${saturation + 8}%, ${lightness + 22}%, ${ringOpacity})`;
-      ctx.lineWidth = ringWidth;
-      ctx.stroke();
+      const core = context.createRadialGradient(center, center, 0, center, center, 16 + amplitude * 2);
+      core.addColorStop(0, `hsla(${0 + hueShift}, 0%, 100%, 0.94)`);
+      core.addColorStop(0.24, `hsla(${204 + hueShift}, 100%, 88%, ${0.52 + amplitude * 0.18})`);
+      core.addColorStop(0.52, `hsla(${280 + hueShift}, 88%, 82%, ${0.2 + amplitude * 0.12})`);
+      core.addColorStop(1, 'transparent');
+      context.fillStyle = core;
+      context.beginPath();
+      context.arc(center, center, 16 + amplitude * 2, 0, Math.PI * 2);
+      context.fill();
 
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius - 4.5, 0, Math.PI * 2);
-      ctx.strokeStyle = `hsla(${hue}, 18%, 96%, ${0.12 + pulse * 0.06})`;
-      ctx.lineWidth = 0.9;
-      ctx.stroke();
-
-      if (listeningPulseOpacity > 0 && !reducedMotion) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius + 7 + pulse * 1.8, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${hue}, ${saturation + 8}%, ${lightness + 18}%, ${listeningPulseOpacity * (0.6 + pulse * 0.4)})`;
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-      }
-
-      if (thinkingArcOpacity > 0 && !reducedMotion) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius + 6, time * 1.5, time * 1.5 + Math.PI * 0.82);
-        ctx.strokeStyle = `hsla(${hue}, ${saturation + 10}%, ${lightness + 14}%, ${thinkingArcOpacity})`;
-        ctx.lineWidth = 1.25;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius + 9, -time * 1.15, -time * 1.15 + Math.PI * 0.45);
-        ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness + 8}%, ${thinkingArcOpacity * 0.7})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      if (state === 'speaking' && !reducedMotion) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius + 6 + pulse * 1.2, time * 1.7, time * 1.7 + Math.PI * 0.95);
-        ctx.strokeStyle = `hsla(${hue}, ${saturation + 12}%, ${lightness + 18}%, ${0.26 + amplitude * 0.24})`;
-        ctx.lineWidth = 1.35;
-        ctx.stroke();
-      }
-
-      animRef.current = requestAnimationFrame(draw);
+      frameRef.current = requestAnimationFrame(render);
     };
 
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animRef.current);
-    };
-  }, [state, effectiveVisualState, analyser, getAmplitude, reducedMotion]);
-
-  const ariaLabel = {
-    idle: 'Assistente vocale — apri pannello',
-    loading: 'Assistente vocale — caricamento in corso',
-    speaking: 'Assistente vocale — in riproduzione',
-    paused: 'Assistente vocale — in pausa',
-    error: 'Assistente vocale — errore',
-  }[state];
-
-  const showAwakeState = eyeState.isHovering || effectiveVisualState === 'listening' || effectiveVisualState === 'thinking' || state === 'speaking';
+    render();
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [effectiveState, getAmplitude, reducedMotion]);
 
   return (
     <button
-      ref={orbRef}
-      onClick={() => {
-        if (isMobile) reactToTap();
-        onClick();
-      }}
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-      className="voice-orb group relative h-[72px] w-[72px] cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-      aria-label={ariaLabel}
+      type="button"
+      onClick={onClick}
+      className="voice-orb voice-siri-orb"
+      aria-label={STATE_LABELS[state]}
       title="Assistente vocale"
       data-voice-assistant
       data-voice-orb
       data-state={state}
-      data-visual-state={effectiveVisualState}
-      data-hovered={eyeState.isHovering ? 'true' : 'false'}
+      data-visual-state={effectiveState}
     >
-      <span className="voice-orb-shell" aria-hidden="true" />
+      <span className="voice-siri-orb__outer-ring" aria-hidden="true" />
+      <span className="voice-siri-orb__rim" aria-hidden="true" />
+      <span className="voice-siri-orb__spin" aria-hidden="true" />
+      <span className="voice-siri-orb__surface" aria-hidden="true" />
       <span className="voice-orb-halo" aria-hidden="true" />
-
-      <canvas
-        ref={canvasRef}
-        className="relative z-[1] h-full w-full"
-        style={{ width: 72, height: 72 }}
-      />
-
-      <span className="voice-orb-eye-layer" aria-hidden="true">
-        <span className={`voice-orb-eye-socket ${showAwakeState ? 'is-awake' : ''} ${eyeState.isBlinking ? 'is-blinking' : ''}`}>
-          <span
-            className="voice-orb-pupil"
-            style={{
-              transform: `translate(${isInteractiveTracking ? eyeState.left.x : 0}px, ${isInteractiveTracking ? eyeState.left.y : 0.5}px) scale(${showAwakeState ? 1.05 : 1})`,
-            }}
-          />
-        </span>
-        <span className={`voice-orb-eye-socket ${showAwakeState ? 'is-awake' : ''} ${eyeState.isBlinking ? 'is-blinking' : ''}`}>
-          <span
-            className="voice-orb-pupil"
-            style={{
-              transform: `translate(${isInteractiveTracking ? eyeState.right.x : 0}px, ${isInteractiveTracking ? eyeState.right.y : 0.5}px) scale(${showAwakeState ? 1.05 : 1})`,
-            }}
-          />
-        </span>
-      </span>
-
-      <span className="voice-orb-tooltip" aria-hidden="true">
-        Ascolta o chiedi guida
-      </span>
+      <canvas ref={canvasRef} className="voice-orb-canvas" style={{ width: 108, height: 108 }} />
+      <span className="voice-orb-tooltip" aria-hidden="true">Ascolta o chiedi guida</span>
     </button>
   );
 }

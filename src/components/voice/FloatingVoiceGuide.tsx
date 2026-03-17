@@ -68,7 +68,7 @@ export default function FloatingVoiceGuide() {
         />
       )}
 
-      <VoiceStreakGlyph
+      <VoiceOrb
         state={state}
         visualState={visualState}
         analyser={audioAnalyser}
@@ -76,7 +76,7 @@ export default function FloatingVoiceGuide() {
       />
 
       <div className="hidden" aria-hidden="true">
-        <VoiceOrb
+        <VoiceStreakGlyph
           state={state}
           visualState={visualState}
           analyser={audioAnalyser}
