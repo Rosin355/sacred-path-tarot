@@ -1036,8 +1036,8 @@
   }
 
   .voice-assistant-shell[data-route-context='threshold'] {
-    left: 50%;
-    right: auto;
+    left: auto;
+    right: 0.9rem;
     bottom: max(0.78rem, env(safe-area-inset-bottom, 0.78rem));
   }
 
