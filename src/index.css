@@ -670,23 +670,58 @@
 
 .voice-star {
   inset: 50% auto auto 50%;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   z-index: 2;
   transform: translate(-50%, -50%);
-  animation: voice-star-twinkle 4.8s ease-in-out infinite;
+  animation: voice-star-twinkle 5.8s ease-in-out infinite;
+}
+
+.voice-star__aura,
+.voice-star__ring,
+.voice-star__core {
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+}
+
+.voice-star__aura {
+  border-radius: 9999px;
+  mix-blend-mode: screen;
+  animation: voice-star-aura-breathe 5.8s ease-in-out infinite;
+}
+
+.voice-star__aura--outer {
+  width: 34px;
+  height: 34px;
+  background: radial-gradient(circle, hsla(var(--foreground) / 0.18) 0%, hsla(var(--accent) / 0.12) 36%, hsla(var(--primary) / 0.05) 64%, transparent 76%);
+  filter: blur(6px);
+}
+
+.voice-star__aura--inner {
+  width: 18px;
+  height: 18px;
+  background: radial-gradient(circle, hsla(var(--foreground) / 0.34) 0%, hsla(var(--accent) / 0.18) 46%, transparent 78%);
+  filter: blur(3px);
+}
+
+.voice-star__ring {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  border: 1px solid hsla(var(--foreground) / 0.16);
+  box-shadow: inset 0 0 10px hsla(var(--accent) / 0.1);
+  opacity: 0.72;
+  animation: voice-star-ring-turn 12s linear infinite;
 }
 
 .voice-star__core {
-  inset: 50% auto auto 50%;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 9999px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, hsla(var(--foreground) / 0.96) 0%, hsla(var(--accent) / 0.88) 44%, hsla(var(--primary) / 0.38) 76%, transparent 100%);
+  background: radial-gradient(circle, hsla(var(--foreground) / 0.98) 0%, hsla(var(--accent) / 0.72) 56%, hsla(var(--primary) / 0.24) 84%, transparent 100%);
   box-shadow:
-    0 0 12px hsla(var(--foreground) / 0.42),
-    0 0 24px hsla(var(--accent) / 0.24);
+    0 0 10px hsla(var(--foreground) / 0.28),
+    0 0 18px hsla(var(--accent) / 0.14);
 }
 
 .voice-star__ray {
@@ -694,26 +729,26 @@
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 9999px;
-  background: linear-gradient(180deg, transparent 0%, hsla(var(--foreground) / 0.92) 20%, hsla(var(--accent) / 0.66) 50%, hsla(var(--foreground) / 0.92) 80%, transparent 100%);
+  background: linear-gradient(180deg, transparent 0%, hsla(var(--foreground) / 0.38) 22%, hsla(var(--accent) / 0.28) 50%, hsla(var(--foreground) / 0.38) 78%, transparent 100%);
   mix-blend-mode: screen;
-  animation: voice-star-ray-pulse 4.8s ease-in-out infinite;
+  animation: voice-star-ray-pulse 5.8s ease-in-out infinite;
 }
 
 .voice-star__ray--v {
-  width: 2px;
-  height: 28px;
+  width: 1px;
+  height: 24px;
 }
 
 .voice-star__ray--h {
-  width: 28px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, hsla(var(--foreground) / 0.92) 20%, hsla(var(--accent) / 0.66) 50%, hsla(var(--foreground) / 0.92) 80%, transparent 100%);
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, hsla(var(--foreground) / 0.38) 22%, hsla(var(--accent) / 0.28) 50%, hsla(var(--foreground) / 0.38) 78%, transparent 100%);
 }
 
 .voice-star__ray--d1,
 .voice-star__ray--d2 {
-  width: 2px;
-  height: 22px;
+  width: 1px;
+  height: 18px;
 }
 
 .voice-star__ray--d1 {
