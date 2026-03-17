@@ -1041,13 +1041,13 @@
   }
 
   .voice-orb[data-variant='mini'] {
-    width: 70px;
-    height: 70px;
+    width: 76px;
+    height: 76px;
   }
 
   .voice-orb[data-variant='mini'] .voice-orb-webgl canvas {
-    width: 70px !important;
-    height: 70px !important;
+    width: 76px !important;
+    height: 76px !important;
   }
 }
 
