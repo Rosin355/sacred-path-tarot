@@ -904,7 +904,7 @@
   filter: drop-shadow(0 14px 24px hsla(var(--background) / 0.34));
 }
 
-.voice-siri-preview__glow,
+ .voice-siri-preview__glow,
 .voice-siri-preview__surface,
 .voice-siri-preview__rail,
 .voice-siri-preview__wave {
@@ -913,8 +913,14 @@
   border-radius: inherit;
   pointer-events: none;
 }
-...
-.voice-siri-preview__rail {
+
+.voice-siri-preview__glow {
+  background: radial-gradient(circle at 50% 50%, hsla(var(--foreground) / 0.08) 0%, hsla(var(--accent) / 0.12) 34%, transparent 78%);
+  opacity: 0.68;
+  filter: blur(14px);
+}
+
+.voice-siri-preview__surface {
   left: 50%;
   top: 50%;
   width: calc(100% - 3.8rem);
