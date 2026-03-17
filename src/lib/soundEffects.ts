@@ -87,6 +87,15 @@ class SoundEffects {
     this.synth.triggerAttackRelease('E5', '0.34', now + 0.14, 0.24);
   }
 
+  // Chiusura capsule: dissolvenza breve verso il silenzio
+  async playCapsuleClose() {
+    await this.ensureInitialized();
+    const now = Tone.now();
+    this.synth.triggerAttackRelease('E5', '0.12', now, 0.18);
+    this.synth.triggerAttackRelease('C#5', '0.16', now + 0.05, 0.14);
+    this.synth.triggerAttackRelease('A4', '0.2', now + 0.1, 0.1);
+  }
+
   setMuted(muted: boolean) {
     this.volume.mute = muted;
   }

@@ -54,6 +54,7 @@ export const useSoundEffects = () => {
     playNavigation: () => soundEffects.playNavigation(),
     playStarInvocation: () => soundEffects.playStarInvocation(),
     playCapsuleOpen: () => soundEffects.playCapsuleOpen(),
+    playCapsuleClose: () => soundEffects.playCapsuleClose(),
     isInitialized,
   };
 };

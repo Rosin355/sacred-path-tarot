@@ -29,7 +29,7 @@ export default function FloatingVoiceGuide() {
     audioAnalyser,
     progress,
   } = useVoiceAssistant();
-  const { playStarInvocation, playCapsuleOpen } = useSoundEffects();
+  const { playStarInvocation, playCapsuleOpen, playCapsuleClose } = useSoundEffects();
   const isMobile = useIsMobile();
   const location = useLocation();
   const previousStateRef = useRef<VoiceState>('idle');
@@ -62,6 +62,17 @@ export default function FloatingVoiceGuide() {
 
   const showOrbOnly = state === 'idle' && !isOpen && !isMorphing;
 
+  const collapseToStar = () => {
+    if (morphTimeoutRef.current) {
+      window.clearTimeout(morphTimeoutRef.current);
+      morphTimeoutRef.current = null;
+    }
+
+    void playCapsuleClose();
+    setIsMorphing(false);
+    setIsOpen(false);
+  };
+
   const handleToggleAssistant = () => {
     if (showOrbOnly) {
       void playStarInvocation();
@@ -74,6 +85,11 @@ export default function FloatingVoiceGuide() {
       return;
     }
 
+    if (state === 'idle' && isOpen) {
+      collapseToStar();
+      return;
+    }
+
     if (morphTimeoutRef.current) {
       window.clearTimeout(morphTimeoutRef.current);
       morphTimeoutRef.current = null;
@@ -81,6 +97,15 @@ export default function FloatingVoiceGuide() {
 
     setIsMorphing(false);
     setIsOpen(!isOpen);
+  };
+
+  const handlePanelClose = () => {
+    if (state === 'idle') {
+      collapseToStar();
+      return;
+    }
+
+    setIsOpen(false);
   };
 
   return (
@@ -102,7 +127,7 @@ export default function FloatingVoiceGuide() {
           onResume={resume}
           onStop={stop}
           onRestart={restart}
-          onClose={() => setIsOpen(false)}
+          onClose={handlePanelClose}
         />
       )}
 
