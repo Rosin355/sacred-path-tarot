@@ -25,6 +25,10 @@ interface Props {
   phase: "idle" | "dissolving" | "navigating";
   isActive: boolean;
   onClick: (door: DoorData) => void;
+  onPointerEnter?: () => void;
+  onPointerLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const ThresholdDoor = forwardRef<DoorHandle, Props>(
