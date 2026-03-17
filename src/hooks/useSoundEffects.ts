@@ -52,6 +52,8 @@ export const useSoundEffects = () => {
     playRevealWisdom: () => soundEffects.playRevealWisdom(),
     playNewConsultation: () => soundEffects.playNewConsultation(),
     playNavigation: () => soundEffects.playNavigation(),
+    playStarInvocation: () => soundEffects.playStarInvocation(),
+    playCapsuleOpen: () => soundEffects.playCapsuleOpen(),
     isInitialized,
   };
 };
