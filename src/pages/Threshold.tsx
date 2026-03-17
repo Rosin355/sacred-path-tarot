@@ -6,14 +6,13 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
-import FullscreenDoorSubtitlePopup from "@/components/threshold/FullscreenDoorSubtitlePopup";
-import { useDoorSubtitlePopup } from "@/hooks/useDoorSubtitlePopup";
 
 const doors: DoorData[] = [
   {
     id: "arcani",
     title: "La Via degli Arcani",
-    subtitle: "TAROCCHI, SIMBOLI, CONSULTI PERSONALI, CORSI E PERCORSI DI FORMAZIONE PER DIVENTARE UN INTERPRETE PREPARATO",
+    subtitle:
+      "TAROCCHI, SIMBOLI, CONSULTI PERSONALI, CORSI E PERCORSI DI FORMAZIONE PER DIVENTARE UN INTERPRETE PREPARATO",
     route: "/arcani",
     colorClass: "door-arcani",
   },
@@ -58,8 +57,6 @@ const Threshold = () => {
   const activeDoorRef = useRef<DoorData | null>(null);
   const phaseRef = useRef<Phase>("idle");
 
-  const subtitle = useDoorSubtitlePopup();
-
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(t);
@@ -71,16 +68,9 @@ const Threshold = () => {
     };
   }, []);
 
-  // Close subtitle popup when door transition starts
-  useEffect(() => {
-    if (phase !== "idle" && subtitle.popupVisible) {
-      subtitle.onCloseClick();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
-
   const handleDoorClick = useCallback(
     (door: DoorData) => {
+      // Guard sync to prevent double-trigger on very fast double click/tap
       if (phaseRef.current !== "idle") return;
 
       setActiveDoor(door);
@@ -94,6 +84,7 @@ const Threshold = () => {
         return;
       }
 
+      // Capture the text area rect only
       const handle = doorHandleRefs.current[door.id];
       if (handle) {
         setDoorRect(handle.getTextRect());
@@ -103,13 +94,14 @@ const Threshold = () => {
       setPhase("dissolving");
       phaseRef.current = "dissolving";
 
+      // Fallback: keep longer than the full dissolve chain to avoid premature route switch
       if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
       fallbackTimerRef.current = setTimeout(() => {
         const d = activeDoorRef.current;
         if (d) navigate(d.route, { state: { doorColor: DOOR_COLORS[d.id] } });
       }, 5200);
     },
-    [navigate, reducedMotion]
+    [navigate, reducedMotion],
   );
 
   const handleDissolveComplete = useCallback(() => {
@@ -122,6 +114,7 @@ const Threshold = () => {
     setPhase("navigating");
     phaseRef.current = "navigating";
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    // Small delay while fully dark, then navigate with color state
     setTimeout(() => {
       const d = activeDoorRef.current;
       if (d) {
@@ -129,29 +122,6 @@ const Threshold = () => {
       }
     }, 800);
   }, [navigate]);
-
-  // Door hover handlers that also trigger subtitle popup
-  const handleDoorPointerEnter = useCallback(
-    (door: DoorData) => {
-      if (phase === "idle") subtitle.onDoorPointerEnter(door);
-    },
-    [phase, subtitle]
-  );
-
-  const handleDoorPointerLeave = useCallback(() => {
-    subtitle.onDoorPointerLeave();
-  }, [subtitle]);
-
-  const handleDoorFocus = useCallback(
-    (door: DoorData) => {
-      if (phase === "idle") subtitle.onDoorFocus(door);
-    },
-    [phase, subtitle]
-  );
-
-  const handleDoorBlur = useCallback(() => {
-    subtitle.onDoorBlur();
-  }, [subtitle]);
 
   return (
     <div className="relative h-[100dvh] w-full overflow-x-hidden overflow-y-auto bg-background threshold-bg md:fixed md:inset-0 md:h-full md:overflow-hidden">
@@ -175,7 +145,7 @@ const Threshold = () => {
             Benvenuto nel Tempio
           </p>
           <h1 className="text-foreground leading-[0.92] mb-0 font-display text-[clamp(2.35rem,4.45vw,4.2rem)] md:mb-0">
-            Tarocchi e Yoga <em className="italic">per</em> Illuminarsi
+            Tarocchi & Yoga <em className="italic">per</em> Illuminarsi
           </h1>
         </header>
 
@@ -186,10 +156,13 @@ const Threshold = () => {
         >
           <div className="threshold-intro-copy__veil">
             <p className="text-muted-foreground text-[0.98rem] font-body leading-relaxed md:text-[0.9rem] md:leading-[1.58] lg:text-[0.95rem]">
-              Sono Jessica Marin, la Sacerdotessa che ti guiderà verso le profondità della tua anima e dell'inconscio collettivo umano, costellato di simboli e chiavi segrete che ti aiuterò a reintegrare per far emergere la pienezza realizzativa del tuo essere!
+              Sono Jessica Marin, la Sacerdotessa che ti guiderà verso le profondità della tua anima e dell’inconscio
+              collettivo umano, costellato di simboli e chiavi segrete che ti aiuterò a reintegrare per far emergere la
+              pienezza realizzativa del tuo essere!
             </p>
             <p className="mt-4 text-muted-foreground text-[0.98rem] font-body leading-relaxed md:mt-3 md:text-[0.9rem] md:leading-[1.58] lg:text-[0.95rem]">
-              Nei miei Corsi, Percorsi e Workshop trasmetto le conoscenze Esoteriche e Yogiche-motorie dai livelli basi a quelli avanzati. Sei pronto a trovare la tua luce interiore? Scegli la tua via!
+              Nei miei Corsi, Percorsi e Workshop trasmetto le conoscenze Esoteriche e Yogiche-motorie dai livelli basi
+              a quelli avanzati. Sei pronto a trovare la tua luce interiore? Scegli la tua via!
             </p>
           </div>
         </div>
@@ -201,23 +174,16 @@ const Threshold = () => {
           }`}
         >
           {doors.map((door) => (
-            <div
+            <ThresholdDoor
               key={door.id}
-              onPointerEnter={() => handleDoorPointerEnter(door)}
-              onPointerLeave={handleDoorPointerLeave}
-              onFocus={() => handleDoorFocus(door)}
-              onBlur={handleDoorBlur}
-            >
-              <ThresholdDoor
-                door={door}
-                phase={phase}
-                isActive={activeDoor?.id === door.id}
-                onClick={handleDoorClick}
-                ref={(el) => {
-                  doorHandleRefs.current[door.id] = el;
-                }}
-              />
-            </div>
+              door={door}
+              phase={phase}
+              isActive={activeDoor?.id === door.id}
+              onClick={handleDoorClick}
+              ref={(el) => {
+                doorHandleRefs.current[door.id] = el;
+              }}
+            />
           ))}
         </nav>
 
@@ -229,19 +195,6 @@ const Threshold = () => {
           Scegli la soglia che ti chiama
         </p>
       </div>
-
-      {/* Fullscreen subtitle popup */}
-      <FullscreenDoorSubtitlePopup
-        text={subtitle.activeSubtitleText}
-        visible={subtitle.popupVisible}
-        closing={subtitle.popupClosing}
-        doorId={subtitle.hoveredDoorId}
-        onPopupPointerEnter={subtitle.onPopupPointerEnter}
-        onPopupPointerLeave={subtitle.onPopupPointerLeave}
-        onCloseClick={subtitle.onCloseClick}
-        onExitComplete={subtitle.onExitComplete}
-        onEscapeKey={subtitle.onEscapeKey}
-      />
 
       {/* Door dissolve overlay */}
       {activeDoor && !reducedMotion && (
@@ -256,11 +209,7 @@ const Threshold = () => {
 
       {/* Dark overlay */}
       {showOverlay && activeDoor && !reducedMotion && (
-        <PetalBurstOverlay
-          active={true}
-          doorColor={DOOR_COLORS[activeDoor.id]}
-          onComplete={handleOverlayComplete}
-        />
+        <PetalBurstOverlay active={true} doorColor={DOOR_COLORS[activeDoor.id]} onComplete={handleOverlayComplete} />
       )}
     </div>
   );
