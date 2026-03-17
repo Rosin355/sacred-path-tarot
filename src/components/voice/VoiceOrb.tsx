@@ -198,10 +198,8 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
       data-state={state}
       data-visual-state={effectiveState}
     >
-      <span className="voice-siri-orb__outer-ring" aria-hidden="true" />
-      <span className="voice-siri-orb__rim" aria-hidden="true" />
-      <span className="voice-siri-orb__spin" aria-hidden="true" />
       <span className="voice-siri-orb__surface" aria-hidden="true" />
+      <span className="voice-orb-halo" aria-hidden="true" />
       <span className="voice-orb-halo" aria-hidden="true" />
       <canvas ref={canvasRef} className="voice-orb-canvas" style={{ width: 108, height: 108 }} />
       <span className="voice-orb-tooltip" aria-hidden="true">Ascolta o chiedi guida</span>
