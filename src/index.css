@@ -1071,10 +1071,13 @@
   .threshold-door-grid {
     align-items: center;
     justify-items: center;
+    max-width: 31rem;
   }
 
   .threshold-door-grid > * {
     align-self: center;
+    width: 100%;
+    flex: 0 0 auto;
   }
 }
 
