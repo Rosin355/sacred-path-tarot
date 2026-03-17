@@ -120,6 +120,7 @@ export default function FloatingVoiceGuide() {
       className="voice-assistant-shell fixed z-[60] flex flex-col items-end gap-3"
       data-voice-assistant
       data-route-context={isThresholdRoute ? 'threshold' : 'default'}
+      data-path-theme={voicePathTheme}
       data-mobile={isMobile ? 'true' : 'false'}
       data-display-mode={showOrbOnly ? 'orb' : 'siri'}
       data-morphing={isMorphing ? 'true' : 'false'}

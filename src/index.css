@@ -1050,6 +1050,21 @@
     bottom: max(1.32rem, env(safe-area-inset-bottom, 1.32rem));
   }
 
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='orb'] {
+    right: 1.46rem;
+    bottom: max(1.4rem, env(safe-area-inset-bottom, 1.4rem));
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='orb'] {
+    right: 1.62rem;
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='orb'] {
+    right: 1.08rem;
+    bottom: max(1.18rem, env(safe-area-inset-bottom, 1.18rem));
+  }
+
   .voice-siri-preview,
   .voice-siri-preview--compact {
     width: min(100%, 13.75rem);
