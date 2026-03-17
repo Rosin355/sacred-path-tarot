@@ -187,7 +187,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           <h3 className="text-foreground text-[0.95rem] md:text-base lg:text-lg tracking-[0.05em] font-display group-hover:text-accent transition-colors duration-500">
             {door.title}
           </h3>
-          <p className="text-muted-foreground text-[0.62rem] sm:text-[0.64rem] md:text-[0.65rem] tracking-[0.025em] font-caption leading-relaxed max-w-[20ch] mx-auto px-0 my-px py-0">
+          <p className="text-muted-foreground text-[0.62rem] sm:text-[0.64rem] md:text-[0.65rem] tracking-[0.025em] font-caption leading-relaxed max-w-[26ch] mx-auto px-0 my-px py-0">
             {door.subtitle}
           </p>
         </div>
