@@ -47,7 +47,7 @@ const Threshold = () => {
   const [visible, setVisible] = useState(false);
   const { isMuted, toggleMute } = useBackgroundMusic();
   const reducedMotion = useReducedMotion();
-
+  const subtitle = useDoorSubtitlePopup();
   const [phase, setPhase] = useState<Phase>("idle");
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
   const [doorRect, setDoorRect] = useState<DOMRect | null>(null);
