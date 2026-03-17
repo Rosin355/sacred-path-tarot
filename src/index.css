@@ -1015,8 +1015,8 @@
 
 @media (max-width: 767px) {
   .voice-assistant-shell {
-    right: 1rem;
-    bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+    right: 1.2rem;
+    bottom: max(1.2rem, env(safe-area-inset-bottom, 1.2rem));
   }
 
   .voice-assistant-shell[data-route-context='threshold'] {
@@ -1028,6 +1028,11 @@
   .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
     bottom: max(0.68rem, env(safe-area-inset-bottom, 0.68rem));
     right: 0.82rem;
+  }
+
+  .voice-assistant-shell[data-route-context='default'][data-display-mode='orb'] {
+    right: 1.32rem;
+    bottom: max(1.32rem, env(safe-area-inset-bottom, 1.32rem));
   }
 
   .voice-siri-preview,
