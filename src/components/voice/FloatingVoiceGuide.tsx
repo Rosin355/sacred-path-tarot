@@ -4,6 +4,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import type { VoiceState } from '@/hooks/useVoiceAssistant';
 import VoiceOrb from './VoiceOrb';
 import VoicePanel from './VoicePanel';
+import VoiceStreakGlyph from './VoiceStreakGlyph';
 
 /**
  * Global floating voice assistant.
@@ -67,12 +68,21 @@ export default function FloatingVoiceGuide() {
         />
       )}
 
-      <VoiceOrb
+      <VoiceStreakGlyph
         state={state}
         visualState={visualState}
         analyser={audioAnalyser}
         onClick={() => setIsOpen(!isOpen)}
       />
+
+      <div className="hidden" aria-hidden="true">
+        <VoiceOrb
+          state={state}
+          visualState={visualState}
+          analyser={audioAnalyser}
+          onClick={() => setIsOpen(!isOpen)}
+        />
+      </div>
     </div>
   );
 }

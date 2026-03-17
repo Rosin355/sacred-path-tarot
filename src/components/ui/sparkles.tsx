@@ -1,9 +1,5 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import type { Container, ISourceOptions } from "@tsparticles/engine";
-import { loadSlim } from "@tsparticles/slim";
-import { motion, useAnimation } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 type SparklesCoreProps = {
   id?: string;
@@ -15,179 +11,161 @@ type SparklesCoreProps = {
   particleColor?: string;
   particleDensity?: number;
   active?: boolean;
-  direction?: "top" | "top-right" | "top-left" | "none";
+  direction?: 'top' | 'top-right' | 'top-left' | 'none';
 };
 
-const DIRECTION_ANGLE: Record<NonNullable<SparklesCoreProps["direction"]>, number> = {
-  top: 270,
-  "top-right": 315,
-  "top-left": 225,
-  none: 0,
+const DIRECTION_ANGLE: Record<NonNullable<SparklesCoreProps['direction']>, number> = {
+  top: -Math.PI / 2,
+  'top-right': -Math.PI / 4,
+  'top-left': (-3 * Math.PI) / 4,
+  none: -Math.PI / 2,
 };
 
-const COLOR_VAR_FALLBACK = "0 0% 100%";
+const COLOR_VAR_FALLBACK = '0 0% 100%';
 
 const resolveCssVarColor = (color: string, target?: HTMLElement | null) => {
-  if (!color.includes("var(") || !target) return color;
+  if (!color.includes('var(') || !target) return color;
 
   const computed = getComputedStyle(target);
-
   return color.replace(/var\((--[^)]+)\)/g, (_, token: string) => {
     const value = computed.getPropertyValue(token).trim();
     return value || COLOR_VAR_FALLBACK;
   });
 };
 
+type Particle = {
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  velocityX: number;
+  velocityY: number;
+  drift: number;
+};
+
 export const SparklesCore = ({
-  id,
   className,
-  background = "transparent",
+  background = 'transparent',
   minSize = 1,
   maxSize = 3,
   speed = 1,
-  particleColor = "hsl(var(--foreground))",
+  particleColor = 'hsl(var(--foreground))',
   particleDensity = 120,
   active = true,
-  direction = "top",
+  direction = 'top',
 }: SparklesCoreProps) => {
-  const [init, setInit] = useState(false);
   const [resolvedParticleColor, setResolvedParticleColor] = useState(particleColor);
-  const controls = useAnimation();
-  const generatedId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => setInit(true));
-  }, []);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const frameRef = useRef<number>(0);
 
   useEffect(() => {
     setResolvedParticleColor(resolveCssVarColor(particleColor, containerRef.current));
   }, [particleColor]);
 
+  const particles = useMemo<Particle[]>(() => {
+    const count = Math.max(12, Math.round(particleDensity));
+    const angle = DIRECTION_ANGLE[direction];
+
+    return Array.from({ length: count }, () => {
+      const velocity = (0.25 + Math.random() * 0.75) * speed;
+      const spread = direction === 'none' ? Math.PI * 2 : 0.65;
+      const particleAngle = direction === 'none'
+        ? Math.random() * Math.PI * 2
+        : angle + (Math.random() - 0.5) * spread;
+
+      return {
+        x: Math.random(),
+        y: Math.random(),
+        size: minSize + Math.random() * (maxSize - minSize),
+        opacity: 0.15 + Math.random() * 0.85,
+        velocityX: Math.cos(particleAngle) * velocity * 0.0018,
+        velocityY: Math.sin(particleAngle) * velocity * 0.0018,
+        drift: (Math.random() - 0.5) * 0.0008,
+      };
+    });
+  }, [direction, maxSize, minSize, particleDensity, speed]);
+
   useEffect(() => {
-    controls.start({
-      opacity: active ? 1 : 0,
-      transition: {
-        duration: active ? 0.28 : 0.18,
-        ease: "easeOut",
-      },
-    });
-  }, [active, controls]);
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
-  const particlesLoaded = async (container?: Container) => {
-    if (!container || !active) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
 
-    controls.start({
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-      },
-    });
-  };
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, rect.width) * dpr;
+      canvas.height = Math.max(1, rect.height) * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
 
-  const options = useMemo<ISourceOptions>(
-    () => ({
-      background: {
-        color: {
-          value: background,
-        },
-      },
-      fullScreen: {
-        enable: false,
-        zIndex: 1,
-      },
-      fpsLimit: 120,
-      interactivity: {
-        events: {
-          onClick: {
-            enable: false,
-            mode: "push",
-          },
-          onHover: {
-            enable: false,
-            mode: "repulse",
-          },
-        },
-        modes: {
-          push: {
-            quantity: 4,
-          },
-        },
-      },
-      particles: {
-        color: {
-          value: resolvedParticleColor,
-        },
-        move: {
-          angle: {
-            offset: 0,
-            value: DIRECTION_ANGLE[direction],
-          },
-          direction: direction === "none" ? "none" : "top",
-          enable: true,
-          outModes: {
-            default: "out",
-          },
-          random: false,
-          speed: {
-            min: 0.1,
-            max: speed,
-          },
-          straight: false,
-        },
-        number: {
-          density: {
-            enable: true,
-            width: 400,
-            height: 400,
-          },
-          value: particleDensity,
-        },
-        opacity: {
-          value: {
-            min: 0.1,
-            max: 1,
-          },
-          animation: {
-            enable: true,
-            speed: Math.max(1.2, speed * 4),
-            sync: false,
-            startValue: "random",
-          },
-        },
-        shape: {
-          type: "circle",
-        },
-        size: {
-          value: {
-            min: minSize,
-            max: maxSize,
-          },
-        },
-        links: {
-          enable: false,
-        },
-      },
-      detectRetina: true,
-      pauseOnBlur: true,
-      pauseOnOutsideViewport: true,
-    }),
-    [background, direction, maxSize, minSize, particleDensity, resolvedParticleColor, speed]
-  );
+    resize();
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+
+    let lastTime = performance.now();
+
+    const tick = (now: number) => {
+      const rect = container.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const delta = Math.min(32, now - lastTime);
+      lastTime = now;
+
+      context.clearRect(0, 0, width, height);
+
+      if (background !== 'transparent') {
+        context.fillStyle = background;
+        context.fillRect(0, 0, width, height);
+      }
+
+      if (active) {
+        for (const particle of particles) {
+          particle.x += particle.velocityX * delta;
+          particle.y += particle.velocityY * delta;
+          particle.x += Math.sin(now * 0.001 + particle.y * 10) * particle.drift * delta;
+
+          if (particle.x < -0.08 || particle.x > 1.08 || particle.y < -0.08 || particle.y > 1.08) {
+            particle.x = 0.5 + (Math.random() - 0.5) * 0.3;
+            particle.y = 1.02;
+          }
+
+          const x = particle.x * width;
+          const y = particle.y * height;
+          const radius = particle.size;
+          const gradient = context.createRadialGradient(x, y, 0, x, y, radius * 3);
+          gradient.addColorStop(0, resolvedParticleColor.replace('hsl(', 'hsla(').replace(')', ` / ${particle.opacity})`));
+          gradient.addColorStop(1, 'transparent');
+          context.fillStyle = gradient;
+          context.beginPath();
+          context.arc(x, y, radius * 3, 0, Math.PI * 2);
+          context.fill();
+        }
+      }
+
+      frameRef.current = requestAnimationFrame(tick);
+    };
+
+    frameRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(frameRef.current);
+      resizeObserver.disconnect();
+    };
+  }, [active, background, particles, resolvedParticleColor]);
 
   return (
-    <motion.div ref={containerRef} animate={controls} className={cn("pointer-events-none opacity-0", className)}>
-      {init ? (
-        <Particles
-          id={id ?? generatedId}
-          className="h-full w-full"
-          particlesLoaded={particlesLoaded}
-          options={options}
-        />
-      ) : null}
-    </motion.div>
+    <div
+      ref={containerRef}
+      className={cn('pointer-events-none transition-opacity duration-300 ease-out', active ? 'opacity-100' : 'opacity-0', className)}
+    >
+      <canvas ref={canvasRef} className="h-full w-full" />
+    </div>
   );
 };
 
