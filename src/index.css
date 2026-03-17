@@ -737,13 +737,16 @@
 }
 
 .voice-assistant-shell[data-route-context='threshold'] {
-  right: 1.25rem;
+  left: 50%;
+  right: auto;
   bottom: max(1.1rem, env(safe-area-inset-bottom, 1.1rem));
+  transform: translateX(-50%);
+  align-items: center;
 }
 
 .voice-assistant-shell[data-route-context='threshold'][data-mobile='true'] {
-  left: 1rem;
-  right: 1rem;
+  left: 50%;
+  right: auto;
   align-items: center;
 }
 
@@ -752,7 +755,6 @@
 }
 
 .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
-  right: 1rem;
   bottom: max(0.9rem, env(safe-area-inset-bottom, 0.9rem));
 }
 
