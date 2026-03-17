@@ -1027,6 +1027,17 @@
   flex-shrink: 0;
 }
 
+@media (max-width: 767px) {
+  .threshold-door-grid {
+    align-items: center;
+    justify-items: center;
+  }
+
+  .threshold-door-grid > * {
+    align-self: center;
+  }
+}
+
 @keyframes voice-orb-to-capsule {
   0% {
     opacity: 0;
