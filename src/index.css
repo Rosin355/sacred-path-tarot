@@ -978,6 +978,7 @@
 
 .voice-siri-preview[data-state='speaking'] .voice-siri-preview__wave > div,
 .voice-siri-preview[data-state='loading'] .voice-siri-preview__wave > div,
+.voice-siri-preview[data-state='paused'] .voice-siri-preview__wave > div,
 .voice-siri-preview[data-visual-state='thinking'] .voice-siri-preview__wave > div {
   opacity: 1;
   transform: scaleY(1.08);
