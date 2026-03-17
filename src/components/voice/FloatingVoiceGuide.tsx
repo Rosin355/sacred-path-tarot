@@ -68,6 +68,7 @@ export default function FloatingVoiceGuide() {
       : state;
 
   const showOrbOnly = state === 'idle' && !isOpen && !isMorphing;
+  const siriVariant = !isThresholdRoute && state !== 'idle' ? 'default' : isThresholdRoute ? 'compact' : 'default';
 
   const collapseToStar = () => {
     if (morphTimeoutRef.current) {
@@ -153,7 +154,7 @@ export default function FloatingVoiceGuide() {
           visualState={visualState}
           analyser={audioAnalyser}
           onClick={handleToggleAssistant}
-          variant={isThresholdRoute ? 'compact' : 'default'}
+          variant={siriVariant}
         />
       )}
 
