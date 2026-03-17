@@ -832,6 +832,21 @@
   bottom: max(2.15rem, env(safe-area-inset-bottom, 2.15rem));
 }
 
+.voice-assistant-shell[data-route-context='default'][data-path-theme='arcani'][data-display-mode='orb'] {
+  right: 2.45rem;
+  bottom: max(2.35rem, env(safe-area-inset-bottom, 2.35rem));
+}
+
+.voice-assistant-shell[data-route-context='default'][data-path-theme='respiro'][data-display-mode='orb'] {
+  right: 2.7rem;
+  bottom: max(2.55rem, env(safe-area-inset-bottom, 2.55rem));
+}
+
+.voice-assistant-shell[data-route-context='default'][data-path-theme='ispirazione'][data-display-mode='orb'] {
+  right: 1.85rem;
+  bottom: max(1.95rem, env(safe-area-inset-bottom, 1.95rem));
+}
+
 .voice-assistant-shell[data-morphing='true'] .voice-orb[data-variant='mini'] {
   transform: translateZ(0) scale(1.18);
   opacity: 0.14;

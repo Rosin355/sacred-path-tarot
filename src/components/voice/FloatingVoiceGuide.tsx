@@ -36,6 +36,13 @@ export default function FloatingVoiceGuide() {
   const morphTimeoutRef = useRef<number | null>(null);
   const [isMorphing, setIsMorphing] = useState(false);
   const isThresholdRoute = location.pathname === '/';
+  const voicePathTheme = location.pathname.startsWith('/arcani')
+    ? 'arcani'
+    : location.pathname.startsWith('/respiro')
+      ? 'respiro'
+      : location.pathname.startsWith('/ispirazione')
+        ? 'ispirazione'
+        : 'default';
 
   useEffect(() => {
     const previousState = previousStateRef.current;
