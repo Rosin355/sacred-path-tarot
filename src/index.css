@@ -823,17 +823,17 @@
 }
 
 .voice-assistant-shell[data-route-context='threshold'] {
-  left: 50%;
-  right: auto;
+  left: auto;
+  right: 1.5rem;
   bottom: max(1.05rem, env(safe-area-inset-bottom, 1.05rem));
-  transform: translateX(-50%);
-  align-items: center;
+  transform: none;
+  align-items: flex-end;
 }
 
 .voice-assistant-shell[data-route-context='threshold'][data-mobile='true'] {
-  left: 50%;
-  right: auto;
-  align-items: center;
+  left: auto;
+  right: 1rem;
+  align-items: flex-end;
 }
 
 .voice-assistant-shell[data-route-context='threshold'][data-mobile='false'] {

@@ -273,6 +273,9 @@ export default function VoiceOrb({ state, visualState, analyser, onClick, varian
       <span className="voice-orb-halo" aria-hidden="true" />
       {isMini ? (
         <span className="voice-star" aria-hidden="true">
+          <span className="voice-star__aura voice-star__aura--outer" />
+          <span className="voice-star__aura voice-star__aura--inner" />
+          <span className="voice-star__ring" />
           <span className="voice-star__core" />
           <span className="voice-star__ray voice-star__ray--v" />
           <span className="voice-star__ray voice-star__ray--h" />
