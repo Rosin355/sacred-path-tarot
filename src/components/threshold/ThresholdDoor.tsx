@@ -32,7 +32,7 @@ interface Props {
 }
 
 const ThresholdDoor = forwardRef<DoorHandle, Props>(
-  ({ door, phase, isActive, onClick }, ref) => {
+  ({ door, phase, isActive, onClick, onPointerEnter, onPointerLeave, onFocus, onBlur }, ref) => {
     const dimmed = phase !== "idle" && !isActive;
     const buttonRef = useRef<HTMLButtonElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
