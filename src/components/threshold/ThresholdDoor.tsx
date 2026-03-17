@@ -152,6 +152,10 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         onClick={() => onClick(door)}
         disabled={phase !== "idle"}
         {...hoverBindings}
+        onPointerEnter={(e) => { hoverBindings.onPointerEnter?.(e); onPointerEnter?.(); }}
+        onPointerLeave={(e) => { hoverBindings.onPointerLeave?.(e); onPointerLeave?.(); }}
+        onFocus={(e) => { hoverBindings.onFocus?.(e); onFocus?.(); }}
+        onBlur={(e) => { hoverBindings.onBlur?.(e); onBlur?.(); }}
         data-hover-active={isHoverActive ? "true" : "false"}
         className={`group relative isolate w-[178px] sm:w-[190px] md:w-[198px] lg:w-[222px] cursor-pointer
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
