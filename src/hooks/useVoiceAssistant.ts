@@ -69,7 +69,7 @@ export function useVoiceAssistant(): UseVoiceAssistantReturn {
       const audio = new Audio();
       audio.crossOrigin = 'anonymous';
       audio.preload = 'auto';
-      audio.playsInline = true;
+      audio.setAttribute('playsinline', 'true');
       audioRef.current = audio;
     }
 
