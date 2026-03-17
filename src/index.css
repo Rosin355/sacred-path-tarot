@@ -934,7 +934,7 @@
 }
 
 .voice-siri-preview--compact .voice-siri-preview__rail {
-  width: calc(100% - 2.6rem);
+  width: calc(100% - 2.1rem);
 }
 
 .voice-siri-preview__wave {
@@ -942,12 +942,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline: 1rem;
-  overflow: hidden;
+  padding-inline: 0.9rem;
+  padding-block: 0.2rem;
+  overflow: clip;
 }
 
 .voice-siri-preview--compact .voice-siri-preview__wave {
-  padding-inline: 0.6rem;
+  padding-inline: 0.4rem;
+  padding-block: 0.1rem;
 }
 
 .voice-siri-preview__wave > div {
