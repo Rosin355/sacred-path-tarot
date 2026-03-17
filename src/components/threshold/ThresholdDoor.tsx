@@ -149,7 +149,7 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
         disabled={phase !== "idle"}
         {...hoverBindings}
         data-hover-active={isHoverActive ? "true" : "false"}
-        className={`group relative isolate w-[200px] md:w-[230px] cursor-pointer
+        className={`group relative isolate w-[178px] sm:w-[190px] md:w-[198px] lg:w-[222px] cursor-pointer
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
           transition-all duration-700 ease-out hover:scale-[1.03]
           ${door.colorClass}
@@ -164,7 +164,6 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
       >
         <DoorAuraLayer active={isHoverActive && phase === "idle"} reducedMotion={reducedMotion} />
 
-        {/* Arch container */}
         <div className="relative z-10">
           <div
             className="absolute inset-0 divine-light-glow rounded-t-full opacity-0 transition-opacity duration-1000"
@@ -184,12 +183,11 @@ const ThresholdDoor = forwardRef<DoorHandle, Props>(
           />
         </div>
 
-        {/* Text below arch */}
-        <div ref={textRef} className="relative z-10 mt-4 text-center space-y-2">
-          <h3 className="text-foreground text-base md:text-lg tracking-[0.06em] font-display group-hover:text-accent transition-colors duration-500">
+        <div ref={textRef} className="relative z-10 mt-3 text-center space-y-1.5 md:mt-4 md:space-y-2">
+          <h3 className="text-foreground text-[0.95rem] md:text-base lg:text-lg tracking-[0.05em] font-display group-hover:text-accent transition-colors duration-500">
             {door.title}
           </h3>
-          <p className="text-muted-foreground text-[0.65rem] tracking-wide font-caption leading-relaxed">
+          <p className="text-muted-foreground text-[0.62rem] sm:text-[0.64rem] md:text-[0.65rem] tracking-[0.025em] font-caption leading-relaxed max-w-[20ch] mx-auto">
             {door.subtitle}
           </p>
         </div>
