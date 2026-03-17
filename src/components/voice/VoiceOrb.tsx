@@ -120,61 +120,63 @@ export default function VoiceOrb({ state, visualState, analyser, onClick }: Voic
           break;
       }
 
-      const halo = context.createRadialGradient(center, center, 4, center, center, 40 + amplitude * 10);
-      halo.addColorStop(0, `hsla(${210 + hueShift}, 100%, 78%, ${0.16 + pulse})`);
-      halo.addColorStop(0.28, `hsla(${272 + hueShift}, 98%, 77%, ${0.14 + pulse * 0.82})`);
-      halo.addColorStop(0.56, `hsla(${178 + hueShift}, 84%, 66%, ${0.09 + pulse * 0.56})`);
+      const halo = context.createRadialGradient(center, center, 4, center, center, 36 + amplitude * 8);
+      halo.addColorStop(0, `hsla(${210 + hueShift}, 100%, 78%, ${0.11 + pulse})`);
+      halo.addColorStop(0.32, `hsla(${272 + hueShift}, 98%, 77%, ${0.1 + pulse * 0.76})`);
+      halo.addColorStop(0.58, `hsla(${178 + hueShift}, 84%, 66%, ${0.06 + pulse * 0.4})`);
       halo.addColorStop(1, 'transparent');
       context.fillStyle = halo;
       context.beginPath();
-      context.arc(center, center, 40 + amplitude * 8, 0, Math.PI * 2);
+      context.arc(center, center, 36 + amplitude * 6, 0, Math.PI * 2);
       context.fill();
 
       const drawRibbon = (offset: number, alpha: number) => {
-        const points = 180;
+        const points = 220;
         context.beginPath();
 
         for (let i = 0; i <= points; i += 1) {
-          const t = (i / points) * Math.PI * 2;
-          const waveA = Math.sin(t * 2 + time * spin + offset) * warp;
-          const waveB = Math.cos(t * 3 - time * (spin * 0.82) + offset) * (warp * 0.42);
-          const r = radius + waveA + waveB;
+          const t = (i / points) * Math.PI * 2 * tailLength;
+          const waveA = Math.sin(t * 1.8 + time * spin + offset) * warp;
+          const waveB = Math.cos(t * 2.6 - time * (spin * 0.8) + offset) * (warp * 0.34);
+          const decay = 1 - i / points;
+          const trailPull = effectiveState === 'speaking' ? decay * amplitude * 12 : decay * 2.4;
+          const r = radius + waveA + waveB + trailPull;
           const x = center + Math.cos(t) * r;
           const y = center + Math.sin(t) * (r * verticalStretch);
           if (i === 0) context.moveTo(x, y);
           else context.lineTo(x, y);
         }
 
-        const gradient = context.createConicGradient(time * 0.48 + offset, center, center);
-        gradient.addColorStop(0, `hsla(${202 + hueShift}, 100%, 78%, ${ringOpacity * alpha})`);
-        gradient.addColorStop(0.2, `hsla(${246 + hueShift}, 100%, 77%, ${ringOpacity * 0.94 * alpha})`);
-        gradient.addColorStop(0.42, `hsla(${286 + hueShift}, 100%, 78%, ${ringOpacity * 0.96 * alpha})`);
-        gradient.addColorStop(0.64, `hsla(${328 + hueShift}, 98%, 79%, ${ringOpacity * 0.78 * alpha})`);
-        gradient.addColorStop(0.82, `hsla(${178 + hueShift}, 84%, 68%, ${ringOpacity * 0.86 * alpha})`);
-        gradient.addColorStop(1, `hsla(${202 + hueShift}, 100%, 78%, ${ringOpacity * alpha})`);
+        const gradient = context.createConicGradient(time * 0.42 + offset, center, center);
+        gradient.addColorStop(0, `hsla(${202 + hueShift}, 100%, 79%, ${ringOpacity * alpha})`);
+        gradient.addColorStop(0.24, `hsla(${248 + hueShift}, 100%, 78%, ${ringOpacity * 0.9 * alpha})`);
+        gradient.addColorStop(0.48, `hsla(${286 + hueShift}, 100%, 79%, ${ringOpacity * 0.94 * alpha})`);
+        gradient.addColorStop(0.7, `hsla(${328 + hueShift}, 92%, 80%, ${ringOpacity * 0.64 * alpha})`);
+        gradient.addColorStop(0.88, `hsla(${178 + hueShift}, 82%, 69%, ${ringOpacity * 0.72 * alpha})`);
+        gradient.addColorStop(1, `hsla(${202 + hueShift}, 100%, 79%, ${ringOpacity * alpha})`);
 
         context.strokeStyle = gradient;
         context.lineWidth = lineWidth;
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.shadowBlur = 18 + amplitude * 16;
-        context.shadowColor = `hsla(${252 + hueShift}, 88%, 74%, ${0.34 * alpha})`;
+        context.shadowBlur = 12 + amplitude * 12;
+        context.shadowColor = `hsla(${252 + hueShift}, 88%, 74%, ${0.24 * alpha})`;
         context.stroke();
         context.shadowBlur = 0;
       };
 
       drawRibbon(0, 1);
-      drawRibbon(Math.PI / 3.2, 0.54);
-      drawRibbon(-Math.PI / 2.6, 0.3);
+      drawRibbon(Math.PI / 3.4, 0.42);
+      drawRibbon(-Math.PI / 2.8, 0.22);
 
-      const core = context.createRadialGradient(center, center, 0, center, center, 16 + amplitude * 2);
-      core.addColorStop(0, `hsla(${0 + hueShift}, 0%, 100%, 0.94)`);
-      core.addColorStop(0.24, `hsla(${204 + hueShift}, 100%, 88%, ${0.52 + amplitude * 0.18})`);
-      core.addColorStop(0.52, `hsla(${280 + hueShift}, 88%, 82%, ${0.2 + amplitude * 0.12})`);
+      const core = context.createRadialGradient(center, center, 0, center, center, 14 + amplitude * 1.6);
+      core.addColorStop(0, `hsla(${0 + hueShift}, 0%, 100%, 0.88)`);
+      core.addColorStop(0.22, `hsla(${204 + hueShift}, 100%, 88%, ${0.34 + amplitude * 0.14})`);
+      core.addColorStop(0.5, `hsla(${280 + hueShift}, 88%, 82%, ${0.12 + amplitude * 0.08})`);
       core.addColorStop(1, 'transparent');
       context.fillStyle = core;
       context.beginPath();
-      context.arc(center, center, 16 + amplitude * 2, 0, Math.PI * 2);
+      context.arc(center, center, 14 + amplitude * 1.6, 0, Math.PI * 2);
       context.fill();
 
       frameRef.current = requestAnimationFrame(render);
