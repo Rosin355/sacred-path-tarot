@@ -3,7 +3,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useDoorSubtitlePopup } from "@/hooks/useDoorSubtitlePopup";
 import ThresholdDoor, { type DoorData, type DoorHandle } from "@/components/threshold/ThresholdDoor";
+import FullscreenDoorSubtitlePopup from "@/components/threshold/FullscreenDoorSubtitlePopup";
 import DoorDissolveOverlay from "@/components/threshold/DoorDissolveOverlay";
 import PetalBurstOverlay from "@/components/threshold/PetalBurstOverlay";
 
@@ -45,6 +47,21 @@ const Threshold = () => {
   const [visible, setVisible] = useState(false);
   const { isMuted, toggleMute } = useBackgroundMusic();
   const reducedMotion = useReducedMotion();
+  const {
+    hoveredDoorId,
+    popupVisible,
+    popupClosing,
+    activeSubtitleText,
+    onDoorPointerEnter,
+    onDoorPointerLeave,
+    onDoorFocus,
+    onDoorBlur,
+    onPopupPointerEnter,
+    onPopupPointerLeave,
+    onCloseClick,
+    onExitComplete,
+    onEscapeKey,
+  } = useDoorSubtitlePopup();
 
   const [phase, setPhase] = useState<Phase>("idle");
   const [activeDoor, setActiveDoor] = useState<DoorData | null>(null);
@@ -180,6 +197,10 @@ const Threshold = () => {
               phase={phase}
               isActive={activeDoor?.id === door.id}
               onClick={handleDoorClick}
+              onPointerEnter={() => onDoorPointerEnter(door)}
+              onPointerLeave={onDoorPointerLeave}
+              onFocus={() => onDoorFocus(door)}
+              onBlur={onDoorBlur}
               ref={(el) => {
                 doorHandleRefs.current[door.id] = el;
               }}
@@ -195,6 +216,18 @@ const Threshold = () => {
           Scegli la soglia che ti chiama
         </p>
       </div>
+
+      <FullscreenDoorSubtitlePopup
+        text={activeSubtitleText}
+        visible={popupVisible}
+        closing={popupClosing}
+        doorId={hoveredDoorId}
+        onPopupPointerEnter={onPopupPointerEnter}
+        onPopupPointerLeave={onPopupPointerLeave}
+        onCloseClick={onCloseClick}
+        onExitComplete={onExitComplete}
+        onEscapeKey={onEscapeKey}
+      />
 
       {/* Door dissolve overlay */}
       {activeDoor && !reducedMotion && (
