@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useVoiceAssistant } from '@/hooks/useVoiceAssistant';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -31,6 +31,8 @@ export default function FloatingVoiceGuide() {
   const isMobile = useIsMobile();
   const location = useLocation();
   const previousStateRef = useRef<VoiceState>('idle');
+  const morphTimeoutRef = useRef<number | null>(null);
+  const [isMorphing, setIsMorphing] = useState(false);
   const isThresholdRoute = location.pathname === '/';
 
   useEffect(() => {
@@ -38,10 +40,17 @@ export default function FloatingVoiceGuide() {
 
     if (state === 'speaking' && previousState !== 'speaking') {
       setIsOpen(false);
+      setIsMorphing(false);
     }
 
     previousStateRef.current = state;
   }, [state, setIsOpen]);
+
+  useEffect(() => () => {
+    if (morphTimeoutRef.current) {
+      window.clearTimeout(morphTimeoutRef.current);
+    }
+  }, []);
 
   const visualState = state === 'loading'
     ? 'thinking'
@@ -49,8 +58,26 @@ export default function FloatingVoiceGuide() {
       ? 'listening'
       : state;
 
-  const showOrbOnly = state === 'idle' && !isOpen;
-  const handleToggleAssistant = () => setIsOpen(!isOpen);
+  const showOrbOnly = state === 'idle' && !isOpen && !isMorphing;
+
+  const handleToggleAssistant = () => {
+    if (showOrbOnly) {
+      setIsMorphing(true);
+      morphTimeoutRef.current = window.setTimeout(() => {
+        setIsOpen(true);
+        setIsMorphing(false);
+      }, 180);
+      return;
+    }
+
+    if (morphTimeoutRef.current) {
+      window.clearTimeout(morphTimeoutRef.current);
+      morphTimeoutRef.current = null;
+    }
+
+    setIsMorphing(false);
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div
@@ -59,6 +86,7 @@ export default function FloatingVoiceGuide() {
       data-route-context={isThresholdRoute ? 'threshold' : 'default'}
       data-mobile={isMobile ? 'true' : 'false'}
       data-display-mode={showOrbOnly ? 'orb' : 'siri'}
+      data-morphing={isMorphing ? 'true' : 'false'}
     >
       {isOpen && (
         <VoicePanel

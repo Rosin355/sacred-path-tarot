@@ -271,8 +271,20 @@ export default function VoiceOrb({ state, visualState, analyser, onClick, varian
       data-variant={variant}
     >
       <span className="voice-orb-halo" aria-hidden="true" />
-      <span className="voice-siri-orb__surface" aria-hidden="true" />
-      <div ref={mountRef} className="voice-orb-webgl" aria-hidden="true" />
+      {isMini ? (
+        <span className="voice-star" aria-hidden="true">
+          <span className="voice-star__core" />
+          <span className="voice-star__ray voice-star__ray--v" />
+          <span className="voice-star__ray voice-star__ray--h" />
+          <span className="voice-star__ray voice-star__ray--d1" />
+          <span className="voice-star__ray voice-star__ray--d2" />
+        </span>
+      ) : (
+        <>
+          <span className="voice-siri-orb__surface" aria-hidden="true" />
+          <div ref={mountRef} className="voice-orb-webgl" aria-hidden="true" />
+        </>
+      )}
       <span className="voice-orb-tooltip" aria-hidden="true">Ascolta o chiedi guida</span>
     </button>
   );
