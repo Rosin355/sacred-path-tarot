@@ -822,8 +822,9 @@
 }
 
 .voice-assistant-shell {
-  right: 2rem;
-  bottom: max(2rem, env(safe-area-inset-bottom, 2rem));
+  right: 1.5rem;
+  bottom: max(1.05rem, env(safe-area-inset-bottom, 1.05rem));
+  align-items: flex-end;
 }
 
 .voice-assistant-shell[data-route-context='threshold'] {
@@ -833,7 +834,7 @@
   transform: none;
   align-items: flex-end;
 }
-...
+
 .voice-assistant-shell[data-route-context='threshold'][data-display-mode='orb'] {
   bottom: max(0.82rem, env(safe-area-inset-bottom, 0.82rem));
 }
