@@ -1,5 +1,7 @@
 # **App-flow-pages-and-roles**
 
+> **Naming tecnico:** il nome pubblico è “Via dell’Arte”; per compatibilità la route e gli identificatori storici restano `/ispirazione` e `ispirazione`.
+
 # **Obiettivo del documento**
 
 Definire la struttura essenziale del portale **Il Tempio delle Tre Vie** in modo semplice, leggibile e pronto per la build.
@@ -18,7 +20,7 @@ Questo documento copre:
 * **Homepage / Il Tempio**  
 * **La Via degli Arcani**  
 * **La Via del Respiro**  
-* **La Via dell’Ispirazione**
+* **La Via dell’Arte**
 
 ## **Livello 1 — Pagine top-level interne alle Vie**
 
@@ -36,7 +38,7 @@ Questo documento copre:
 * **Eventi / lezioni / incontri**  
 * **Contatti / Prenotazione**
 
-### **Via dell’Ispirazione**
+### **Via dell’Arte**
 
 * **Articoli / riflessioni**  
 * **Musica / ascolti / ispirazioni**  
@@ -66,7 +68,7 @@ Il Tempio
 │   ├── Discipline e pratiche
 │   ├── Eventi / lezioni / incontri
 │   └── Contatti / Prenotazione
-└── La Via dell’Ispirazione
+└── La Via dell’Arte
     ├── Articoli / riflessioni
     ├── Musica / ascolti / ispirazioni
     ├── Letteratura esoterica
@@ -77,7 +79,7 @@ Il Tempio
 
 ## **Homepage / Il Tempio**
 
-**Scopo:** accogliere l’utente nella soglia simbolica e aiutarlo a scegliere una delle tre Vie senza distrazioni.
+**Scopo:** accompagnare l’utente in un percorso cinematografico e, nel Centro del Tempio, consentire l’ingresso reale in una delle tre Vie.
 
 ## **La Via degli Arcani**
 
@@ -119,7 +121,7 @@ Il Tempio
 
 **Scopo:** permettere all’utente di chiedere informazioni o prenotare una pratica con chiarezza e calma.
 
-## **La Via dell’Ispirazione**
+## **La Via dell’Arte**
 
 **Scopo:** aprire uno spazio editoriale e culturale dedicato ad arte, musica e letteratura esoterica.
 
@@ -255,7 +257,7 @@ Far capire che la proposta è esperienza incarnata, non fitness generico.
 3. **Richiede informazioni o prenota**  
    * passa all’azione con fiducia
 
-## **Journey 4 — Esplorare contenuti nella Via dell’Ispirazione**
+## **Journey 4 — Esplorare contenuti nella Via dell’Arte**
 
 ### **Obiettivo**
 
@@ -263,7 +265,7 @@ Guidare l’utente verso un’esperienza editoriale, culturale e contemplativa.
 
 ### **Step**
 
-1. **Entra nella Via dell’Ispirazione**  
+1. **Entra nella Via dell’Arte**
    * comprende subito il tono della sezione  
 2. **Sceglie un contenuto**  
    * apre articoli, ascolti o letteratura  

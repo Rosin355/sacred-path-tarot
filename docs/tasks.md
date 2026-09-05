@@ -224,7 +224,7 @@ body { font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.6; }
 
 **Struttura:**
 - Hero con atmosfera culturale e calda (Parchment Glow dominant)
-- 3 CTA: Esplora le ispirazioni / Leggi le riflessioni / Scopri eventi o progetti
+- 3 CTA: Esplora l’arte / Leggi le riflessioni / Scopri eventi o progetti
 - Tono editoriale, contemplativo
 
 ### Task 4.4: Aggiornare ViaLayout.tsx
@@ -265,7 +265,7 @@ body { font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.6; }
 
 **Route:** `/respiro/filosofia`, `/respiro/discipline`, `/respiro/lezioni`, `/respiro/contatti`
 
-### Task 5.3: Pagine Via dell'Ispirazione
+### Task 5.3: Pagine Via dell'Arte
 
 **File da creare:**
 - `src/pages/ispirazione/Articoli.tsx` — Articoli / riflessioni

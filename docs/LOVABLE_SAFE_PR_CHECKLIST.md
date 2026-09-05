@@ -4,25 +4,26 @@ Usa questa checklist prima di aprire o mergiare una PR per evitare regressioni s
 
 ## 1) Compatibilità build/runtime
 
-- [ ] Il progetto resta **client-side Vite + React** (nessun runtime server custom richiesto).
-- [ ] Nessuna dipendenza introdotta richiede componenti nativi/non web o toolchain non supportata da Lovable.
-- [ ] I file base non sono stati rotti/spostati: `index.html`, `src/main.tsx`, `vite.config.ts`.
-- [ ] Alias `@/` ancora funzionante (config Vite + TS coerente).
+- [x] Il progetto resta **client-side Vite + React** (nessun runtime server custom richiesto).
+- [x] Nessuna dipendenza introdotta richiede componenti nativi/non web o toolchain non supportata da Lovable.
+- [x] I file base non sono stati rotti/spostati: `index.html`, `src/main.tsx`, `vite.config.ts`.
+- [x] Alias `@/` ancora funzionante (config Vite + TS coerente).
 
 ## 2) Environment variables
 
-- [ ] Le nuove variabili ambiente usano prefisso `VITE_`.
-- [ ] Non sono state committate secret private nel codice client.
-- [ ] Le chiavi Supabase restano publishable lato client; nessuna service role key esposta.
+- [x] Nessuna nuova variabile ambiente introdotta.
+- [x] Non sono state committate secret private nel codice client.
+- [x] Le chiavi Supabase restano publishable lato client; nessuna service role key esposta.
 
 ## 3) Routing e UX core
 
-- [ ] Le route principali funzionano: `/`, `/arcani`, `/respiro`, `/ispirazione`, `/login`, `/admin`, fallback `*`.
-- [ ] Threshold → Via transition funziona (click porta → petali → navigazione).
-- [ ] Fallback transition funziona (navigazione entro 3s anche se animazione fallisce).
-- [ ] `prefers-reduced-motion` rispettato (fade semplice, no Canvas).
+- [x] Le route principali funzionano localmente: `/`, `/arcani`, `/respiro`, `/ispirazione`, `/login`, `/admin`, fallback `*`.
+- [x] Centro del Tempio → Via funziona (click soglia → dissolvenza → navigazione reale).
+- [x] Il ritorno da ogni Via apre `/#centro`.
+- [x] Il loader attiva il fallback entro 8s se i frame non sono disponibili.
+- [x] `prefers-reduced-motion` usa le sezioni statiche e naviga senza attese.
 - [ ] Nessun link/anchor interno è rotto (sezioni raggiungibili da menu desktop/mobile).
-- [ ] In caso di errore non critico (audio/autoplay/WebGL/Canvas), l'app degrada senza crash.
+- [x] In caso di errore non critico (audio/autoplay/WebGL/Canvas), l'app degrada senza crash.
 
 ## 4) Auth, ruoli e sicurezza
 
@@ -33,22 +34,24 @@ Usa questa checklist prima di aprire o mergiare una PR per evitare regressioni s
 
 ## 5) Stato, dati e backward compatibility
 
-- [ ] Eventuali cambi schema DB hanno migration versionata in `supabase/migrations`.
-- [ ] Le migrazioni sono backward-safe o con piano di rollout esplicito.
-- [ ] Le modifiche a localStorage/sessione mantengono fallback per utenti esistenti.
+- [x] Nessun cambio schema DB o nuova migrazione inclusi.
+- [x] La preferenza audio in `localStorage` mantiene un default compatibile con gli utenti esistenti.
 
 ## 6) Performance e asset
 
-- [ ] Nuovi asset (immagini/audio/video/3D) sono ottimizzati per web preview.
-- [ ] Nessun blocco in main thread introdotto da animazioni/effetti pesanti.
-- [ ] Eventuali feature sperimentali sono protette da flag/fallback.
+- [x] I frame WebP desktop/mobile e gli still sono disponibili sotto `public/cinematic`.
+- [x] Gli asset vengono caricati per scena e non tutti in modo eager.
+- [x] Canvas e Three.js hanno fallback statico e teardown esplicito.
 
 ## 7) Verifiche minime prima merge
 
-- [ ] `npm run build` passa.
-- [ ] `npm run lint` passa.
-- [ ] Smoke test manuale su route core completato.
+- [x] `npm run build` passa.
+- [x] `npm run lint` passa senza errori (dieci warning legacy non bloccanti).
+- [x] Smoke test manuale su route core completato.
 - [ ] Smoke test auth/admin completato (se toccato da PR).
+- [x] Guida vocale assente dalla home e presente nelle tre Vie.
+- [ ] Audio verificato end-to-end nella preview con il bucket Lovable collegato.
+- [ ] Vulnerabilità npm ereditate triagiate prima del merge.
 
 ## 8) Criteri di stop-merge
 
@@ -58,7 +61,7 @@ Usa questa checklist prima di aprire o mergiare una PR per evitare regressioni s
 
 ## 9) Note PR (da compilare)
 
-- Impatto Lovable preview/run:
-- Feature flag/fallback introdotti:
-- Migrazioni Supabase incluse (sì/no):
-- Rischi residui e mitigazioni:
+- Impatto Lovable preview/run: nuova home e asset statici; nessuna modifica a backend, schema o configurazione del progetto.
+- Feature flag/fallback introdotti: still statici per reduced motion, data saver o indisponibilità Canvas/WebGL.
+- Migrazioni Supabase incluse (sì/no): no.
+- Rischi residui e mitigazioni: peso asset mitigato da manifest desktop/mobile e caricamento progressivo; audio, auth e admin da verificare nella preview collegata.

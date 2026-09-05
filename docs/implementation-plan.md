@@ -46,7 +46,7 @@ Micro-task:
   * homepage-soglia  
   * Via degli Arcani  
   * Via del Respiro  
-  * Via dell’Ispirazione  
+  * Via dell’Arte
 * confermare il pattern fisso:  
   * **Torna al Tempio**  
 * confermare cosa rimane fuori:  
@@ -262,7 +262,7 @@ Micro-task:
   * richiedi informazioni  
 * impostare atmosfera più luminosa e ariosa
 
-### **4.4 Mini-home — Via dell’Ispirazione**
+### **4.4 Mini-home — Via dell’Arte**
 
 Output:
 
@@ -273,7 +273,7 @@ Micro-task:
 * definire titolo forte  
 * scrivere intro editoriale e contemplativa  
 * creare CTA:  
-  * esplora le ispirazioni  
+  * esplora l’arte
   * leggi le riflessioni  
   * scopri eventi o progetti  
 * impostare atmosfera più culturale e calda
@@ -312,7 +312,7 @@ Micro-task:
 * distinguere lezioni, incontri, percorsi  
 * rendere il contatto semplice e rassicurante
 
-### **5.3 Via dell’Ispirazione**
+### **5.3 Via dell’Arte**
 
 Pagine MVP:
 
@@ -683,4 +683,3 @@ Il piano funziona se, al rilascio:
 * ogni mini-home spiega bene l’offerta  
 * l’utente trova facilmente il prossimo passo  
 * il sistema è pronto a crescere senza perdersi
-
