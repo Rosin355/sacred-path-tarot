@@ -60,7 +60,7 @@ Questo registro accompagna i commit della migrazione da `jessicamarin-sitoV2` a 
 - **Commit:** `docs: record the Lovable migration and release checks` (questo documento)
 - **Obiettivo:** consegnare una base governabile tramite GitHub e Lovable, con requisiti, architettura, roadmap, verifiche e rollback espliciti.
 - **Modifiche:** aggiunti PDR, architettura, Sprint 4, changelog e runbook Lovable; marcate come storiche le specifiche della precedente Threshold.
-- **Verifica:** build locale completata; nessuna migrazione database inclusa.
+- **Verifica:** build locale completata; quella fase non includeva migrazioni database. La migrazione additiva dei contatti viene introdotta successivamente nella Fase 7.
 - **Rischi residui:** preview, security check e pubblicazione Lovable richiedono l'ambiente collegato dopo il merge. `npm audit --omit=dev` segnala inoltre vulnerabilità già presenti nelle catene React Router, Supabase, Recharts e toolchain; le tre nuove dipendenze dirette non compaiono nelle catene segnalate, ma il debito va riesaminato separatamente prima della pubblicazione.
 - [x] PDR
 - [x] Architettura
@@ -73,3 +73,61 @@ Questo registro accompagna i commit della migrazione da `jessicamarin-sitoV2` a 
 - [x] `npm run check` completato dopo il riordino finale dei commit
 - [x] Audit npm eseguito senza applicare aggiornamenti automatici potenzialmente regressivi
 - [ ] Preview e Publish Lovable
+
+## Fase 6 — navigazione immediata
+
+- **Commit:** `831a7c8 feat: add immediate global path navigation`
+- **Obiettivo:** consentire l'accesso diretto alle tre Vie senza obbligare il visitatore a completare il percorso cinematografico.
+- **Modifiche:** introdotto `TempleNavigation` condiviso; link fissi su desktop, dock inferiore su mobile, `aria-current`, disponibilità sopra il loader e adeguamento della guida vocale.
+- **Verifica:** TypeScript e lint mirato completati; rotte e transizione cromatica esistenti riutilizzate.
+- **Rischi residui:** spaziature e sovrapposizioni devono essere confermate nella preview Lovable su Safari e dispositivi reali.
+- [x] Menu globale condiviso
+- [x] Accesso durante il loader
+- [x] Stato attivo accessibile
+- [x] Compatibilità con dissolvenza e audio
+- [ ] QA preview Chrome/Safari
+
+## Fase 7 — persistenza sicura
+
+- **Commit:** `39837ca feat: add secure path inquiry persistence`
+- **Obiettivo:** registrare le richieste senza concedere accesso pubblico diretto ai dati.
+- **Modifiche:** aggiunta migrazione con tabella, enum, trigger, indici, policy RLS e RPC; introdotti idempotenza, honeypot, limite di tre invii/ora, validazione server-side e scadenza a 12 mesi.
+- **Verifica:** tipi Supabase aggiornati e controllo TypeScript completato.
+- **Rischi residui:** la migrazione e le policy devono essere applicate e testate nell'ambiente Lovable collegato prima del merge.
+- [x] Schema additivo
+- [x] Nessun privilegio INSERT pubblico
+- [x] RPC anon/auth limitata
+- [x] RLS amministrativa
+- [x] Pulizia richieste scadute
+- [ ] Test SQL/RLS in preview
+
+## Fase 8 — form, privacy e inbox
+
+- **Commit:** `fc6587c feat: add path inquiry forms and admin inbox`
+- **Obiettivo:** rendere operative le CTA e dare agli amministratori un flusso completo di consultazione delle richieste.
+- **Modifiche:** aggiunti form contestuali, motivi per Via, pagina `/privacy`, gestione sicura del recapito pubblico, inbox admin e azioni di stato/eliminazione.
+- **Verifica:** TypeScript e lint mirato completati; i contenuti utente sono renderizzati come testo React e gli errori pubblici non espongono dettagli backend.
+- **Rischi residui:** invio reale e inbox richiedono migrazione applicata, variabile configurata e account admin nella preview.
+- [x] CTA con preselezione
+- [x] Validazione client e messaggi `aria-live`
+- [x] Honeypot e token di invio
+- [x] Privacy e conservazione documentate
+- [x] Inbox paginata da 25
+- [ ] Smoke test end-to-end Lovable
+
+## Fase 9 — documentazione contatti e rilascio
+
+- **Commit:** `docs: record inquiry workflow and privacy controls` (questo documento)
+- **Obiettivo:** rendere verificabili architettura, requisiti, sicurezza, rilascio e rollback del nuovo flusso.
+- **Modifiche:** aggiornati PDR, architettura, SRS, roadmap, changelog, worklog e checklist Lovable.
+- **Verifica:** `npm run check`, diff check e QA locale vengono registrati al completamento della fase.
+- **Rischi residui:** security check e test backend restano vincolati all'ambiente Lovable dopo l'applicazione della migrazione.
+- [x] Requisiti e flusso dati documentati
+- [x] Controlli privacy e RLS documentati
+- [x] Procedura di rilascio e rollback aggiornata
+- [x] `npm run check`: zero errori, dieci warning legacy non bloccanti
+- [x] QA locale: 1440×900, 768×1024 e 390×844
+- [x] Menu durante il loader, CTA/preselezione, validazione e `/privacy` verificati localmente
+- [x] Dock mobile misurata nel viewport senza sovrapposizione con la guida vocale
+- [x] Form disabilitato e nessun invio possibile senza `VITE_PRIVACY_CONTACT_EMAIL`
+- [ ] Verifica preview Lovable

@@ -27,10 +27,24 @@
 - [ ] Security check Lovable.
 - [ ] Merge su `main` e Publish → Update.
 
-## Sprint 5 — evoluzioni successive
+## Sprint 5 — navigazione e contatti
+
+- [x] Menu globale desktop e mobile per le Tre Vie.
+- [x] Navigazione disponibile sopra il loader e `aria-current`.
+- [x] Form riutilizzabile e motivi contestuali per ogni Via.
+- [x] CTA collegate al form con preselezione del motivo.
+- [x] Pagina `/privacy` e gestione di `VITE_PRIVACY_CONTACT_EMAIL`.
+- [x] Migrazione additiva `contact_inquiries` con RLS.
+- [x] RPC pubblica controllata con validazione, honeypot, idempotenza e rate limit.
+- [x] Inbox admin con ricerca, filtri, paginazione e gestione stato.
+- [x] Pulizia automatica delle richieste scadute senza `pg_cron`.
+- [ ] Applicazione migrazione e test RLS/RPC nella preview Lovable.
+- [ ] Verifica visuale e funzionale Chrome/Safari nella preview.
+
+## Sprint 6 — evoluzioni successive
 
 - [x] Code splitting delle pagine interne e dei moduli 3D.
 - [ ] Misurazione Core Web Vitals sull'hosting Lovable.
 - [ ] Ottimizzazione ulteriore del numero di frame per reti lente.
-- [ ] Collegamento delle CTA oggi marcate “Presto disponibile”.
+- [x] Collegamento delle CTA ai form contestuali.
 - [ ] Revisione accessibilità con screen reader e navigazione solo tastiera.
