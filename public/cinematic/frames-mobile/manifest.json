@@ -1,0 +1,31 @@
+{
+  "width": 960,
+  "height": 540,
+  "scenes": [
+    {
+      "id": "01",
+      "name": "soglia",
+      "count": 235
+    },
+    {
+      "id": "02",
+      "name": "arcani",
+      "count": 239
+    },
+    {
+      "id": "03",
+      "name": "respiro",
+      "count": 243
+    },
+    {
+      "id": "04",
+      "name": "ispirazione",
+      "count": 249
+    },
+    {
+      "id": "05",
+      "name": "centro",
+      "count": 241
+    }
+  ]
+}

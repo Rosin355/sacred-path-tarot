@@ -3,6 +3,9 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : "Si è verificato un errore imprevisto";
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -59,10 +62,10 @@ export const useAuth = () => {
       });
 
       return { data, error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Errore",
-        description: error.message,
+        description: getErrorMessage(error),
         variant: "destructive"
       });
       return { error };
@@ -93,10 +96,10 @@ export const useAuth = () => {
       });
 
       return { data, error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Errore",
-        description: error.message,
+        description: getErrorMessage(error),
         variant: "destructive"
       });
       return { error };
@@ -124,10 +127,10 @@ export const useAuth = () => {
       });
 
       return { data, error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Errore",
-        description: error.message,
+        description: getErrorMessage(error),
         variant: "destructive"
       });
       return { error };
@@ -153,10 +156,10 @@ export const useAuth = () => {
       });
 
       return { error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Errore",
-        description: error.message,
+        description: getErrorMessage(error),
         variant: "destructive"
       });
       return { error };

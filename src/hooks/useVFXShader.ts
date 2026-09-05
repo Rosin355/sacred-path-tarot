@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { VFX } from '@vfx-js/core';
+import { VFX, type VFXProps } from '@vfx-js/core';
 
 export const useVFXShader = (shader: string) => {
   const elementRef = useRef<HTMLHeadingElement>(null);
@@ -14,11 +14,12 @@ export const useVFXShader = (shader: string) => {
 
     try {
       vfxRef.current = new VFX();
-      vfxRef.current.add(elementRef.current, {
+      const options: VFXProps = {
         shader,
-        overflow: 1000,
+        overflow: { top: 1000, right: 1000, bottom: 1000, left: 1000 },
         overlay: 1
-      } as any);
+      };
+      vfxRef.current.add(elementRef.current, options);
     } catch (error) {
       console.warn('VFX-JS initialization failed:', error);
     }
