@@ -26,27 +26,27 @@ const sections = [
 
 const ctas = [
   { label: "Leggi le riflessioni", primary: true },
-  { label: "Esplora le ispirazioni", primary: false },
+  { label: "Esplora l’arte", primary: false },
   { label: "Scopri i progetti", primary: false },
 ];
 
 const ViaIspirazione = () => {
   useEffect(() => {
-    document.title = "La Via dell'Ispirazione | Arte esoterica, musica e letteratura simbolica";
+    document.title = "La Via dell’Arte | Jessica Marin";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
         "content",
-        "Esplora La Via dell'Ispirazione di Jessica Marin: riflessioni, musica, letteratura esoterica, contenuti culturali ed eventi speciali in uno spazio contemplativo e simbolico."
+        "La Via dell’Arte di Jessica Marin: arte, parola e contemplazione trasformano simboli, ascolto e mondo interiore in espressione e consapevolezza."
       );
     }
     return () => {
-      document.title = "Tre Vie per illuminarsi | Tarocchi, Yoga e Percorsi Interiori";
+      document.title = "Tempio delle Tre Vie — Jessica Marin";
     };
   }, []);
 
   return (
-    <ViaLayout viaClass="via-ispirazione" title="La Via dell'Ispirazione">
+    <ViaLayout viaClass="via-ispirazione" title="La Via dell’Arte">
       {/* Hero */}
       <section className="relative flex flex-col items-center justify-center min-h-[70vh] px-6 text-center overflow-hidden">
         {/* Warm editorial ambient — golden tones */}
@@ -67,12 +67,10 @@ const ViaIspirazione = () => {
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
             Arte, parola e contemplazione
           </p>
-          <h1 className="text-foreground mb-8 font-display">La Via dell'Ispirazione</h1>
+          <h1 className="text-foreground mb-8 font-display">La Via dell’Arte</h1>
           <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            La Via dell'Ispirazione è uno spazio editoriale e culturale in cui arte, musica, parola e simbolo si incontrano.
-            Qui Jessica Marin raccoglie riflessioni, ascolti, letteratura esoterica e progetti speciali
-            per nutrire l'immaginazione, la contemplazione e la ricerca interiore.
+            L’arte dà forma al mondo interiore: trasforma simboli, parole e ascolto in espressione e consapevolezza.
           </p>
         </div>
       </section>
@@ -114,7 +112,7 @@ const ViaIspirazione = () => {
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="sacred-divider mb-10" />
           <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
-            L'ispirazione è il respiro dell'anima: nutre ciò che ancora non ha forma.
+            L’arte rende visibile ciò che il mondo interiore custodisce ancora senza forma.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">

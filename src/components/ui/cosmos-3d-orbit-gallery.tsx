@@ -72,22 +72,22 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
     }
 
     // Add both pointer and touch events for better compatibility
-    canvas.addEventListener('pointerdown', handlePointerDown as any)
-    canvas.addEventListener('touchstart', handlePointerDown as any, { passive: false })
-    window.addEventListener('pointermove', handlePointerMove as any)
-    window.addEventListener('touchmove', handlePointerMove as any, { passive: false })
-    window.addEventListener('pointerup', handlePointerUp as any)
-    window.addEventListener('touchend', handlePointerUp as any)
-    canvas.addEventListener('pointerleave', handlePointerUp as any)
+    canvas.addEventListener('pointerdown', handlePointerDown as EventListener)
+    canvas.addEventListener('touchstart', handlePointerDown as EventListener, { passive: false })
+    window.addEventListener('pointermove', handlePointerMove as EventListener)
+    window.addEventListener('touchmove', handlePointerMove as EventListener, { passive: false })
+    window.addEventListener('pointerup', handlePointerUp as EventListener)
+    window.addEventListener('touchend', handlePointerUp as EventListener)
+    canvas.addEventListener('pointerleave', handlePointerUp as EventListener)
 
     return () => {
-      canvas.removeEventListener('pointerdown', handlePointerDown as any)
-      canvas.removeEventListener('touchstart', handlePointerDown as any)
-      window.removeEventListener('pointermove', handlePointerMove as any)
-      window.removeEventListener('touchmove', handlePointerMove as any)
-      window.removeEventListener('pointerup', handlePointerUp as any)
-      window.removeEventListener('touchend', handlePointerUp as any)
-      canvas.removeEventListener('pointerleave', handlePointerUp as any)
+      canvas.removeEventListener('pointerdown', handlePointerDown as EventListener)
+      canvas.removeEventListener('touchstart', handlePointerDown as EventListener)
+      window.removeEventListener('pointermove', handlePointerMove as EventListener)
+      window.removeEventListener('touchmove', handlePointerMove as EventListener)
+      window.removeEventListener('pointerup', handlePointerUp as EventListener)
+      window.removeEventListener('touchend', handlePointerUp as EventListener)
+      canvas.removeEventListener('pointerleave', handlePointerUp as EventListener)
     }
   }, [isDragging, gl.domElement])
 

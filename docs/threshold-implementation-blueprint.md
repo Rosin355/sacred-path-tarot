@@ -1,5 +1,7 @@
 # Threshold Implementation Blueprint
 
+> **Documento storico.** La home descritta qui è stata sostituita da `CinematicHome`. Il codice può essere consultato come riferimento, ma non rappresenta più il flusso pubblico su `/`.
+
 ## Architettura attuale
 
 La homepage `/` rende `Threshold.tsx` che mostra tre porte cliccabili (archi classici con luce divina e nebbia CSS).

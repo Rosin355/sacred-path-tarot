@@ -1,5 +1,7 @@
 # Threshold Motion Spec
 
+> **Documento storico.** Questa transizione non è più attiva sulla route `/`; il rilascio corrente usa una dissolvenza di 800 ms dalla home cinematica verso le tre Vie.
+
 > Specifica tecnica per la transizione cinematica delle porte nella Threshold page.
 
 ## Visual Reference

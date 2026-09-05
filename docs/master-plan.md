@@ -1,9 +1,11 @@
 # **Master-plan**
 
+> **Aggiornamento editoriale:** il nome pubblico della terza area è “Via dell’Arte”; l'identificatore tecnico storico resta `ispirazione`.
+
 # **30-second elevator pitch**
 
 **Il Tempio delle Tre Vie** è un portale web editoriale e immersivo che accoglie il visitatore come in un luogo sacro, non come in un sito tradizionale.  
-L’esperienza inizia con una soglia simbolica: tre porte monumentali introducono tre percorsi interiori — **Arcani**, **Respiro**, **Ispirazione** — unificati dalla guida di Jessica Marin.  
+L’esperienza attraversa cinque scene e termina nel Centro del Tempio, dove tre soglie introducono i percorsi interiori — **Arcani**, **Respiro** e **Arte** — unificati dalla guida di Jessica Marin.
 Ogni percorso apre una mini-esperienza chiara, contemplativa e orientata all’azione gentile: comprendere l’offerta, sentire la risonanza, scegliere il passo successivo.
 
 ## **Problema e missione**
@@ -115,7 +117,7 @@ CTA principali:
 * Scopri le attività  
 * Prenota o richiedi informazioni
 
-### **6\. Via dell’Ispirazione**
+### **6\. Via dell’Arte**
 
 Focus:
 
@@ -126,7 +128,7 @@ Focus:
 
 CTA principali:
 
-* Esplora le ispirazioni  
+* Esplora l’arte
 * Leggi le riflessioni  
 * Scopri contenuti ed eventi
 
@@ -235,7 +237,7 @@ Schema concettuale in parole:
 * Ogni **Via** contiene più **Pagine/Sezioni**  
 * Ogni **Via** può avere più **Offer**  
 * Ogni **Via** può avere più **Event**  
-* La **Via dell’Ispirazione** può avere molti **Editorial Content**  
+* La **Via dell’Arte** può avere molti **Editorial Content**
 * Tutte le CTA possono generare un **Contact / Inquiry**
 
 ## **UI design principles**
@@ -386,4 +388,3 @@ Il progetto sarà riuscito se:
 **Il Tempio delle Tre Vie** non deve sembrare un contenitore di servizi.  
 Deve sembrare un luogo.  
 Un luogo digitale in cui simbolo, presenza e chiarezza convivono, e in cui ogni scelta dell’utente assomiglia più a un attraversamento che a un click.
-

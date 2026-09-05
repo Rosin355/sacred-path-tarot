@@ -3,18 +3,18 @@ import ViaLayout from "@/components/ViaLayout";
 
 const sections = [
   {
-    title: "Yoga, pranayama, corpo e presenza",
-    text: "Questo percorso accompagna l'allievo nella conoscenza del proprio respiro, del proprio corpo e della propria mente, usando la pratica come via concreta di presenza e trasformazione.",
+    title: "Attività fisica e pratiche dinamiche",
+    text: "Power Yoga e Ginnastica Total Body sviluppano movimento, energia, forza e resistenza attraverso una pratica consapevole e progressiva.",
     icon: "◯",
   },
   {
-    title: "Pratiche dinamiche e potenziamento",
-    text: "Tra le discipline più dinamiche proposte da Jessica ci sono power yoga e ginnastica total body, pensate per forgiare il corpo, aumentare il movimento e sviluppare energia, forza e resistenza.",
+    title: "Yoga, tecnica e respiro",
+    text: "Iyengar, Hatha, Yin e Pranayama uniscono precisione, ascolto e respirazione per accompagnare ogni persona verso una pratica più profonda.",
     icon: "△",
   },
   {
-    title: "Pratiche tecniche, interiori e rilassate",
-    text: "La proposta comprende anche Iyengar yoga, più tecnico, strutturato e profondo, oltre a Hatha yoga, Yin yoga e tecniche della respirazione, per chi desidera un approccio più interiore, graduale e contemplativo.",
+    title: "Ascolto, forza e consapevolezza",
+    text: "La pratica diventa un percorso concreto di relazione con il corpo e la mente, adattabile ai diversi livelli e orientato a una crescita graduale.",
     icon: "◇",
   },
   {
@@ -32,16 +32,16 @@ const ctas = [
 
 const ViaRespiro = () => {
   useEffect(() => {
-    document.title = "Yoga, Pranayama e Presenza | La Via del Respiro";
+    document.title = "Yoga e attività fisica | La Via del Respiro";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
         "content",
-        "Scopri La Via del Respiro di Jessica Marin: yoga, pranayama, corpo e presenza attraverso pratiche che uniscono forza, tecnica, rilassamento, consapevolezza e ascolto."
+        "La Via del Respiro di Jessica Marin: Yoga e attività fisica si incontrano in un percorso di ascolto, forza, tecnica e consapevolezza."
       );
     }
     return () => {
-      document.title = "Tre Vie per illuminarsi | Tarocchi, Yoga e Percorsi Interiori";
+      document.title = "Tempio delle Tre Vie — Jessica Marin";
     };
   }, []);
 
@@ -99,7 +99,7 @@ const ViaRespiro = () => {
 
         <div className="relative z-10 max-w-3xl mx-auto animate-fade-in">
           <p className="text-xs tracking-[0.3em] uppercase mb-6 font-caption" style={{ color: "hsla(175, 35%, 60%, 0.7)" }}>
-            Il respiro come guida interiore
+            Yoga e attività fisica
           </p>
           <h1 className="text-foreground mb-8 font-display">La Via del Respiro</h1>
           <div className="mx-auto mb-8" style={{
@@ -108,9 +108,8 @@ const ViaRespiro = () => {
             background: "linear-gradient(90deg, transparent, hsla(175, 40%, 55%, 0.4), transparent)",
           }} />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            La Via del Respiro è uno spazio dedicato a yoga, pranayama, corpo e presenza.
-            Qui il respiro diventa guida e memoria interiore, per aiutare la persona a ritrovare centratura,
-            ascolto, forza e consapevolezza attraverso pratiche che uniscono movimento, tecnica e profondità.
+            La pratica è il luogo in cui il corpo ricorda ciò che la mente dimentica: Yoga e attività fisica
+            si incontrano in un percorso di ascolto, forza e consapevolezza.
           </p>
         </div>
       </section>

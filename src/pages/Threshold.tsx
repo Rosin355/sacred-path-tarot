@@ -27,8 +27,8 @@ const doors: DoorData[] = [
   },
   {
     id: "ispirazione",
-    title: "La Via dell'Ispirazione",
-    subtitle: "Arte esoterica, musica, letteratura simbolica e visioni",
+    title: "La Via dell’Arte",
+    subtitle: "Arte, parola e contemplazione",
     route: "/ispirazione",
     colorClass: "door-ispirazione",
   },
@@ -162,7 +162,7 @@ const Threshold = () => {
             Benvenuto nel Tempio
           </p>
           <h1 className="text-foreground leading-[0.92] mb-0 font-display text-[clamp(2.35rem,4.45vw,4.2rem)] md:mb-0">
-            Tarocchi & Yoga <em className="italic">per</em> Illuminarsi
+            Tempio delle Tre Vie
           </h1>
         </header>
 

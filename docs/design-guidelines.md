@@ -157,7 +157,7 @@ Palette dark-first, costruita per un’esperienza serale, lunare e contemplativa
   * air tone: Lunar Ivory  
   * secondary shadow: Stone Gray  
   * feeling: respiro, spazio, calma luminosa  
-* **La Via dell’Ispirazione**  
+* **La Via dell’Arte**
   * base: Parchment Glow  
   * accent: Antique Gold  
   * deep grounding: Temple Night  
@@ -610,4 +610,3 @@ Info            #7DB8D6
 La direzione emotiva e quella tecnica sono ben allineate: la palette sostiene la soglia, la tipografia dà autorevolezza senza pesantezza, e la motion resta rituale ma leggibile. Il sistema è sufficientemente distinto per le tre Vie, ma abbastanza unificato da far percepire un solo tempio.
 
 **Miglioramento consigliato:** dedicare una rifinitura specifica alla composizione mobile della homepage, perché è il punto più delicato per mantenere insieme monumentalità, leggibilità e immediatezza della scelta.
-

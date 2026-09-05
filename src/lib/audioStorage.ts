@@ -4,6 +4,9 @@ const AUDIO_BUCKET = 'audio';
 const AUDIO_FILE_NAME = 'ambient-music.mp3';
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
+
 export const uploadAudioFile = async (file: File): Promise<{ error?: string }> => {
   try {
     // Validate file type
@@ -38,8 +41,8 @@ export const uploadAudioFile = async (file: File): Promise<{ error?: string }> =
     }
 
     return {};
-  } catch (error: any) {
-    return { error: error.message || 'Errore durante l\'upload del file' };
+  } catch (error: unknown) {
+    return { error: getErrorMessage(error, 'Errore durante l\'upload del file') };
   }
 };
 
@@ -67,8 +70,8 @@ export const deleteAudioFile = async (): Promise<{ error?: string }> => {
     }
 
     return {};
-  } catch (error: any) {
-    return { error: error.message || 'Errore durante l\'eliminazione del file' };
+  } catch (error: unknown) {
+    return { error: getErrorMessage(error, 'Errore durante l\'eliminazione del file') };
   }
 };
 
