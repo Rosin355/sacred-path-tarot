@@ -1638,5 +1638,10 @@
   .voice-orb-tooltip {
     display: none;
   }
-}
 
+  .voice-assistant-shell[data-route-context='default'],
+  .voice-assistant-shell[data-route-context='default'][data-display-mode='orb'],
+  .voice-assistant-shell[data-route-context='default'][data-display-mode='siri'] {
+    bottom: calc(max(0.78rem, env(safe-area-inset-bottom, 0.78rem)) + 4.6rem);
+  }
+}

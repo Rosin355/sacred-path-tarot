@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { TempleNavigation } from "@/components/TempleNavigation";
 
 interface ViaLayoutProps {
   children: ReactNode;
@@ -48,7 +49,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
     : "hsl(var(--background))";
 
   return (
-    <div className={`min-h-screen overflow-x-hidden overflow-y-auto bg-background ${viaClass}`}>
+    <div className={`min-h-screen overflow-x-hidden overflow-y-auto bg-background pb-24 md:pb-0 ${viaClass}`}>
       {/* Continuity overlay */}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-[800ms] ease-out"
@@ -69,6 +70,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
           <ArrowLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Torna al Tempio</span>
         </button>
+        <TempleNavigation variant="page" />
         <div className="flex items-center gap-4">
           <span className="text-muted-foreground/50 text-[10px] tracking-[0.25em] uppercase hidden sm:block font-caption">
             {title}

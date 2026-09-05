@@ -117,11 +117,13 @@ html.has-webgl-atmosphere .cinematic-home #atmosphere { opacity: .62; }
 
 .cinematic-home #hud {
   position: fixed; top: 0; left: 0; right: 0;
-  z-index: 10;
-  display: flex; justify-content: space-between; align-items: flex-start;
+  z-index: 110;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
   padding: 1.6rem 2rem;
   pointer-events: none;
 }
+
+.cinematic-home #hud > :last-child { justify-self: end; }
 
 .cinematic-home #hud::before {
   content: "";

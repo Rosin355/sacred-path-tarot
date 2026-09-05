@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { initializeCinematicJourney } from "@/cinematic/cinematicJourney";
 import "@/cinematic/cinematic-home.css";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { TempleNavigation } from "@/components/TempleNavigation";
+import type { TemplePathId } from "@/config/templePaths";
 
 const destinations = {
   arcani: { route: "/arcani", color: "270 55% 45%" },
@@ -56,7 +58,7 @@ const CinematicHome = () => {
   }, []);
 
   const enterPath = useCallback(
-    (destination: Destination) => {
+    (destination: TemplePathId) => {
       if (activeDestination) return;
       const target = destinations[destination];
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,6 +112,7 @@ const CinematicHome = () => {
         <a className="brand" href="#soglia" data-waypoint="0">
           TEMPIO DELLE TRE VIE <span className="brand-glyph" aria-hidden="true">☽</span>
         </a>
+        <TempleNavigation variant="cinematic" onSelect={enterPath} />
         <button
           type="button"
           className="cinematic-audio-toggle"
