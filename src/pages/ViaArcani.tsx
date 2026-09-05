@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ViaLayout from "@/components/ViaLayout";
+import { PathInquiryForm } from "@/components/PathInquiryForm";
+import type { InquiryTopic } from "@/config/inquiries";
 
 const tarotImages = [
   "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
@@ -48,13 +50,21 @@ const sections = [
 ];
 
 const ctas = [
-  { label: "Scopri il metodo", primary: true },
-  { label: "Esplora i percorsi", primary: false },
-  { label: "Vedi gli eventi", primary: false },
-];
+  { label: "Corsi e percorsi", primary: true, topic: "corsi-percorsi" },
+  { label: "Prenota un consulto", primary: false, topic: "consulto-personale" },
+  { label: "Eventi ed esercitazioni", primary: false, topic: "eventi-esercitazioni" },
+] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
 const ViaArcani = () => {
   const reducedMotion = useReducedMotion();
+  const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+
+  const openInquiry = (topic: InquiryTopic) => {
+    setSelectedTopic(topic);
+    window.requestAnimationFrame(() => {
+      document.getElementById("richiesta")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    });
+  };
 
   useEffect(() => {
     document.title = "Corso di Tarocchi e Arcani | La Via degli Arcani";
@@ -163,7 +173,9 @@ const ViaArcani = () => {
             {ctas.map((cta) => (
               <button
                 key={cta.label}
+                type="button"
                 className={`sacred-cta font-caption ${cta.primary ? "sacred-cta-primary" : ""}`}
+                onClick={() => openInquiry(cta.topic)}
               >
                 {cta.label}
               </button>
@@ -171,6 +183,8 @@ const ViaArcani = () => {
           </div>
         </div>
       </section>
+
+      <PathInquiryForm path="arcani" selectedTopic={selectedTopic} />
     </ViaLayout>
   );
 };

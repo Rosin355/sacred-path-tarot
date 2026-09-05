@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShieldCheck, LogOut, Sparkles } from 'lucide-react';
 import { AdminKnowledgeManager } from '@/components/admin/AdminKnowledgeManager';
+import { AdminInquiryManager } from '@/components/admin/AdminInquiryManager';
 
 const AdminContent = () => {
   const { user, signOut } = useAuth();
@@ -46,6 +47,7 @@ const AdminContent = () => {
       </header>
 
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+        <AdminInquiryManager />
         <section>
           <Card className="minimal-border bg-card/80 backdrop-blur-sm">
             <CardHeader className="space-y-3">
@@ -86,4 +88,3 @@ const Admin = () => {
 };
 
 export default Admin;
-

@@ -6,10 +6,12 @@ import "@fontsource/figtree/latin-400.css";
 import "@fontsource/figtree/latin-500.css";
 import { Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { initializeCinematicJourney } from "@/cinematic/cinematicJourney";
 import "@/cinematic/cinematic-home.css";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { TempleNavigation } from "@/components/TempleNavigation";
+import type { TemplePathId } from "@/config/templePaths";
 
 const destinations = {
   arcani: { route: "/arcani", color: "270 55% 45%" },
@@ -56,7 +58,7 @@ const CinematicHome = () => {
   }, []);
 
   const enterPath = useCallback(
-    (destination: Destination) => {
+    (destination: TemplePathId) => {
       if (activeDestination) return;
       const target = destinations[destination];
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,6 +112,7 @@ const CinematicHome = () => {
         <a className="brand" href="#soglia" data-waypoint="0">
           TEMPIO DELLE TRE VIE <span className="brand-glyph" aria-hidden="true">☽</span>
         </a>
+        <TempleNavigation variant="cinematic" onSelect={enterPath} />
         <button
           type="button"
           className="cinematic-audio-toggle"
@@ -241,7 +244,7 @@ const CinematicHome = () => {
                   <span className="porta-glifo" aria-hidden="true">◇</span><span className="porta-nome">La Via dell’Arte</span>
                 </button>
               </div>
-              <footer className="colophon">© Jessica Marin — Tempio delle Tre Vie<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽</span></footer>
+              <footer className="colophon">© Jessica Marin — Tempio delle Tre Vie<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽ &nbsp;·&nbsp; </span><Link to="/privacy">Privacy</Link></footer>
             </div>
           </div>
         </section>

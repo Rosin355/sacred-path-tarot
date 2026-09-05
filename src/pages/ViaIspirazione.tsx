@@ -1,5 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ViaLayout from "@/components/ViaLayout";
+import { PathInquiryForm } from "@/components/PathInquiryForm";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { InquiryTopic } from "@/config/inquiries";
 
 const sections = [
   {
@@ -25,12 +28,22 @@ const sections = [
 ];
 
 const ctas = [
-  { label: "Leggi le riflessioni", primary: true },
-  { label: "Esplora l’arte", primary: false },
-  { label: "Scopri i progetti", primary: false },
-];
+  { label: "Proponi una collaborazione", primary: true, topic: "collaborazioni-progetti" },
+  { label: "Scopri gli eventi culturali", primary: false, topic: "eventi-culturali" },
+  { label: "Parliamo di contenuti", primary: false, topic: "contenuti-editoriali" },
+] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
 const ViaIspirazione = () => {
+  const reducedMotion = useReducedMotion();
+  const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+
+  const openInquiry = (topic: InquiryTopic) => {
+    setSelectedTopic(topic);
+    window.requestAnimationFrame(() => {
+      document.getElementById("richiesta")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    });
+  };
+
   useEffect(() => {
     document.title = "La Via dell’Arte | Jessica Marin";
     const meta = document.querySelector('meta[name="description"]');
@@ -119,7 +132,9 @@ const ViaIspirazione = () => {
             {ctas.map((cta) => (
               <button
                 key={cta.label}
+                type="button"
                 className={`sacred-cta font-caption ${cta.primary ? "sacred-cta-primary" : ""}`}
+                onClick={() => openInquiry(cta.topic)}
               >
                 {cta.label}
               </button>
@@ -127,6 +142,8 @@ const ViaIspirazione = () => {
           </div>
         </div>
       </section>
+
+      <PathInquiryForm path="ispirazione" selectedTopic={selectedTopic} />
     </ViaLayout>
   );
 };

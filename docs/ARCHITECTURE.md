@@ -20,12 +20,15 @@ App
     ├── /arcani              ViaArcani
     ├── /respiro             ViaRespiro
     ├── /ispirazione         ViaIspirazione, nome pubblico Via dell'Arte
+    ├── /privacy             Privacy
     ├── /transition/:via     redirect legacy
     ├── /login
     ├── /reset-password
     ├── /admin               ProtectedRoute
     └── *                    NotFound
 ```
+
+`TempleNavigation` è condiviso dalla home e da `ViaLayout`: mostra link fissi nell'header desktop e una dock inferiore su mobile. Usa `aria-current` per la Via attiva e rimane sopra il loader, offrendo un accesso immediato alternativo alla narrazione.
 
 ## Home cinematica
 
@@ -54,9 +57,26 @@ Il ritorno usa `/#centro`: un ingresso normale su `/` parte dalla Soglia, mentre
 
 `BackgroundMusicProvider` crea un solo `HTMLAudioElement` sopra il router. La sorgente resta `audio/ambient-music.mp3` nello storage collegato. Lo stato condiviso espone `isMuted`, `isPlaying`, `isReady` e `toggleMute`; la preferenza mute usa `localStorage`.
 
+## Richieste di contatto
+
+`PathInquiryForm` è configurato dalla Via corrente e usa un insieme chiuso di motivi. Le CTA aggiornano il motivo e scorrono a `#richiesta`. Il client applica validazione UX, normalizza l'email, genera un `submission_token` UUID per i retry e invoca esclusivamente `submit_contact_inquiry`.
+
+```text
+CTA della Via
+  → PathInquiryForm
+  → RPC submit_contact_inquiry
+  → validazione, honeypot, idempotenza e limite 3/ora
+  → contact_inquiries protetta da RLS
+  → AdminInquiryManager (lettura e gestione solo admin)
+```
+
+La tabella conserva le richieste per 12 mesi. Gli elementi scaduti vengono rimossi all'arrivo di un nuovo invio e all'apertura dell'inbox, tramite RPC amministrativa; non è richiesto `pg_cron`. La UI admin offre contatori, filtri, ricerca, paginazione da 25, dettaglio, cambio stato ed eliminazione confermata.
+
 ## Sicurezza e configurazione
 
 - Nessun segreto viene aggiunto al client.
-- Le variabili Lovable/Supabase esistenti non vengono cambiate.
-- Nessuna migrazione DB o modifica RLS fa parte del rilascio.
+- `VITE_PRIVACY_CONTACT_EMAIL` è un recapito pubblico, non un segreto, e deve essere configurato nell'ambiente Lovable senza essere committato.
+- La migrazione additiva crea `contact_inquiries`, enum, trigger, RPC e policy RLS; non modifica gli schemi applicativi esistenti.
+- Anonimi e utenti autenticati non ricevono privilegi diretti sulla tabella; possono eseguire soltanto la RPC di invio. L'accesso amministrativo è verificato anche lato database con `is_admin()`.
+- Il contenuto inserito dagli utenti viene renderizzato come testo React, senza interpretazione HTML.
 - Il progetto mantiene entrypoint e build standard Vite richiesti da Lovable.

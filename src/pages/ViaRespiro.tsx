@@ -1,5 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ViaLayout from "@/components/ViaLayout";
+import { PathInquiryForm } from "@/components/PathInquiryForm";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { InquiryTopic } from "@/config/inquiries";
 
 const sections = [
   {
@@ -25,12 +28,22 @@ const sections = [
 ];
 
 const ctas = [
-  { label: "Comprendi la pratica", primary: true },
-  { label: "Scopri le discipline", primary: false },
-  { label: "Vedi lezioni e incontri", primary: false },
-];
+  { label: "Richiedi una lezione di prova", primary: true, topic: "lezione-prova" },
+  { label: "Scopri discipline e percorsi", primary: false, topic: "discipline-percorsi" },
+  { label: "Eventi e incontri", primary: false, topic: "eventi-incontri" },
+] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
 const ViaRespiro = () => {
+  const reducedMotion = useReducedMotion();
+  const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+
+  const openInquiry = (topic: InquiryTopic) => {
+    setSelectedTopic(topic);
+    window.requestAnimationFrame(() => {
+      document.getElementById("richiesta")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    });
+  };
+
   useEffect(() => {
     document.title = "Yoga e attività fisica | La Via del Respiro";
     const meta = document.querySelector('meta[name="description"]');
@@ -199,7 +212,9 @@ const ViaRespiro = () => {
             {ctas.map((cta) => (
               <button
                 key={cta.label}
+                type="button"
                 className={`font-caption ${cta.primary ? "" : ""}`}
+                onClick={() => openInquiry(cta.topic)}
                 style={{
                   padding: "0.875rem 2rem",
                   fontSize: "0.75rem",
@@ -242,6 +257,8 @@ const ViaRespiro = () => {
           </div>
         </div>
       </section>
+
+      <PathInquiryForm path="respiro" selectedTopic={selectedTopic} />
     </ViaLayout>
   );
 };
