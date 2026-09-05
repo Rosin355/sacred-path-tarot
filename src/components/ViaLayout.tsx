@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
@@ -109,6 +109,9 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
           <p className="text-muted-foreground/30 text-xs font-caption tracking-[0.15em]">
             Jessica Marin — Un solo tempio. Tre vie interiori.
           </p>
+          <Link to="/privacy" className="mt-3 inline-block text-xs text-muted-foreground/55 underline underline-offset-4 transition-colors hover:text-foreground">
+            Privacy
+          </Link>
         </div>
       </footer>
     </div>

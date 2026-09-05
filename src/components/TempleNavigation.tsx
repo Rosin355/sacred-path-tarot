@@ -1,4 +1,5 @@
 import { MouseEvent } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { templePaths, type TemplePathId } from "@/config/templePaths";
 import "./temple-navigation.css";
@@ -48,12 +49,22 @@ export function TempleNavigation({ variant, onSelect }: TempleNavigationProps) {
     });
 
   return (
-    <nav
-      className={`temple-path-navigation temple-path-navigation--${variant}`}
-      aria-label="Navigazione principale delle Tre Vie"
-    >
-      <div className="temple-path-navigation__desktop">{renderLinks(false)}</div>
-      <div className="temple-path-navigation__mobile">{renderLinks(true)}</div>
-    </nav>
+    <>
+      <nav
+        className={`temple-path-navigation temple-path-navigation--${variant} temple-path-navigation__desktop-shell`}
+        aria-label="Navigazione principale delle Tre Vie"
+      >
+        <div className="temple-path-navigation__desktop">{renderLinks(false)}</div>
+      </nav>
+      {typeof document !== "undefined" && createPortal(
+        <nav
+          className={`temple-path-navigation temple-path-navigation--${variant} temple-path-navigation__mobile-shell`}
+          aria-label="Navigazione principale delle Tre Vie"
+        >
+          <div className="temple-path-navigation__mobile">{renderLinks(true)}</div>
+        </nav>,
+        document.body,
+      )}
+    </>
   );
 }

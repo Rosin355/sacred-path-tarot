@@ -56,6 +56,10 @@
   display: none;
 }
 
+.temple-path-navigation__mobile-shell {
+  display: none;
+}
+
 .temple-path-navigation--cinematic {
   --temple-nav-accent: #d4af6a;
   --temple-nav-text: rgba(244, 239, 230, 0.76);
@@ -78,15 +82,22 @@
 }
 
 @media (max-width: 767px) {
-  .temple-path-navigation__desktop {
+  .temple-path-navigation__desktop-shell {
     display: none;
+  }
+
+  .temple-path-navigation__mobile-shell {
+    display: block;
   }
 
   .temple-path-navigation__mobile {
     position: fixed;
-    right: max(0.75rem, env(safe-area-inset-right));
-    bottom: max(0.65rem, env(safe-area-inset-bottom));
-    left: max(0.75rem, env(safe-area-inset-left));
+    right: 0.75rem;
+    bottom: 0.65rem;
+    left: 0.75rem;
+    right: calc(0.75rem + env(safe-area-inset-right, 0px));
+    bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+    left: calc(0.75rem + env(safe-area-inset-left, 0px));
     z-index: 120;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

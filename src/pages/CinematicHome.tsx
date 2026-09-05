@@ -6,7 +6,7 @@ import "@fontsource/figtree/latin-400.css";
 import "@fontsource/figtree/latin-500.css";
 import { Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { initializeCinematicJourney } from "@/cinematic/cinematicJourney";
 import "@/cinematic/cinematic-home.css";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
@@ -244,7 +244,7 @@ const CinematicHome = () => {
                   <span className="porta-glifo" aria-hidden="true">◇</span><span className="porta-nome">La Via dell’Arte</span>
                 </button>
               </div>
-              <footer className="colophon">© Jessica Marin — Tempio delle Tre Vie<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽</span></footer>
+              <footer className="colophon">© Jessica Marin — Tempio delle Tre Vie<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽ &nbsp;·&nbsp; </span><Link to="/privacy">Privacy</Link></footer>
             </div>
           </div>
         </section>

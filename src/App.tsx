@@ -14,6 +14,7 @@ const ViaIspirazione = lazy(() => import("./pages/ViaIspirazione"));
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/Admin"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Privacy = lazy(() => import("./pages/Privacy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const FloatingVoiceGuide = lazy(() => import("./components/voice/FloatingVoiceGuide"));
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/ispirazione" element={<ViaIspirazione />} />
               <Route path="/login" element={<Login />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
