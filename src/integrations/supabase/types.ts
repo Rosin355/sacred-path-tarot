@@ -158,6 +158,60 @@ export type Database = {
           },
         ]
       }
+      contact_inquiries: {
+        Row: {
+          archived_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          privacy_accepted_at: string
+          read_at: string | null
+          status: Database["public"]["Enums"]["contact_inquiry_status"]
+          submission_token: string
+          topic: string
+          updated_at: string
+          via: string
+        }
+        Insert: {
+          archived_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          privacy_accepted_at?: string
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["contact_inquiry_status"]
+          submission_token: string
+          topic: string
+          updated_at?: string
+          via: string
+        }
+        Update: {
+          archived_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          privacy_accepted_at?: string
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["contact_inquiry_status"]
+          submission_token?: string
+          topic?: string
+          updated_at?: string
+          via?: string
+        }
+        Relationships: []
+      }
       knowledge_chunks: {
         Row: {
           chunk_index: number
@@ -337,6 +391,21 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      purge_expired_contact_inquiries: { Args: never; Returns: number }
+      submit_contact_inquiry: {
+        Args: {
+          p_company?: string
+          p_email: string
+          p_message: string
+          p_name: string
+          p_phone: string
+          p_privacy_accepted: boolean
+          p_submission_token: string
+          p_topic: string
+          p_via: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
@@ -350,6 +419,7 @@ export type Database = {
         | "approved_link"
         | "reference_domain"
         | "editorial_source"
+      contact_inquiry_status: "new" | "read" | "archived"
       knowledge_content_type:
         | "page"
         | "article"
@@ -493,6 +563,7 @@ export const Constants = {
         "reference_domain",
         "editorial_source",
       ],
+      contact_inquiry_status: ["new", "read", "archived"],
       knowledge_content_type: [
         "page",
         "article",
