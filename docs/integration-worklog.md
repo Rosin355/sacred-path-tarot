@@ -27,3 +27,17 @@ Questo registro accompagna i commit della migrazione da `jessicamarin-sitoV2` a 
 - [x] CSS isolato
 - [x] Fallback statico
 - [ ] QA browser e viewport
+
+## Fase 3 — routing, audio e funzioni Lovable
+
+- **Commit previsto:** `feat: connect path routes and persistent temple audio`
+- **Obiettivo:** trasformare le soglie finali in navigazione reale e mantenere la musica senza interruzioni fra le rotte.
+- **Modifiche:** introdotto un provider audio unico, avvio al primo gesto, controllo persistente, redirect legacy e guida vocale limitata alle tre Vie; il ritorno punta a `/#centro`.
+- **Verifica:** build di produzione completata dopo la conversione della home; route state e overlay condividono il colore della soglia.
+- **Rischi residui:** l'audio dipende dal bucket Lovable/Supabase e richiede verifica nell'ambiente collegato.
+- [x] Navigazione `/arcani`, `/respiro`, `/ispirazione`
+- [x] Redirect `/transition/:via`
+- [x] Audio singleton a livello applicazione
+- [x] Guida vocale solo nelle Vie
+- [x] Ritorno al Centro del Tempio
+- [ ] Smoke test con backend Lovable

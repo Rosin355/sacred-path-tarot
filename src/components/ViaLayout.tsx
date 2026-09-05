@@ -9,6 +9,10 @@ interface ViaLayoutProps {
   title: string;
 }
 
+type ViaNavigationState = {
+  doorColor?: string;
+};
+
 function parseHSL(color: string): { h: number; s: number; l: number } {
   const nums = color.match(/[\d.]+/g);
   if (!nums || nums.length < 3) return { h: 270, s: 55, l: 45 };
@@ -21,18 +25,18 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const { isMuted, toggleMute } = useBackgroundMusic();
   const [overlayVisible, setOverlayVisible] = useState(true);
 
-  const doorColor = (location.state as any)?.doorColor as string | undefined;
+  const doorColor = (location.state as ViaNavigationState | null)?.doorColor;
 
   useEffect(() => {
+    let frame2 = 0;
     const frame1 = requestAnimationFrame(() => {
-      const frame2 = requestAnimationFrame(() => {
+      frame2 = requestAnimationFrame(() => {
         setOverlayVisible(false);
       });
-      (frame1 as any).__inner = frame2;
     });
     return () => {
       cancelAnimationFrame(frame1);
-      if ((frame1 as any).__inner) cancelAnimationFrame((frame1 as any).__inner);
+      if (frame2) cancelAnimationFrame(frame2);
     };
   }, []);
 
@@ -47,7 +51,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
     <div className={`min-h-screen overflow-x-hidden overflow-y-auto bg-background ${viaClass}`}>
       {/* Continuity overlay */}
       <div
-        className="fixed inset-0 pointer-events-none transition-opacity duration-[1800ms] ease-out"
+        className="fixed inset-0 pointer-events-none transition-opacity duration-[800ms] ease-out"
         style={{
           zIndex: 9999,
           background: overlayBg,
@@ -59,7 +63,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
       {/* Top bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/15">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/#centro")}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm tracking-wide"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -91,7 +95,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
             "Il cammino è il tempio stesso."
           </p>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/#centro")}
             className="sacred-cta-primary sacred-cta font-caption"
           >
             ← Torna al Tempio delle Tre Vie

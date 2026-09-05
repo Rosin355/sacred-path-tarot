@@ -22,7 +22,7 @@ type Destination = keyof typeof destinations;
 const CinematicHome = () => {
   const rootRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { isMuted, toggleMute } = useBackgroundMusic();
+  const { isMuted, isPlaying, toggleMute } = useBackgroundMusic();
   const [activeDestination, setActiveDestination] = useState<Destination | null>(null);
   const transitionTimer = useRef<number | null>(null);
 
@@ -114,9 +114,9 @@ const CinematicHome = () => {
           type="button"
           className="cinematic-audio-toggle"
           onClick={toggleMute}
-          aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
+          aria-label={isMuted || !isPlaying ? "Attiva audio" : "Disattiva audio"}
         >
-          {isMuted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+          {isMuted || !isPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
         </button>
       </header>
 
