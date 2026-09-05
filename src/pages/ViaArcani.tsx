@@ -66,7 +66,7 @@ const ViaArcani = () => {
       );
     }
     return () => {
-      document.title = "Tre Vie per illuminarsi | Tarocchi, Yoga e Percorsi Interiori";
+      document.title = "Tempio delle Tre Vie — Jessica Marin";
     };
   }, []);
 

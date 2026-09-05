@@ -41,3 +41,16 @@ Questo registro accompagna i commit della migrazione da `jessicamarin-sitoV2` a 
 - [x] Guida vocale solo nelle Vie
 - [x] Ritorno al Centro del Tempio
 - [ ] Smoke test con backend Lovable
+
+## Fase 4 — allineamento editoriale
+
+- **Commit previsto:** `content: align the breath and art paths`
+- **Obiettivo:** rendere coerenti home, pagine interne, accessibilità e metadati con le tre Vie approvate.
+- **Modifiche:** Via del Respiro centrata su Yoga e attività fisica; `/ispirazione` presenta esclusivamente il nome pubblico Via dell’Arte; aggiornati title, description e CTA.
+- **Verifica:** la rotta tecnica `/ispirazione` resta invariata e non sono stati modificati identificatori backend o token grafici storici.
+- **Rischi residui:** i documenti storici devono essere marcati e allineati nella fase documentale.
+- [x] Copy Via del Respiro
+- [x] Copy Via dell’Arte
+- [x] SEO globale e di pagina
+- [x] Route tecnica `/ispirazione` preservata
+- [ ] Allineamento documentazione storica
