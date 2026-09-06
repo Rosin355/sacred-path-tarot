@@ -1,5 +1,17 @@
 # Worklog — integrazione home cinematica
 
+## Revisione editoriale homepage — 6 settembre 2026
+
+- **Commit:** `content: refine homepage copy and reduce temple repetition` (voce inclusa nel commit).
+- **Obiettivo:** distinguere marchio, promessa iniziale e invito finale senza ripetizioni.
+- **Modifiche:** copy approvato di apertura e chiusura, loader “Jessica Marin”, waypoint e accessibilità; dimensione H1 mobile e sottotitolo responsive; PDR e changelog aggiornati.
+- **Verifiche:** `npm run check` superato (zero errori, dieci warning legacy); controllo browser a 1440×900, 768×1024, 390×844, H1 su due righe e navigazione al finale.
+- **Limiti:** fallback statico e percorso reduced-motion verificati nel codice condiviso; emulazione reduced-motion non disponibile nel browser di questa sessione. Verifica visiva dedicata e preview Lovable restano da completare.
+- [x] Copy, etichette accessibili e documentazione
+- [x] Build e lint
+- [x] QA responsive modalità cinematica
+- [ ] QA visiva con preferenza reduced-motion attiva e preview Lovable
+
 Questo registro accompagna i commit della migrazione da `jessicamarin-sitoV2` a `sacred-path-tarot`.
 
 ## Fase 1 — asset e dipendenze

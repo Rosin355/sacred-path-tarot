@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — revisione editoriale homepage, 6 settembre 2026
+
+- Ridotte le ripetizioni del marchio in apertura, loader, scena finale e footer.
+- Nuovo H1 “Le tre vie / per illuminarsi”, sottotitolo descrittivo e invito allo scroll.
+- Quinta tappa “La scelta” e chiusura “Il tuo prossimo passo / Scegli la via che senti tua”, con etichette accessibili coerenti.
+- Adattati dimensione mobile dell'H1 e impaginazione del sottotitolo; rotte e animazioni invariate.
+
 ## Unreleased — integrazione home cinematica
 
 ### Aggiunto

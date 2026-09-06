@@ -2,6 +2,12 @@
 
 ## Visione
 
+### Gerarchia editoriale della homepage — 6 settembre 2026
+
+Il marchio nell'header mantiene “Tempio delle Tre Vie”. L'apertura usa il sopratitolo “Un percorso con Jessica Marin”, l'H1 “Le tre vie / per illuminarsi” e il sottotitolo “Tarocchi, Yoga e attività fisica, Arte: percorsi per conoscere ed esprimere te stesso.” L'invito allo scroll è “Scorri e scopri il percorso”.
+
+La tappa conclusiva è “La scelta”, introdotta da “Il tuo prossimo passo” e “Scegli la via / che senti tua”. Il footer mostra © Jessica Marin, simboli decorativi e Privacy; il loader identifica Jessica Marin. Questi testi sono condivisi da esperienza cinematica e fallback statico. Presentazione personale, offerte e nomi delle porte restano invariati.
+
 Offrire a Jessica Marin un unico sito esperienziale che accompagni il visitatore attraverso una home cinematica e lo conduca a tre aree editoriali reali: Arcani, Respiro e Arte.
 
 ## Problema risolto
