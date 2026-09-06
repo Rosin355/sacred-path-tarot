@@ -87,7 +87,7 @@ const CinematicHome = () => {
       <div id="loader" role="status" aria-live="polite">
         <div className="loader-inner">
           <span className="loader-glyph">✦</span>
-          <p className="loader-title">TEMPIO DELLE TRE VIE</p>
+          <p className="loader-title">JESSICA MARIN</p>
           <p className="loader-label">Il velo si sta sollevando…</p>
           <div
             className="loader-bar"
@@ -130,18 +130,18 @@ const CinematicHome = () => {
           <li><a href="#arcani" data-waypoint="1" aria-label="II — Arcani"><span className="numeral">II</span><span className="wp-label">Arcani</span></a></li>
           <li><a href="#respiro" data-waypoint="2" aria-label="III — Respiro"><span className="numeral">III</span><span className="wp-label">Respiro</span></a></li>
           <li><a href="#ispirazione" data-waypoint="3" aria-label="IV — Arte"><span className="numeral">IV</span><span className="wp-label">Arte</span></a></li>
-          <li><a href="#centro" data-waypoint="4" aria-label="V — Tempio"><span className="numeral">V</span><span className="wp-label">Tempio</span></a></li>
+          <li><a href="#centro" data-waypoint="4" aria-label="V — La scelta"><span className="numeral">V</span><span className="wp-label">La scelta</span></a></li>
         </ol>
       </nav>
 
       <main id="journey" tabIndex={-1}>
-        <section className="scene" id="soglia" data-scene="0" data-tint="#E7C9B4" aria-label="La Soglia — benvenuto nel Tempio">
+        <section className="scene" id="soglia" data-scene="0" data-tint="#E7C9B4" aria-label="Le tre vie per illuminarsi — Jessica Marin">
           <div className="pin">
             <div className="moment" data-window="0,0.38" data-theme="ink">
-              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>Benvenuto nel Tempio</p>
-              <h1>Tempio delle<br />Tre Vie</h1>
-              <p className="tagline">Le tre vie per illuminarsi — Arcani, Respiro e Arte</p>
-              <p className="scroll-hint">Scegli la soglia che ti chiama<span className="hint-arrow" aria-hidden="true">▾</span></p>
+              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>Un percorso con Jessica Marin</p>
+              <h1>Le tre vie<br />per illuminarsi</h1>
+              <p className="tagline">Tarocchi, Yoga e attività fisica, Arte: percorsi per conoscere ed esprimere te stesso.</p>
+              <p className="scroll-hint">Scorri e scopri il percorso<span className="hint-arrow" aria-hidden="true">▾</span></p>
             </div>
             <div className="moment" data-window="0.36,0.96">
               <p className="kicker"><span aria-hidden="true">◈ &nbsp;</span>La Sacerdotessa</p>
@@ -228,11 +228,11 @@ const CinematicHome = () => {
           </div>
         </section>
 
-        <section className="scene" id="centro" data-scene="4" data-tint="#D4AF6A" aria-label="Il Centro del Tempio — scegli la tua via">
+        <section className="scene" id="centro" data-scene="4" data-tint="#D4AF6A" aria-label="Scegli la tua via">
           <div className="pin">
             <div className="moment finale" data-window="0.1,1">
-              <p className="kicker"><span aria-hidden="true">△ &nbsp;</span>Il Centro del Tempio</p>
-              <h2>Scegli la soglia<br />che ti chiama</h2>
+              <p className="kicker"><span aria-hidden="true">△ &nbsp;</span>Il tuo prossimo passo</p>
+              <h2>Scegli la via<br />che senti tua</h2>
               <div className="porte">
                 <button type="button" className="porta" onClick={() => enterPath("arcani")} disabled={Boolean(activeDestination)}>
                   <span className="porta-glifo" aria-hidden="true">✦</span><span className="porta-nome">La Via degli Arcani</span>
@@ -244,7 +244,7 @@ const CinematicHome = () => {
                   <span className="porta-glifo" aria-hidden="true">◇</span><span className="porta-nome">La Via dell’Arte</span>
                 </button>
               </div>
-              <footer className="colophon">© Jessica Marin — Tempio delle Tre Vie<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽ &nbsp;·&nbsp; </span><Link to="/privacy">Privacy</Link></footer>
+              <footer className="colophon">© Jessica Marin<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽ &nbsp;·&nbsp; </span><Link to="/privacy">Privacy</Link></footer>
             </div>
           </div>
         </section>
