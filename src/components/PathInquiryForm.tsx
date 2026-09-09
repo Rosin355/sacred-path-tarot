@@ -24,8 +24,8 @@ const inquirySchema = z.object({
   phone: z.string().trim().max(30, "Il numero è troppo lungo."),
   topic: z.string().min(1, "Scegli il motivo della richiesta."),
   message: z.string().trim().min(20, "Scrivi almeno 20 caratteri.").max(2000, "Il messaggio è troppo lungo."),
-  privacyAccepted: z.literal(true, {
-    errorMap: () => ({ message: "Devi confermare di aver letto l’informativa privacy." }),
+  privacyAccepted: z.boolean().refine((value) => value === true, {
+    message: "Devi confermare di aver letto l’informativa privacy.",
   }),
   company: z.string().optional(),
 });
