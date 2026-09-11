@@ -24,7 +24,7 @@ const inquirySchema = z.object({
   phone: z.string().trim().max(30, "Il numero è troppo lungo."),
   topic: z.string().min(1, "Scegli il motivo della richiesta."),
   message: z.string().trim().min(20, "Scrivi almeno 20 caratteri.").max(2000, "Il messaggio è troppo lungo."),
-  privacyAccepted: z.boolean().refine((accepted) => accepted, {
+  privacyAccepted: z.boolean().refine((value) => value === true, {
     message: "Devi confermare di aver letto l’informativa privacy.",
   }),
   company: z.string().optional(),
@@ -83,7 +83,7 @@ export function PathInquiryForm({ path, selectedTopic }: PathInquiryFormProps) {
     setStatusMessage("Invio della richiesta in corso…");
 
     try {
-    const { data, error } = await supabase.rpc("submit_contact_inquiry", {
+    const { error } = await supabase.rpc("submit_contact_inquiry", {
       p_submission_token: submissionTokenRef.current,
       p_via: path,
       p_topic: values.topic,
@@ -95,7 +95,8 @@ export function PathInquiryForm({ path, selectedTopic }: PathInquiryFormProps) {
       p_company: values.company ?? "",
     });
 
-    if (error || !data) {
+    // Both deployed VOID and hardened UUID RPC contracts report failure via error.
+    if (error) {
       setSubmissionState("error");
       setStatusMessage(
         error?.message.includes("rate_limit_exceeded")

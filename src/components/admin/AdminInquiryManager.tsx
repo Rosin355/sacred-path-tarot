@@ -166,10 +166,10 @@ export function AdminInquiryManager() {
     setActionId(inquiry.id);
     const now = new Date().toISOString();
     const updates = status === "archived"
-      ? { status, archived_at: now }
+      ? { status }
       : status === "read"
-        ? { status, read_at: inquiry.read_at ?? now, archived_at: null }
-        : { status, read_at: null, archived_at: null };
+        ? { status, read_at: inquiry.read_at ?? now }
+        : { status, read_at: null };
 
     try {
     const { error } = await supabase.from("contact_inquiries").update(updates).eq("id", inquiry.id);

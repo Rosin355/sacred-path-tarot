@@ -1,5 +1,12 @@
 # Worklog — integrazione home cinematica
 
+## Integrazione main — 11 settembre 2026
+
+- Commit locale migliorie: `c9cd647`; merge con `origin/main` base `49cc20f`, senza force push.
+- Preservati favicon/social, Auth preview e correzioni remote; conflitto form risolto, contratti RPC e inbox allineati alla variante Lovable.
+- Verifiche: lint/build/typecheck e SQL isolato sulle due varianti; recapito solo in `.env.local` ignorato.
+- Rischi e configurazioni residue: `MAIN-INTEGRATION-2026-09-11.md`. Variabile build Lovable bloccata dal piano, backend remoto non modificato.
+
 ## Leggibilità e richieste — 9–11 settembre 2026, modifiche non committate
 
 - Obiettivo: contenuti leggibili durante lo scroll e affidabilità del flusso contatti.

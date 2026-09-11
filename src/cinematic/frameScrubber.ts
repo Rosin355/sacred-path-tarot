@@ -20,7 +20,11 @@
  * bitmap esatto manca si disegna il vicino più prossimo già decodificato.
  */
 export class FrameScrubber {
-  constructor(canvas, { base, scenes, width, height }, opts = {}) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(canvas: any, { base, scenes, width, height }: any, opts: any = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.frameW = width;

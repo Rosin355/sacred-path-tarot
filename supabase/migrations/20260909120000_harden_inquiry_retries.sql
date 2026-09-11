@@ -1,4 +1,7 @@
--- Additive hardening; apply only after the original contact migration.
+-- Reconcile either historical contact schema; review before remote execution.
+-- PostgreSQL cannot change a function return type with CREATE OR REPLACE.
+-- DROP without CASCADE preserves unrelated dependencies by failing safely.
+DROP FUNCTION IF EXISTS public.submit_contact_inquiry(uuid, text, text, text, text, text, text, boolean, text);
 -- RLS remains the admin authorization boundary; table grants are explicit.
 REVOKE ALL ON TABLE public.contact_inquiries FROM PUBLIC, anon, authenticated;
 GRANT SELECT, UPDATE, DELETE ON TABLE public.contact_inquiries TO authenticated;
@@ -109,3 +112,20 @@ $$;
 
 REVOKE ALL ON FUNCTION public.submit_contact_inquiry(uuid, text, text, text, text, text, text, boolean, text) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.submit_contact_inquiry(uuid, text, text, text, text, text, text, boolean, text) TO anon, authenticated;
+
+DROP FUNCTION IF EXISTS public.purge_expired_contact_inquiries();
+CREATE FUNCTION public.purge_expired_contact_inquiries()
+RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $$
+DECLARE v_deleted integer;
+BEGIN
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'insufficient_privilege' USING ERRCODE = '42501';
+  END IF;
+  DELETE FROM public.contact_inquiries WHERE expires_at <= now();
+  GET DIAGNOSTICS v_deleted = ROW_COUNT;
+  RETURN v_deleted;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.purge_expired_contact_inquiries() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.purge_expired_contact_inquiries() TO authenticated;

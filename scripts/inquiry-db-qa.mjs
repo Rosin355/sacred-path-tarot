@@ -21,7 +21,7 @@ const submit = async (overrides={}) => {
   return (await db.query('SELECT public.submit_contact_inquiry($1,$2,$3,$4,$5,$6,$7,$8,$9) AS id',Object.values(p))).rows[0].id;
 };
 try {
-  await db.exec(`CREATE ROLE anon; CREATE ROLE authenticated; CREATE SCHEMA auth;
+  await db.exec(`CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role; CREATE SCHEMA auth;
     CREATE TABLE auth.users(id uuid PRIMARY KEY,email text,raw_user_meta_data jsonb DEFAULT '{}');
     CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$ SELECT nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
     GRANT USAGE ON SCHEMA public,auth TO anon,authenticated;
@@ -31,7 +31,9 @@ try {
   const editorial=await migration('20260316180429_c566cd8b-afa7-42a1-9e2f-378776dc8a9b.sql');
   const triggerFunction=editorial.match(/CREATE OR REPLACE FUNCTION public\.set_updated_at\(\)[\s\S]*?\$\$;/)?.[0];
   assert(triggerFunction); await db.exec(triggerFunction);
-  await db.exec(await migration('20260905180000_add_contact_inquiries.sql'));
+  await db.exec(await migration(process.env.QA_SCHEMA === 'lovable'
+    ? '20260909102844_9c0001c6-463b-450f-95dc-bba9cff6e810.sql'
+    : '20260905180000_add_contact_inquiries.sql'));
   await db.exec(await migration('20260909120000_harden_inquiry_retries.sql'));
   await db.query('INSERT INTO auth.users(id,email) VALUES ($1,$2),($3,$4)',[admin,'admin@example.test',member,'member@example.test']);
   await db.query("INSERT INTO public.user_roles(user_id,role) VALUES ($1,'admin')",[admin]);
