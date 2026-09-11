@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Archive, Check, ChevronLeft, ChevronRight, Inbox, Loader2, RotateCcw, Search, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import type { Enums, Tables } from "@/integrations/supabase/types";
-import { getInquiryTopicLabel, inquiryPathLabels, type InquiryPath } from "@/config/inquiries";
+import { getInquiryTopicLabel, inquiryPathLabels, inquiryTopics, type InquiryPath } from "@/config/inquiries";
 
 type Inquiry = Tables<"contact_inquiries">;
 type InquiryStatus = Enums<"contact_inquiry_status">;
@@ -59,6 +59,8 @@ export function AdminInquiryManager() {
   const [selected, setSelected] = useState<Inquiry | null>(null);
   const [pendingDelete, setPendingDelete] = useState<Inquiry | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const requestSequence = useRef(0);
+  const actionLock = useRef(false);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -70,37 +72,47 @@ export function AdminInquiryManager() {
   }, [search]);
 
   const fetchCounts = useCallback(async () => {
+    try {
     const statuses: InquiryStatus[] = ["new", "read", "archived"];
     const results = await Promise.all(statuses.map((status) =>
       supabase.from("contact_inquiries").select("id", { count: "exact", head: true }).eq("status", status),
     ));
 
-    if (results.some((result) => result.error)) return;
+    if (results.some((result) => result.error)) throw new Error("counts unavailable");
     setCounts({
       new: results[0].count ?? 0,
       read: results[1].count ?? 0,
       archived: results[2].count ?? 0,
     });
+    } catch {
+      setErrorMessage("I contatori non sono aggiornati. Riprova con Aggiorna richieste.");
+    }
   }, []);
 
   const fetchInquiries = useCallback(async () => {
+    const sequence = ++requestSequence.current;
     setLoading(true);
     setErrorMessage("");
-
+    try {
     let query = supabase
       .from("contact_inquiries")
       .select("*", { count: "exact" })
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false });
 
     if (statusFilter !== "all") query = query.eq("status", statusFilter);
     if (pathFilter !== "all") query = query.eq("via", pathFilter);
     if (debouncedSearch) {
       const pattern = `%${debouncedSearch}%`;
-      query = query.or(`name.ilike.${pattern},email.ilike.${pattern},topic.ilike.${pattern}`);
+      const matchingTopics = [...new Set(Object.values(inquiryTopics).flat()
+        .filter((topic) => topic.label.toLocaleLowerCase("it").includes(debouncedSearch.toLocaleLowerCase("it")))
+        .map((topic) => `topic.eq.${topic.value}`))];
+      query = query.or([`name.ilike.${pattern}`, `email.ilike.${pattern}`, `topic.ilike.${pattern}`, ...matchingTopics].join(","));
     }
 
     const from = page * PAGE_SIZE;
     const { data, count, error } = await query.range(from, from + PAGE_SIZE - 1);
+    if (sequence !== requestSequence.current) return;
 
     if (error) {
       setErrorMessage("Le richieste non sono disponibili. Verifica che la migrazione Supabase sia stata applicata.");
@@ -109,15 +121,33 @@ export function AdminInquiryManager() {
     } else {
       setInquiries(data ?? []);
       setTotal(count ?? 0);
+      if (page > 0 && from >= (count ?? 0)) setPage(Math.max(0, Math.ceil((count ?? 0) / PAGE_SIZE) - 1));
     }
-    setLoading(false);
+    } catch {
+      if (sequence === requestSequence.current) setErrorMessage("Connessione non disponibile. Riprova con Aggiorna richieste.");
+    } finally {
+      if (sequence === requestSequence.current) setLoading(false);
+    }
   }, [debouncedSearch, page, pathFilter, statusFilter]);
 
+  useEffect(() => () => { requestSequence.current++; }, []);
+
   useEffect(() => {
-    void supabase.rpc("purge_expired_contact_inquiries").then(() => {
-      void fetchCounts();
-      void fetchInquiries();
-    });
+    let active = true;
+    const sequenceRef = requestSequence;
+    void (async () => {
+      try {
+        const { error } = await supabase.rpc("purge_expired_contact_inquiries");
+        if (error) throw error;
+        if (active) await Promise.all([fetchCounts(), fetchInquiries()]);
+      } catch {
+        if (active) {
+          setErrorMessage("Non è possibile aggiornare la conservazione delle richieste. Riprova più tardi.");
+          setLoading(false);
+        }
+      }
+    })();
+    return () => { active = false; sequenceRef.current++; };
   }, [fetchCounts, fetchInquiries]);
 
   const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -131,6 +161,8 @@ export function AdminInquiryManager() {
   }, [fetchCounts, fetchInquiries]);
 
   const updateStatus = async (inquiry: Inquiry, status: InquiryStatus) => {
+    if (actionLock.current) return;
+    actionLock.current = true;
     setActionId(inquiry.id);
     const now = new Date().toISOString();
     const updates = status === "archived"
@@ -139,18 +171,26 @@ export function AdminInquiryManager() {
         ? { status, read_at: inquiry.read_at ?? now, archived_at: null }
         : { status, read_at: null, archived_at: null };
 
+    try {
     const { error } = await supabase.from("contact_inquiries").update(updates).eq("id", inquiry.id);
     if (error) setErrorMessage("Non è stato possibile aggiornare la richiesta.");
     else {
       if (selected?.id === inquiry.id) setSelected({ ...inquiry, ...updates });
       await refresh();
     }
-    setActionId(null);
+    } catch {
+      setErrorMessage("Connessione non disponibile. L’aggiornamento non è confermato: aggiorna l’elenco prima di riprovare.");
+    } finally {
+      setActionId(null);
+      actionLock.current = false;
+    }
   };
 
   const deleteInquiry = async () => {
-    if (!pendingDelete) return;
+    if (!pendingDelete || actionLock.current) return;
+    actionLock.current = true;
     setActionId(pendingDelete.id);
+    try {
     const { error } = await supabase.from("contact_inquiries").delete().eq("id", pendingDelete.id);
     if (error) setErrorMessage("Non è stato possibile eliminare la richiesta.");
     else {
@@ -158,7 +198,12 @@ export function AdminInquiryManager() {
       setPendingDelete(null);
       await refresh();
     }
-    setActionId(null);
+    } catch {
+      setErrorMessage("Connessione non disponibile. L’eliminazione non è confermata: aggiorna l’elenco prima di riprovare.");
+    } finally {
+      setActionId(null);
+      actionLock.current = false;
+    }
   };
 
   const summaryCards = useMemo(() => ([
@@ -168,13 +213,14 @@ export function AdminInquiryManager() {
   ]), [counts]);
 
   return (
-    <section aria-labelledby="admin-inquiries-title" className="space-y-6">
+    <section aria-labelledby="admin-inquiries-title" className="space-y-6" aria-busy={loading}>
       <Card className="minimal-border bg-card/80 backdrop-blur-sm">
         <CardHeader className="space-y-3">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-muted-foreground">
             <Inbox className="h-3.5 w-3.5" /> Contatti dal Tempio
           </div>
           <CardTitle id="admin-inquiries-title" className="font-serif text-2xl text-foreground">Richieste</CardTitle>
+          <Button type="button" variant="outline" disabled={loading} onClick={() => void refresh()}>Aggiorna richieste</Button>
           <CardDescription>Consulta e organizza i messaggi inviati dalle tre Vie. Nessuna richiesta viene inoltrata a servizi email esterni.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

@@ -2,6 +2,12 @@
 
 ## Visione
 
+### Leggibilità e richieste — 11 settembre 2026
+
+Il percorso deve privilegiare la lettura: testo pienamente visibile, contrasto protetto, paragrafi 16–18 px, nessun blur sui contenuti. La modalità lettura persiste sul dispositivo e il layout diventa statico quando i testi non entrano nella viewport. Il sottotitolo corrente è “Tarocchi, yoga, attività fisica e arte: tre vie per conoscerti, ritrovare equilibrio ed esprimere ciò che sei.” Questa formulazione aggiorna quella della revisione storica riportata sotto.
+
+Le richieste restano nell'inbox riservata, senza invio email. Configurazione privacy nella build e migrazioni approvate sono prerequisiti di rilascio. Esiti e limiti: [audit leggibilità e form](READABILITY-INQUIRIES-AUDIT.md).
+
 ### Gerarchia editoriale della homepage — 6 settembre 2026
 
 Il marchio nell'header mantiene “Tempio delle Tre Vie”. L'apertura usa il sopratitolo “Un percorso con Jessica Marin”, l'H1 “Le tre vie / per illuminarsi” e il sottotitolo “Tarocchi, Yoga e attività fisica, Arte: percorsi per conoscere ed esprimere te stesso.” L'invito allo scroll è “Scorri e scopri il percorso”.

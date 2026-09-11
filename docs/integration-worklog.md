@@ -1,5 +1,17 @@
 # Worklog — integrazione home cinematica
 
+## Leggibilità e richieste — 9–11 settembre 2026, modifiche non committate
+
+- Obiettivo: contenuti leggibili durante lo scroll e affidabilità del flusso contatti.
+- Modifiche: veli, tipografia, modalità lettura, fallback responsive, form e inbox, controllo ruolo e migrazione additiva.
+- [x] Lint/build, verifica responsive campionata e modalità lettura persistente.
+- [x] SQL delle migrazioni testato in isolamento: validazione, honeypot, rate limit, retry, RLS, stati e conservazione.
+- [x] Invii sintetici frontend e comparsa nell'inbox locale; cambio stato e dettaglio.
+- [ ] Test Supabase staging con Auth/PostgREST reali e concorrenza.
+- [ ] Safari, zoom 200%, reduced-motion di sistema e audit contrasto completo.
+- [ ] Configurazione del recapito privacy reale; Security Check e approvazione rilascio.
+- Nessun push, deploy, commit o modifica al database di produzione. Report: `docs/READABILITY-INQUIRIES-AUDIT.md`.
+
 ## Revisione editoriale homepage — 6 settembre 2026
 
 - **Commit:** `content: refine homepage copy and reduce temple repetition` (voce inclusa nel commit).

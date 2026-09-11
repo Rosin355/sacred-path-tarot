@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
 export const useUserRole = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { data: roles, isLoading } = useQuery({
     queryKey: ['userRoles', user?.id],
@@ -26,6 +26,6 @@ export const useUserRole = () => {
   return {
     roles: roles || [],
     isAdmin,
-    isLoading
+    isLoading: authLoading || isLoading
   };
 };

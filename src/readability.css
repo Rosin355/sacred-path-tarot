@@ -1,0 +1,50 @@
+/* Shared readable tokens: decorative glows retain their original palette. */
+:root, .dark { --muted-foreground: 270 12% 78%; --input: 270 12% 52%; --ring: 40 65% 72%; }
+.via-arcani { --accent: 270 70% 78%; --ring: 270 70% 78%; }
+.via-respiro { --accent: 175 45% 72%; --ring: 175 45% 72%; }
+.via-ispirazione { --accent: 40 65% 72%; --ring: 40 65% 72%; }
+body, .font-body { font-family: 'Source Sans 3', system-ui, sans-serif; font-weight: 400; }
+:is(button, a, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid #eed39a; outline-offset: 4px;
+}
+input, select, textarea { font-size: 1rem; }
+button, input, select { min-height: 44px; }
+.via-layout :is(p, label, input, select, textarea), #richiesta :is(p, label, input, select, textarea) {
+  font-size: 1rem; line-height: 1.7; font-weight: 400;
+}
+.via-layout .font-body { max-width: 70ch; }
+.via-layout .font-caption { font-size: .875rem; letter-spacing: .06em; }
+.via-layout p[class*="text-muted-foreground"], .via-layout a[class*="text-muted-foreground"] {
+  color: hsl(var(--muted-foreground));
+}
+.via-layout p.font-caption { color: hsl(var(--accent)) !important; }
+.via-layout > nav { background: hsl(var(--background) / .97); gap: 1rem; }
+.via-layout > nav button { min-width: 44px; }
+.via-layout > nav > div > span { display: none; }
+.via-layout .sacred-cta { min-height: 44px; border-color: hsl(var(--accent) / .8); }
+.via-layout main > section:first-child { padding-block: 3rem; }
+.via-layout .hero-copy {
+  padding: clamp(1.5rem, 4vw, 3rem); border-radius: 2rem;
+  background: hsl(var(--background) / .94);
+  box-shadow: 0 0 48px 24px hsl(var(--background) / .8);
+}
+#richiesta .sacred-card { background: hsl(var(--card)); }
+#richiesta :is(input, textarea, select) { background: hsl(var(--background)); border-color: hsl(var(--input)); }
+#richiesta button[role="checkbox"] { min-width: 24px; min-height: 24px; margin-top: .5rem; border-color: hsl(var(--accent)); }
+#richiesta label[for$="privacy"] { display: inline-block; min-height: 44px; }
+#richiesta :is([role="alert"], [aria-invalid="true"]) { color: #ffb4b4; }
+#richiesta [role="alert"] { font-size: 1rem; }
+@media (max-width: 1100px) {
+  .via-layout { padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }
+  .voice-assistant-shell[data-route-context='default'] { bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 600px) {
+  .via-layout .sacred-card { padding: 1.5rem; }
+  .via-layout main > section { padding-inline: 1.25rem; }
+  .via-layout h1 { font-size: clamp(2.5rem, 10vw, 4rem); overflow-wrap: break-word; }
+  .via-layout .hero-copy { padding-inline: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  .animate-fade-in { opacity: 1 !important; transform: none !important; }
+}

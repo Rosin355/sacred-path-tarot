@@ -31,7 +31,7 @@ body.cinematic-active {
   background: var(--notte);
   color: var(--avorio);
   font-family: var(--sans);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -42,7 +42,7 @@ body.cinematic-active {
   background: var(--notte);
   color: var(--avorio);
   font-family: var(--sans);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
 }
 
@@ -294,6 +294,7 @@ html.has-webgl-atmosphere .cinematic-home #atmosphere { opacity: .62; }
   max-width: 46rem;
   text-align: center;
   opacity: 0;
+  isolation: isolate;
 }
 
 .cinematic-home .moment[inert] { visibility: hidden; }
@@ -302,17 +303,21 @@ html.has-webgl-atmosphere .cinematic-home #atmosphere { opacity: .62; }
 .cinematic-home .moment::before {
   content: "";
   position: absolute;
-  inset: -22% -30%;
+  inset: -2rem;
   z-index: -1;
-  background:
-    radial-gradient(closest-side, rgba(13, 15, 26, .62), rgba(13, 15, 26, .12) 58%, transparent 74%);
+  background: rgba(13, 15, 26, .9);
+  border-radius: 2rem;
+  filter: blur(16px); /* Only the oversized backdrop, never the text. */
+  box-shadow: 0 0 40px 24px rgba(13, 15, 26, .9);
 }
 
 .cinematic-home .moment[data-theme="ink"] { color: #1C1A26; }
+.cinematic-home .moment :is(h1, h2) { color: inherit; }
 .cinematic-home .moment[data-theme="ink"]::before {
-  background: radial-gradient(closest-side, rgba(244, 239, 230, .5), transparent 74%);
+  background: rgba(244, 239, 230, .94);
+  box-shadow: 0 0 40px 24px rgba(244, 239, 230, .94);
 }
-.cinematic-home .moment[data-theme="ink"] .kicker { color: #8A6A2F; }
+.cinematic-home .moment[data-theme="ink"] .kicker { color: #624919; }
 
 /* ——— tipografia ——— */
 
@@ -675,7 +680,73 @@ body.cinematic-active.cinematic-static .moment { opacity: 1; }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"] { color: var(--avorio); }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"] .kicker { color: var(--oro); }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"]::before {
-  background: radial-gradient(closest-side, rgba(13, 15, 26, .58), transparent 72%);
+  background: rgba(13, 15, 26, .9);
+  box-shadow: 0 0 40px 24px rgba(13, 15, 26, .9);
+}
+
+/* Reading surfaces protect the full text area even over white/black frames.
+   Only the outer shadow fades, never the scrim beneath the letters. */
+.cinematic-home .tagline, .cinematic-home .offerta,
+.cinematic-home .filone p, .cinematic-home .colonna p,
+.cinematic-home .chiusa, .cinematic-home .presentazione,
+.cinematic-home .manifesto, .cinematic-home .logistica {
+  font-family: var(--sans);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.65;
+  letter-spacing: .01em;
+  text-transform: none;
+  opacity: 1;
+  max-width: 68ch;
+}
+.cinematic-home .kicker, .cinematic-home .colonna h3,
+.cinematic-home .filone h3, .cinematic-home .scroll-hint,
+.cinematic-home .logistica-nota, .cinematic-home .cta,
+.cinematic-home .colophon, .cinematic-home .loader-title {
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  opacity: 1;
+}
+.cinematic-home .loader-label { opacity: 1; }
+.cinematic-home .colophon a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; }
+.cinematic-home .brand { font-size: .875rem; letter-spacing: .12em; }
+.cinematic-home #hud { background: rgba(13, 15, 26, .95); padding-block: .75rem; }
+.cinematic-home .pin { padding: 9rem 12rem 6rem; }
+.cinematic-home #waypoints { background: rgba(13, 15, 26, .95); padding: .5rem; border-radius: 1rem; }
+.cinematic-home #waypoints a { color: var(--avorio); }
+.cinematic-home #waypoints .wp-label { font-size: .875rem; letter-spacing: .03em; }
+.cinematic-home #waypoints a:hover .wp-label,
+.cinematic-home #waypoints a:focus-visible .wp-label,
+.cinematic-home #waypoints a.active .wp-label { opacity: 1; transform: none; }
+.cinematic-home .reading-mode-toggle {
+  position: fixed; top: 5.25rem; left: 1.25rem; z-index: 111;
+  pointer-events: auto; min-height: 44px; padding: .5rem .9rem;
+  font: 500 .875rem var(--sans); color: var(--avorio);
+  border: 1px solid var(--oro); border-radius: 2rem; background: #0d0f1a;
+}
+.cinematic-home :is(button, a):focus-visible {
+  outline: 3px solid var(--oro); outline-offset: 4px;
+}
+body.cinematic-static .moment { transform: none !important; visibility: visible !important; }
+body.cinematic-static .hint-arrow { animation: none; }
+body.cinematic-static .pin { padding-block: 10rem 7rem; }
+@media (max-width: 1100px) {
+  .cinematic-home #hud { grid-template-columns: 1fr auto; }
+  .cinematic-home #hud > .temple-path-navigation__desktop-shell { display: none; }
+  .cinematic-home .pin { padding-inline: 2rem 5rem; }
+  .cinematic-home #waypoints .wp-label { display: none; }
+  .cinematic-home #waypoints { right: .25rem; }
+  .cinematic-home #waypoints a { min-width: 44px; justify-content: center; }
+  .cinematic-home .moment { width: 100%; max-width: 46rem; }
+  .cinematic-home .moment::before { inset: -1rem; box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
+  .cinematic-home .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(244,239,230,.94); }
+  body.cinematic-static .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
 }
 
 body.cinematic-active.cinematic-static #vignette { position: absolute; }
+/* Reserve the reading control's fixed row in natural-flow mode too. */
+body.cinematic-static .cinematic-home #soglia .pin {
+  padding-top: 10rem;
+}

@@ -12,6 +12,7 @@ import "@/cinematic/cinematic-home.css";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { TempleNavigation } from "@/components/TempleNavigation";
 import type { TemplePathId } from "@/config/templePaths";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const destinations = {
   arcani: { route: "/arcani", color: "270 55% 45%" },
@@ -27,6 +28,29 @@ const CinematicHome = () => {
   const { isMuted, isPlaying, toggleMute } = useBackgroundMusic();
   const [activeDestination, setActiveDestination] = useState<Destination | null>(null);
   const transitionTimer = useRef<number | null>(null);
+  const systemReducedMotion = useReducedMotion();
+  const [viewportRevision, setViewportRevision] = useState(0);
+  const [readingMode, setReadingMode] = useState(() => {
+    try { return localStorage.getItem("temple-reading-mode") === "true"; }
+    catch { return false; }
+  });
+  useEffect(() => {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let timer = 0;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (width !== window.innerWidth || Math.abs(height - window.innerHeight) > 120) {
+          width = window.innerWidth;
+          height = window.innerHeight;
+          setViewportRevision(value => value + 1);
+        }
+      }, 200);
+    };
+    window.addEventListener("resize", onResize);
+    return () => { window.clearTimeout(timer); window.removeEventListener("resize", onResize); };
+  }, []);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -43,7 +67,7 @@ const CinematicHome = () => {
       "Le tre vie per illuminarsi: Tarocchi, Yoga, attività fisica, Arte e percorsi interiori. Un viaggio nel Tempio con Jessica Marin.",
     );
 
-    void initializeCinematicJourney(root, abortController.signal).then((cleanup) => {
+    void initializeCinematicJourney(root, abortController.signal, readingMode || systemReducedMotion).then((cleanup) => {
       if (unmounted) cleanup();
       else dispose = cleanup;
     });
@@ -55,7 +79,7 @@ const CinematicHome = () => {
       if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
       document.body.classList.remove("cinematic-active", "cinematic-loading", "cinematic-static");
     };
-  }, []);
+  }, [readingMode, systemReducedMotion, viewportRevision]);
 
   const enterPath = useCallback(
     (destination: TemplePathId) => {
@@ -70,14 +94,14 @@ const CinematicHome = () => {
         });
       };
 
-      if (reducedMotion) {
+      if (reducedMotion || readingMode) {
         completeNavigation();
         return;
       }
 
       transitionTimer.current = window.setTimeout(completeNavigation, 800);
     },
-    [activeDestination, navigate],
+    [activeDestination, navigate, readingMode],
   );
 
   return (
@@ -122,6 +146,15 @@ const CinematicHome = () => {
           {isMuted || !isPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
         </button>
       </header>
+      <button type="button" className="reading-mode-toggle" aria-pressed={readingMode || systemReducedMotion}
+        disabled={systemReducedMotion}
+        onClick={() => {
+          const next = !readingMode;
+          try { localStorage.setItem("temple-reading-mode", String(next)); } catch { /* Optional preference. */ }
+          setReadingMode(next);
+        }}>
+        {systemReducedMotion ? "Animazioni ridotte" : readingMode ? "Attiva percorso animato" : "Modalità lettura"}
+      </button>
 
       <nav id="waypoints" aria-label="Tappe del viaggio">
         <div className="rail" aria-hidden="true"><span id="rail-fill" /></div>
@@ -140,17 +173,16 @@ const CinematicHome = () => {
             <div className="moment" data-window="0,0.38" data-theme="ink">
               <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>Un percorso con Jessica Marin</p>
               <h1>Le tre vie<br />per illuminarsi</h1>
-              <p className="tagline">Tarocchi, Yoga e attività fisica, Arte: percorsi per conoscere ed esprimere te stesso.</p>
+              <p className="tagline">Tarocchi, yoga, attività fisica e arte: tre vie per conoscerti, ritrovare equilibrio ed esprimere ciò che sei.</p>
               <p className="scroll-hint">Scorri e scopri il percorso<span className="hint-arrow" aria-hidden="true">▾</span></p>
             </div>
-            <div className="moment" data-window="0.36,0.96">
+            <div className="moment" data-window="0.4,0.99">
               <p className="kicker"><span aria-hidden="true">◈ &nbsp;</span>La Sacerdotessa</p>
               <blockquote className="presentazione">
-                «Sono Jessica Marin, la Sacerdotessa che ti guiderà verso le profondità della tua anima e dell’inconscio
-                collettivo umano, costellato di simboli e chiavi segrete che ti aiuterò a reintegrare per far emergere la
-                pienezza realizzativa del tuo essere! Nei miei Corsi, Percorsi e Workshop trasmetto le conoscenze
-                Esoteriche e Yogiche-motorie dai livelli basi a quelli avanzati. Sei pronto a trovare la tua luce interiore?
-                {" "}<em>Scegli la tua via!</em>»
+                Sono Jessica Marin. Ti accompagno nell’esplorazione del tuo mondo interiore attraverso simboli,
+                tarocchi e pratiche del corpo. Nei miei corsi, percorsi e workshop condivido conoscenze esoteriche,
+                yoga e attività motorie, dai livelli di base a quelli avanzati. Vuoi trovare la tua luce interiore?
+                {" "}<em>Scegli la tua via.</em>
               </blockquote>
             </div>
           </div>
@@ -163,7 +195,7 @@ const CinematicHome = () => {
               <h2>La Via degli Arcani</h2>
               <p className="manifesto">Non solo divinazione: i tarocchi come via di conoscenza, interpretazione e consapevolezza.</p>
             </div>
-            <div className="moment" data-window="0.44,0.96">
+            <div className="moment" data-window="0.48,0.99">
               <ul className="offerta">
                 <li><span className="glifo" aria-hidden="true">✦</span> Corsi sugli Arcani Maggiori e Minori</li>
                 <li><span className="glifo" aria-hidden="true">◈</span> Metodi di stesura e lettura</li>
@@ -189,7 +221,7 @@ const CinematicHome = () => {
               <h2>La Via del Respiro</h2>
               <p className="manifesto">La pratica è il luogo in cui il corpo ricorda ciò che la mente dimentica: Yoga e attività fisica si incontrano in un percorso di ascolto, forza e consapevolezza.</p>
             </div>
-            <div className="moment" data-window="0.44,0.96">
+            <div className="moment" data-window="0.48,0.99">
               <div className="discipline">
                 <div className="colonna"><h3>Attività fisica e pratiche dinamiche</h3><p>Power Yoga · Ginnastica Total Body</p></div>
                 <div className="colonna"><h3>Yoga, tecnica e respiro</h3><p>Iyengar · Hatha · Yin · Pranayama</p></div>
@@ -212,7 +244,7 @@ const CinematicHome = () => {
               <h2>La Via dell’Arte</h2>
               <p className="manifesto">L’arte dà forma al mondo interiore: trasforma simboli, parole e ascolto in espressione e consapevolezza.</p>
             </div>
-            <div className="moment" data-window="0.44,0.96">
+            <div className="moment" data-window="0.48,0.99">
               <div className="filoni">
                 <div className="filone"><h3><span aria-hidden="true">✦ </span>Editoriale</h3><p>Articoli su simbolismo e alchimia interiore</p></div>
                 <div className="filone"><h3><span aria-hidden="true">◈ </span>Sonoro</h3><p>Ascolti e paesaggi sonori esoterici</p></div>

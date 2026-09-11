@@ -38,10 +38,10 @@ function cinematicProgress(progress: number) {
   return edgeFrames + (progress - edgeScroll) * ((1 - edgeFrames * 2) / (1 - edgeScroll * 2));
 }
 
-export async function initializeCinematicJourney(root: HTMLElement, signal?: AbortSignal) {
+export async function initializeCinematicJourney(root: HTMLElement, signal?: AbortSignal, readingMode = false) {
   gsap.registerPlugin(ScrollTrigger);
 
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = readingMode || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const smallViewport = Math.min(window.innerWidth, window.innerHeight) < 500 || window.innerWidth < 768;
   const navigatorHints = navigator as NavigatorWithHints;
   const saveData = navigatorHints.connection?.saveData === true;
@@ -60,6 +60,8 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
 
   const onAbort = () => {
     destroyed = true;
+    disposers.splice(0).reverse().forEach((dispose) => dispose());
+    destroyAtmosphere();
   };
   signal?.addEventListener("abort", onAbort, { once: true });
   disposers.push(() => signal?.removeEventListener("abort", onAbort));
@@ -114,6 +116,7 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
 
     root.querySelectorAll<HTMLElement>(".moment").forEach((moment) => {
       moment.inert = false;
+      gsap.set(moment, { clearProps: "opacity,transform,visibility" });
     });
 
     sections.forEach((section, index) => {
@@ -139,7 +142,10 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
     const initialIndex = sections.findIndex((section) => `#${section.id}` === initialHash);
     setActiveWaypoint(Math.max(0, initialIndex));
     if (initialIndex > 0) {
-      requestAnimationFrame(() => sections[initialIndex]?.scrollIntoView({ block: "start" }));
+      const frame = requestAnimationFrame(() => {
+        if (!destroyed) sections[initialIndex]?.scrollIntoView({ block: "start" });
+      });
+      disposers.push(() => cancelAnimationFrame(frame));
     }
   };
 
@@ -161,14 +167,27 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
   };
 
   const originalScrollRestoration = window.history.scrollRestoration;
+  disposers.push(() => {
+    window.history.scrollRestoration = originalScrollRestoration;
+    sections.forEach(section => section.style.removeProperty("background-image"));
+    root.querySelectorAll<HTMLElement>(".moment").forEach(moment => {
+      moment.inert = false;
+      gsap.set(moment, { clearProps: "opacity,transform,visibility" });
+    });
+  });
   if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
   window.scrollTo(0, 0);
 
-  void initAtmosphere();
+  // If zoom or wrapped copy cannot fit, use natural document flow, not nested scroll traps.
+  await document.fonts.ready;
+  if (destroyed) return () => undefined;
+  const contentOverflows = Array.from(root.querySelectorAll<HTMLElement>(".moment"))
+    .some((moment) => moment.scrollHeight > window.innerHeight - 240);
 
-  if (reducedMotion || saveData || !canScrub) {
+  if (reducedMotion || saveData || !canScrub || contentOverflows) {
     initStatic();
   } else {
+    void initAtmosphere();
     try {
       const manifest = await loadManifest();
       if (destroyed) return () => undefined;
@@ -251,7 +270,10 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
         if (loaderFill) loaderFill.style.width = "100%";
         loaderProgress?.setAttribute("aria-valuenow", "100");
         const loader = query<HTMLElement>("#loader");
-        if (loader) gsap.to(loader, { autoAlpha: 0, duration: 0.65, ease: "sine.inOut", delay: 0.12 });
+        if (loader) {
+          const tween = gsap.to(loader, { autoAlpha: 0, duration: 0.65, ease: "sine.inOut", delay: 0.12 });
+          disposers.push(() => tween.kill());
+        }
         document.body.classList.remove("cinematic-loading");
         lenis.start();
 
@@ -332,10 +354,11 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
         timeline.set({}, {}, 1);
 
         moments.forEach(({ element, window: [start, end] }) => {
-          const ramp = 0.06;
+          // Text changes atomically: stopping scroll must never freeze half-transparent copy.
+          // The frame sequence supplies motion; non-overlapping windows supply reading time.
           if (start === 0) gsap.set(element, { opacity: 1 });
-          else timeline.fromTo(element, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: ramp }, start);
-          if (end < 1) timeline.to(element, { opacity: 0, y: -44, duration: ramp }, end - ramp);
+          else timeline.set(element, { opacity: 1 }, start);
+          if (end < 1) timeline.set(element, { opacity: 0 }, end);
         });
       });
 
@@ -383,7 +406,7 @@ export async function initializeCinematicJourney(root: HTMLElement, signal?: Abo
 
   return () => {
     destroyed = true;
-    disposers.reverse().forEach((dispose) => dispose());
+    disposers.splice(0).reverse().forEach((dispose) => dispose());
     destroyAtmosphere();
     window.history.scrollRestoration = originalScrollRestoration;
     document.body.classList.remove("cinematic-loading", "cinematic-static");

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — leggibilità e richieste, 11 settembre 2026
+
+- Testi cinematografici stabili, veli protettivi, tipografia accessibile e modalità lettura persistente con fallback per schermi insufficienti.
+- Form con errori associati ai campi, retry protetti; inbox con aggiornamento, ricerca migliorata e gestione errori; attesa sessione nel controllo ruolo.
+- Migrazione additiva per privilegi espliciti e idempotenza concorrente; test SQL isolati e QA browser con dati sintetici.
+- Nessun push/deploy o migrazione remota. Esiti e verifiche residue in `docs/READABILITY-INQUIRIES-AUDIT.md`.
+
 ## Unreleased — revisione editoriale homepage, 6 settembre 2026
 
 - Ridotte le ripetizioni del marchio in apertura, loader, scena finale e footer.

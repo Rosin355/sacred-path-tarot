@@ -51,7 +51,7 @@ const sections = [
 
 const ctas = [
   { label: "Corsi e percorsi", primary: true, topic: "corsi-percorsi" },
-  { label: "Prenota un consulto", primary: false, topic: "consulto-personale" },
+  { label: "Richiedi un consulto", primary: false, topic: "consulto-personale" },
   { label: "Eventi ed esercitazioni", primary: false, topic: "eventi-esercitazioni" },
 ] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
@@ -108,7 +108,7 @@ const ViaArcani = () => {
         />
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-3xl mx-auto animate-fade-in pointer-events-none">
+        <div className="hero-copy relative z-10 max-w-3xl mx-auto">
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
             Il cammino attraverso i simboli
           </p>

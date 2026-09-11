@@ -23,7 +23,7 @@ function parseHSL(color: string): { h: number; s: number; l: number } {
 const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isMuted, toggleMute } = useBackgroundMusic();
+  const { isMuted, isPlaying, toggleMute } = useBackgroundMusic();
   const [overlayVisible, setOverlayVisible] = useState(true);
 
   const doorColor = (location.state as ViaNavigationState | null)?.doorColor;
@@ -49,7 +49,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
     : "hsl(var(--background))";
 
   return (
-    <div className={`min-h-screen overflow-x-hidden overflow-y-auto bg-background pb-24 md:pb-0 ${viaClass}`}>
+    <div className={`via-layout min-h-screen bg-background pb-24 md:pb-0 ${viaClass}`}>
       {/* Continuity overlay */}
       <div
         className="fixed inset-0 pointer-events-none transition-opacity duration-[800ms] ease-out"
@@ -64,6 +64,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
       {/* Top bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/15">
         <button
+          aria-label="Torna al Tempio"
           onClick={() => navigate("/#centro")}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm tracking-wide"
         >
@@ -78,9 +79,9 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
           <button
             onClick={toggleMute}
             className="p-1.5 text-muted-foreground hover:text-foreground transition-colors duration-300"
-            aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
+            aria-label={isMuted || !isPlaying ? "Attiva audio" : "Disattiva audio"}
           >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            {isMuted || !isPlaying ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
         </div>
       </nav>

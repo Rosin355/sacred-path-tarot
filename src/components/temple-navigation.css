@@ -19,9 +19,9 @@
   border-radius: 999px;
   color: var(--temple-nav-text);
   font-family: "Figtree", "Inter", system-ui, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.06em;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
@@ -62,14 +62,14 @@
 
 .temple-path-navigation--cinematic {
   --temple-nav-accent: #d4af6a;
-  --temple-nav-text: rgba(244, 239, 230, 0.76);
+  --temple-nav-text: #f4efe6;
 }
 
 .temple-path-navigation--cinematic .temple-path-navigation__desktop {
   padding: 0 0.45rem;
   border: 1px solid rgba(212, 175, 106, 0.2);
   border-radius: 999px;
-  background: rgba(13, 15, 26, 0.34);
+  background: rgba(13, 15, 26, 0.95);
   box-shadow: 0 12px 32px rgba(3, 4, 10, 0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -81,7 +81,7 @@
   color: #f4efe6;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1100px) {
   .temple-path-navigation__desktop-shell {
     display: none;
   }
@@ -115,7 +115,7 @@
     min-height: 3rem;
     gap: 0.35rem;
     padding: 0.35rem 0.2rem;
-    font-size: 0.64rem;
+    font-size: 0.875rem;
     letter-spacing: 0.1em;
   }
 
