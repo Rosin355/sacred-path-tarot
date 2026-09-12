@@ -763,12 +763,6 @@ body.cinematic-active.cinematic-static .moment { --veil-base: .9; }
 .cinematic-home #waypoints a:hover .wp-label,
 .cinematic-home #waypoints a:focus-visible .wp-label,
 .cinematic-home #waypoints a.active .wp-label { opacity: 1; transform: none; }
-.cinematic-home .reading-mode-toggle {
-  position: fixed; top: 5.25rem; left: 1.25rem; z-index: 111;
-  pointer-events: auto; min-height: 44px; padding: .5rem .9rem;
-  font: 500 .875rem var(--sans); color: var(--avorio);
-  border: 1px solid var(--oro); border-radius: 2rem; background: #0d0f1a;
-}
 .cinematic-home :is(button, a):focus-visible {
   outline: 3px solid var(--oro); outline-offset: 4px;
 }
