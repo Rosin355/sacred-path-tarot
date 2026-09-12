@@ -126,7 +126,12 @@ const CinematicHome = () => {
   );
 
   return (
-    <div ref={rootRef} className="cinematic-home" data-leaving={activeDestination ?? undefined}>
+    <div
+      ref={rootRef}
+      className="cinematic-home"
+      data-leaving={activeDestination ?? undefined}
+      data-reading={restingReading ? "idle" : undefined}
+    >
       <a className="skip-link" href="#journey">Vai al contenuto</a>
 
       <div id="loader" role="status" aria-live="polite">
