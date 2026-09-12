@@ -30,10 +30,31 @@ const CinematicHome = () => {
   const transitionTimer = useRef<number | null>(null);
   const systemReducedMotion = useReducedMotion();
   const [viewportRevision, setViewportRevision] = useState(0);
-  const [readingMode, setReadingMode] = useState(() => {
-    try { return localStorage.getItem("temple-reading-mode") === "true"; }
-    catch { return false; }
-  });
+  const readingMode = systemReducedMotion;
+  const [restingReading, setRestingReading] = useState(false);
+
+  // Il velo di lettura sale dopo qualche secondo di quiete, poi torna tenue.
+  useEffect(() => {
+    let timer = window.setTimeout(() => setRestingReading(true), 2200);
+    const wake = () => {
+      setRestingReading(false);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setRestingReading(true), 2200);
+    };
+    const options = { passive: true } as const;
+    window.addEventListener("scroll", wake, options);
+    window.addEventListener("pointermove", wake, options);
+    window.addEventListener("pointerdown", wake, options);
+    window.addEventListener("keydown", wake);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", wake);
+      window.removeEventListener("pointermove", wake);
+      window.removeEventListener("pointerdown", wake);
+      window.removeEventListener("keydown", wake);
+    };
+  }, []);
+
   useEffect(() => {
     let width = window.innerWidth;
     let height = window.innerHeight;
