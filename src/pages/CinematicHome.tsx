@@ -167,15 +167,6 @@ const CinematicHome = () => {
           {isMuted || !isPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
         </button>
       </header>
-      <button type="button" className="reading-mode-toggle" aria-pressed={readingMode || systemReducedMotion}
-        disabled={systemReducedMotion}
-        onClick={() => {
-          const next = !readingMode;
-          try { localStorage.setItem("temple-reading-mode", String(next)); } catch { /* Optional preference. */ }
-          setReadingMode(next);
-        }}>
-        {systemReducedMotion ? "Animazioni ridotte" : readingMode ? "Attiva percorso animato" : "Modalità lettura"}
-      </button>
 
       <nav id="waypoints" aria-label="Tappe del viaggio">
         <div className="rail" aria-hidden="true"><span id="rail-fill" /></div>
