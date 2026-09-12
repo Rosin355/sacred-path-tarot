@@ -777,13 +777,12 @@ body.cinematic-static .pin { padding-block: 10rem 7rem; }
   .cinematic-home #waypoints { right: .25rem; }
   .cinematic-home #waypoints a { min-width: 44px; justify-content: center; }
   .cinematic-home .moment { width: 100%; max-width: 46rem; }
-  .cinematic-home .moment::before { inset: -1rem; box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
-  .cinematic-home .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(244,239,230,.94); }
-  body.cinematic-static .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
+  .cinematic-home .moment::before { inset: -2rem; }
+}
+
+/* Su touch il velo resta più presente: non c'è hover. */
+@media (hover: none) {
+  .cinematic-home .moment { --veil-base: .82; }
 }
 
 body.cinematic-active.cinematic-static #vignette { position: absolute; }
-/* Reserve the reading control's fixed row in natural-flow mode too. */
-body.cinematic-static .cinematic-home #soglia .pin {
-  padding-top: 10rem;
-}
