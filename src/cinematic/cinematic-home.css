@@ -299,25 +299,59 @@ html.has-webgl-atmosphere .cinematic-home #atmosphere { opacity: .62; }
 
 .cinematic-home .moment[inert] { visibility: hidden; }
 
-/* scrim locale per leggibilità, senza box */
+/* Velo editoriale: quasi invisibile in scroll, pieno a riposo o in hover. */
+.cinematic-home .moment {
+  --veil-base: .26;
+  --veil-strength: var(--veil-base);
+}
 .cinematic-home .moment::before {
   content: "";
   position: absolute;
-  inset: -2rem;
+  inset: -3.5rem;
   z-index: -1;
-  background: rgba(13, 15, 26, .9);
-  border-radius: 2rem;
-  filter: blur(16px); /* Only the oversized backdrop, never the text. */
-  box-shadow: 0 0 40px 24px rgba(13, 15, 26, .9);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 50%,
+    rgba(13, 15, 26, .96) 0%,
+    rgba(13, 15, 26, .82) 42%,
+    rgba(13, 15, 26, .34) 72%,
+    rgba(13, 15, 26, 0) 100%
+  );
+  filter: blur(22px); /* Only the oversized backdrop, never the text. */
+  opacity: var(--veil-strength);
+  transition: opacity .45s ease;
+}
+
+/* Il velo sale su hover/focus del testo o dopo qualche secondo di quiete. */
+.cinematic-home .moment:hover,
+.cinematic-home .moment:focus-within,
+.cinematic-home[data-reading="idle"] .moment { --veil-strength: .92; }
+
+/* Leggibilità anche col velo tenue, senza riquadri. */
+.cinematic-home .moment :is(h1, h2, h3, p, li, blockquote) {
+  text-shadow: 0 1px 12px rgba(13, 15, 26, .85), 0 0 3px rgba(13, 15, 26, .6);
 }
 
 .cinematic-home .moment[data-theme="ink"] { color: #1C1A26; }
 .cinematic-home .moment :is(h1, h2) { color: inherit; }
 .cinematic-home .moment[data-theme="ink"]::before {
-  background: rgba(244, 239, 230, .94);
-  box-shadow: 0 0 40px 24px rgba(244, 239, 230, .94);
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 50%,
+    rgba(244, 239, 230, .97) 0%,
+    rgba(244, 239, 230, .84) 42%,
+    rgba(244, 239, 230, .36) 72%,
+    rgba(244, 239, 230, 0) 100%
+  );
+}
+.cinematic-home .moment[data-theme="ink"] :is(h1, h2, h3, p, li, blockquote) {
+  text-shadow: 0 1px 12px rgba(244, 239, 230, .9), 0 0 3px rgba(244, 239, 230, .7);
 }
 .cinematic-home .moment[data-theme="ink"] .kicker { color: #624919; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-home .moment { --veil-base: .9; }
+  .cinematic-home .moment::before { transition: none; }
+}
 
 /* ——— tipografia ——— */
 
@@ -680,9 +714,18 @@ body.cinematic-active.cinematic-static .moment { opacity: 1; }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"] { color: var(--avorio); }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"] .kicker { color: var(--oro); }
 body.cinematic-active.cinematic-static .moment[data-theme="ink"]::before {
-  background: rgba(13, 15, 26, .9);
-  box-shadow: 0 0 40px 24px rgba(13, 15, 26, .9);
+  background: radial-gradient(
+    ellipse 78% 68% at 50% 50%,
+    rgba(13, 15, 26, .96) 0%,
+    rgba(13, 15, 26, .82) 42%,
+    rgba(13, 15, 26, .34) 72%,
+    rgba(13, 15, 26, 0) 100%
+  );
 }
+body.cinematic-active.cinematic-static .moment[data-theme="ink"] :is(h1, h2, h3, p, li, blockquote) {
+  text-shadow: 0 1px 12px rgba(13, 15, 26, .85), 0 0 3px rgba(13, 15, 26, .6);
+}
+body.cinematic-active.cinematic-static .moment { --veil-base: .9; }
 
 /* Reading surfaces protect the full text area even over white/black frames.
    Only the outer shadow fades, never the scrim beneath the letters. */
@@ -720,12 +763,6 @@ body.cinematic-active.cinematic-static .moment[data-theme="ink"]::before {
 .cinematic-home #waypoints a:hover .wp-label,
 .cinematic-home #waypoints a:focus-visible .wp-label,
 .cinematic-home #waypoints a.active .wp-label { opacity: 1; transform: none; }
-.cinematic-home .reading-mode-toggle {
-  position: fixed; top: 5.25rem; left: 1.25rem; z-index: 111;
-  pointer-events: auto; min-height: 44px; padding: .5rem .9rem;
-  font: 500 .875rem var(--sans); color: var(--avorio);
-  border: 1px solid var(--oro); border-radius: 2rem; background: #0d0f1a;
-}
 .cinematic-home :is(button, a):focus-visible {
   outline: 3px solid var(--oro); outline-offset: 4px;
 }
@@ -740,13 +777,12 @@ body.cinematic-static .pin { padding-block: 10rem 7rem; }
   .cinematic-home #waypoints { right: .25rem; }
   .cinematic-home #waypoints a { min-width: 44px; justify-content: center; }
   .cinematic-home .moment { width: 100%; max-width: 46rem; }
-  .cinematic-home .moment::before { inset: -1rem; box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
-  .cinematic-home .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(244,239,230,.94); }
-  body.cinematic-static .moment[data-theme="ink"]::before { box-shadow: 0 0 24px 12px rgba(13,15,26,.9); }
+  .cinematic-home .moment::before { inset: -2rem; }
+}
+
+/* Su touch il velo resta più presente: non c'è hover. */
+@media (hover: none) {
+  .cinematic-home .moment { --veil-base: .82; }
 }
 
 body.cinematic-active.cinematic-static #vignette { position: absolute; }
-/* Reserve the reading control's fixed row in natural-flow mode too. */
-body.cinematic-static .cinematic-home #soglia .pin {
-  padding-top: 10rem;
-}

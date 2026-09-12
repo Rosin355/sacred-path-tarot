@@ -30,10 +30,31 @@ const CinematicHome = () => {
   const transitionTimer = useRef<number | null>(null);
   const systemReducedMotion = useReducedMotion();
   const [viewportRevision, setViewportRevision] = useState(0);
-  const [readingMode, setReadingMode] = useState(() => {
-    try { return localStorage.getItem("temple-reading-mode") === "true"; }
-    catch { return false; }
-  });
+  const readingMode = systemReducedMotion;
+  const [restingReading, setRestingReading] = useState(false);
+
+  // Il velo di lettura sale dopo qualche secondo di quiete, poi torna tenue.
+  useEffect(() => {
+    let timer = window.setTimeout(() => setRestingReading(true), 2200);
+    const wake = () => {
+      setRestingReading(false);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setRestingReading(true), 2200);
+    };
+    const options = { passive: true } as const;
+    window.addEventListener("scroll", wake, options);
+    window.addEventListener("pointermove", wake, options);
+    window.addEventListener("pointerdown", wake, options);
+    window.addEventListener("keydown", wake);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", wake);
+      window.removeEventListener("pointermove", wake);
+      window.removeEventListener("pointerdown", wake);
+      window.removeEventListener("keydown", wake);
+    };
+  }, []);
+
   useEffect(() => {
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -105,7 +126,12 @@ const CinematicHome = () => {
   );
 
   return (
-    <div ref={rootRef} className="cinematic-home" data-leaving={activeDestination ?? undefined}>
+    <div
+      ref={rootRef}
+      className="cinematic-home"
+      data-leaving={activeDestination ?? undefined}
+      data-reading={restingReading ? "idle" : undefined}
+    >
       <a className="skip-link" href="#journey">Vai al contenuto</a>
 
       <div id="loader" role="status" aria-live="polite">
@@ -146,15 +172,6 @@ const CinematicHome = () => {
           {isMuted || !isPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
         </button>
       </header>
-      <button type="button" className="reading-mode-toggle" aria-pressed={readingMode || systemReducedMotion}
-        disabled={systemReducedMotion}
-        onClick={() => {
-          const next = !readingMode;
-          try { localStorage.setItem("temple-reading-mode", String(next)); } catch { /* Optional preference. */ }
-          setReadingMode(next);
-        }}>
-        {systemReducedMotion ? "Animazioni ridotte" : readingMode ? "Attiva percorso animato" : "Modalità lettura"}
-      </button>
 
       <nav id="waypoints" aria-label="Tappe del viaggio">
         <div className="rail" aria-hidden="true"><span id="rail-fill" /></div>
