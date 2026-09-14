@@ -31,9 +31,9 @@ La migrazione crea soltanto il nuovo dominio `site_page_content`; non esegue nuo
 
 ## Stato pubblicazione
 
-- Commit e push: da aggiornare dopo la creazione del commit.
-- Migrazione remota: non ancora applicata. La sessione Supabase CLI non ha accesso al progetto `lrooqvnxwttpguyptpfn`; il progetto non risulta nell’elenco dell’account collegato.
+- Commit e push: implementazione pubblicata su `main` nel commit `43f404bdd9663572afd13a0fcbfb6d0440126333`.
+- Migrazione remota: non ancora applicata. Una lettura anonima restituisce `PGRST205`, confermando che `site_page_content` non è presente. La sessione Supabase CLI non ha accesso al progetto `lrooqvnxwttpguyptpfn`; il progetto non risulta nell’elenco dell’account collegato.
 - Deploy Lovable: non ancora eseguito. L’accesso browser automatizzato a Lovable è stato bloccato dal controllo di sicurezza amministrativo del browser.
-- Verifica online: da eseguire soltanto dopo migrazione e deploy.
+- Verifica online: il deployment pubblico `cef730ba-a4af-4c64-a5db-64d16b6fadc4` serve ancora la versione precedente; nel modulo pubblico risultano ancora le vecchie CTA e la firma finale.
 
 Non pubblicare il frontend prima della migrazione: il sito pubblico continuerebbe a funzionare grazie al fallback, ma l’editor non potrebbe salvare o pubblicare testi.
