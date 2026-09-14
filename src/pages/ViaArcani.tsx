@@ -5,6 +5,8 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ViaLayout from "@/components/ViaLayout";
 import { PathInquiryForm } from "@/components/PathInquiryForm";
 import type { InquiryTopic } from "@/config/inquiries";
+import { SiteContentBoundary } from "@/content/SiteContentBoundary";
+import type { SitePageContent } from "@/content/siteContent";
 
 const tarotImages = [
   "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
@@ -31,33 +33,16 @@ const tarotImages = [
   "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",
 ];
 
-const sections = [
-  {
-    title: "Corsi e percorsi sui tarocchi",
-    text: "Il percorso include corsi dedicati agli arcani maggiori, agli arcani minori, ai metodi di stesura dei tarocchi e allo sviluppo della medianità per mezzo dei tarocchi. Ogni proposta è pensata per aiutare la persona a leggere il simbolo con più profondità, ordine e sensibilità.",
-    icon: "✦",
-  },
-  {
-    title: "Carta del destino e lettura simbolica",
-    text: "Tra i percorsi proposti c'è anche la carta del destino, un lavoro che aiuta a comprendere se stessi e gli altri attraverso la data di nascita, in una chiave simbolica e riflessiva.",
-    icon: "◈",
-  },
-  {
-    title: "Esercitazioni pratiche sulle stesure dei tarocchi",
-    text: "Ogni primo venerdì del mese, presso la Libreria Esoterica Il Sigillo, Jessica guida un incontro di esercitazione sulle stesure dei tarocchi. Questo spazio formativo aiuta gli allievi a integrare arcani maggiori e minori, imparare a porre le domande giuste e offrire un responso più chiaro, veritiero e ben strutturato.",
-    icon: "❖",
-  },
-];
-
 const ctas = [
   { label: "Corsi e percorsi", primary: true, topic: "corsi-percorsi" },
   { label: "Richiedi un consulto", primary: false, topic: "consulto-personale" },
   { label: "Eventi ed esercitazioni", primary: false, topic: "eventi-esercitazioni" },
 ] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
-const ViaArcani = () => {
+export const ViaArcaniView = ({ content }: { content: SitePageContent }) => {
   const reducedMotion = useReducedMotion();
   const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+  const sections = ["✦", "◈", "❖"].map((icon, index) => ({ icon, title: content[`section_${index + 1}_title`], text: content[`section_${index + 1}_text`] }));
 
   const openInquiry = (topic: InquiryTopic) => {
     setSelectedTopic(topic);
@@ -110,21 +95,18 @@ const ViaArcani = () => {
         {/* Hero content */}
         <div className="hero-copy relative z-10 max-w-3xl mx-auto">
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
-            Il cammino attraverso i simboli
+            {content.hero_kicker}
           </p>
           <h1 className="text-foreground mb-8 font-display"
             style={{
               textShadow: "0 0 50px hsla(270, 55%, 45%, 0.4), 0 0 100px hsla(270, 55%, 45%, 0.2)",
             }}
           >
-            La Via degli Arcani
+            {content.hero_title}
           </h1>
           <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            La Via degli Arcani è il percorso dedicato a chi desidera entrare davvero nel linguaggio dei tarocchi,
-            non solo come strumento divinatorio, ma come via di conoscenza, interpretazione e consapevolezza.
-            Qui Jessica Marin accompagna l'allievo nello studio degli arcani maggiori, degli arcani minori,
-            dei metodi di stesura, della medianità attraverso i tarocchi e della carta del destino.
+            {content.hero_text}
           </p>
         </div>
       </section>
@@ -166,7 +148,7 @@ const ViaArcani = () => {
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="sacred-divider mb-10" />
           <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
-            Ogni percorso è pensato per accompagnarti verso una comprensione più profonda del simbolo e di te stesso.
+            {content.closing}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -188,5 +170,7 @@ const ViaArcani = () => {
     </ViaLayout>
   );
 };
+
+const ViaArcani = () => <SiteContentBoundary page="arcani">{content => <ViaArcaniView content={content} />}</SiteContentBoundary>;
 
 export default ViaArcani;

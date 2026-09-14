@@ -6,13 +6,15 @@ import "@fontsource/figtree/latin-400.css";
 import "@fontsource/figtree/latin-500.css";
 import { Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { initializeCinematicJourney } from "@/cinematic/cinematicJourney";
 import "@/cinematic/cinematic-home.css";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { TempleNavigation } from "@/components/TempleNavigation";
 import type { TemplePathId } from "@/config/templePaths";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { SiteContentBoundary } from "@/content/SiteContentBoundary";
+import type { SitePageContent } from "@/content/siteContent";
 
 const destinations = {
   arcani: { route: "/arcani", color: "270 55% 45%" },
@@ -22,7 +24,7 @@ const destinations = {
 
 type Destination = keyof typeof destinations;
 
-const CinematicHome = () => {
+export const CinematicHomeView = ({ content }: { content: SitePageContent }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { isMuted, isPlaying, toggleMute } = useBackgroundMusic();
@@ -188,19 +190,14 @@ const CinematicHome = () => {
         <section className="scene" id="soglia" data-scene="0" data-tint="#E7C9B4" aria-label="Le tre vie per illuminarsi — Jessica Marin">
           <div className="pin">
             <div className="moment" data-window="0,0.38" data-theme="ink">
-              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>Un percorso con Jessica Marin</p>
-              <h1>Le tre vie<br />per illuminarsi</h1>
-              <p className="tagline">Tarocchi, yoga, attività fisica e arte: tre vie per conoscerti, ritrovare equilibrio ed esprimere ciò che sei.</p>
+              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>{content.hero_kicker}</p>
+              <h1>{content.hero_title.split("\n").map((line, index) => <span key={line}>{index > 0 && <br />}{line}</span>)}</h1>
+              <p className="tagline">{content.hero_subtitle}</p>
               <p className="scroll-hint">Scorri e scopri il percorso<span className="hint-arrow" aria-hidden="true">▾</span></p>
             </div>
             <div className="moment" data-window="0.4,0.99">
-              <p className="kicker"><span aria-hidden="true">◈ &nbsp;</span>La Sacerdotessa</p>
-              <blockquote className="presentazione">
-                Sono Jessica Marin. Ti accompagno nell’esplorazione del tuo mondo interiore attraverso simboli,
-                tarocchi e pratiche del corpo. Nei miei corsi, percorsi e workshop condivido conoscenze esoteriche,
-                yoga e attività motorie, dai livelli di base a quelli avanzati. Vuoi trovare la tua luce interiore?
-                {" "}<em>Scegli la tua via.</em>
-              </blockquote>
+              <p className="kicker"><span aria-hidden="true">◈ &nbsp;</span>{content.intro_kicker}</p>
+              <blockquote className="presentazione">{content.intro_text}</blockquote>
             </div>
           </div>
         </section>
@@ -208,25 +205,15 @@ const CinematicHome = () => {
         <section className="scene" id="arcani" data-scene="1" data-tint="#C98A3D" aria-label="La Via degli Arcani — tarocchi">
           <div className="pin">
             <div className="moment" data-window="0.02,0.46">
-              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>Il cammino attraverso i simboli</p>
-              <h2>La Via degli Arcani</h2>
-              <p className="manifesto">Non solo divinazione: i tarocchi come via di conoscenza, interpretazione e consapevolezza.</p>
+              <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>{content.arcani_kicker}</p>
+              <h2>{content.arcani_title}</h2>
+              <p className="manifesto">{content.arcani_intro}</p>
             </div>
             <div className="moment" data-window="0.48,0.99">
               <ul className="offerta">
-                <li><span className="glifo" aria-hidden="true">✦</span> Corsi sugli Arcani Maggiori e Minori</li>
-                <li><span className="glifo" aria-hidden="true">◈</span> Metodi di stesura e lettura</li>
-                <li><span className="glifo" aria-hidden="true">❖</span> Medianità attraverso i tarocchi</li>
-                <li><span className="glifo" aria-hidden="true">◇</span> La Carta del Destino — comprendere sé e gli altri dalla data di nascita</li>
-                <li><span className="glifo" aria-hidden="true">☽</span> Esercitazioni pratiche sulle stesure — ogni primo venerdì del mese, Libreria Esoterica Il Sigillo</li>
-                <li><span className="glifo" aria-hidden="true">◯</span> Consulti personali</li>
+                {(["✦", "◈", "❖", "◇", "☽", "◯"] as const).map((glyph, index) => <li key={glyph}><span className="glifo" aria-hidden="true">{glyph}</span> {content[`arcani_item_${index + 1}`]}</li>)}
               </ul>
-              <p className="chiusa">Ogni percorso è pensato per accompagnarti verso una comprensione più profonda del simbolo e di te stesso.</p>
-              <div className="cta-row">
-                <button type="button" className="cta" title="Presto disponibile" disabled>Scopri il metodo</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Esplora i percorsi</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Vedi gli eventi</button>
-              </div>
+              <p className="chiusa">{content.arcani_closing}</p>
             </div>
           </div>
         </section>
@@ -234,22 +221,17 @@ const CinematicHome = () => {
         <section className="scene" id="respiro" data-scene="2" data-tint="#A8CFE0" aria-label="La Via del Respiro — Yoga e attività fisica">
           <div className="pin">
             <div className="moment" data-window="0.02,0.46" data-theme="ink">
-              <p className="kicker"><span aria-hidden="true">◯ &nbsp;</span>Yoga e attività fisica</p>
-              <h2>La Via del Respiro</h2>
-              <p className="manifesto">La pratica è il luogo in cui il corpo ricorda ciò che la mente dimentica: Yoga e attività fisica si incontrano in un percorso di ascolto, forza e consapevolezza.</p>
+              <p className="kicker"><span aria-hidden="true">◯ &nbsp;</span>{content.respiro_kicker}</p>
+              <h2>{content.respiro_title}</h2>
+              <p className="manifesto">{content.respiro_intro}</p>
             </div>
             <div className="moment" data-window="0.48,0.99">
               <div className="discipline">
-                <div className="colonna"><h3>Attività fisica e pratiche dinamiche</h3><p>Power Yoga · Ginnastica Total Body</p></div>
-                <div className="colonna"><h3>Yoga, tecnica e respiro</h3><p>Iyengar · Hatha · Yin · Pranayama</p></div>
+                <div className="colonna"><h3>{content.respiro_group_1}</h3><p>{content.respiro_items_1}</p></div>
+                <div className="colonna"><h3>{content.respiro_group_2}</h3><p>{content.respiro_items_2}</p></div>
               </div>
-              <p className="chiusa">Equilibrio tra flessibilità, forza, potenza e resistenza; atmosfera e ascolto, con chiusura di rilassamento e integrazione.</p>
-              <p className="logistica"><span aria-hidden="true">☽ &nbsp;</span>Kairos Spazio Olistico — mercoledì 20:30–21:45<br /><span className="logistica-nota">+ sostituzioni in altre palestre</span></p>
-              <div className="cta-row">
-                <button type="button" className="cta" title="Presto disponibile" disabled>Comprendi la pratica</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Scopri le discipline</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Vedi lezioni e incontri</button>
-              </div>
+              <p className="chiusa">{content.respiro_closing}</p>
+              <p className="logistica"><span aria-hidden="true">☽ &nbsp;</span>{content.respiro_place}<br /><span className="logistica-nota">{content.respiro_note}</span></p>
             </div>
           </div>
         </section>
@@ -257,21 +239,13 @@ const CinematicHome = () => {
         <section className="scene" id="ispirazione" data-scene="3" data-tint="#5B4A96" aria-label="La Via dell'Arte — arte, parola e contemplazione">
           <div className="pin">
             <div className="moment" data-window="0.02,0.46">
-              <p className="kicker"><span aria-hidden="true">◇ &nbsp;</span>Arte, parola e contemplazione</p>
-              <h2>La Via dell’Arte</h2>
-              <p className="manifesto">L’arte dà forma al mondo interiore: trasforma simboli, parole e ascolto in espressione e consapevolezza.</p>
+              <p className="kicker"><span aria-hidden="true">◇ &nbsp;</span>{content.arte_kicker}</p>
+              <h2>{content.arte_title}</h2>
+              <p className="manifesto">{content.arte_intro}</p>
             </div>
             <div className="moment" data-window="0.48,0.99">
               <div className="filoni">
-                <div className="filone"><h3><span aria-hidden="true">✦ </span>Editoriale</h3><p>Articoli su simbolismo e alchimia interiore</p></div>
-                <div className="filone"><h3><span aria-hidden="true">◈ </span>Sonoro</h3><p>Ascolti e paesaggi sonori esoterici</p></div>
-                <div className="filone"><h3><span aria-hidden="true">❖ </span>Letterario</h3><p>Testi sacri e poesia mistica</p></div>
-                <div className="filone"><h3><span aria-hidden="true">◯ </span>Culturale</h3><p>Eventi e progetti</p></div>
-              </div>
-              <div className="cta-row">
-                <button type="button" className="cta" title="Presto disponibile" disabled>Leggi le riflessioni</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Esplora l’arte</button>
-                <button type="button" className="cta" title="Presto disponibile" disabled>Scopri i progetti</button>
+                {(["✦", "◈", "❖", "◯"] as const).map((glyph, index) => <div className="filone" key={glyph}><h3><span aria-hidden="true">{glyph} </span>{content[`arte_group_${index + 1}`]}</h3><p>{content[`arte_text_${index + 1}`]}</p></div>)}
               </div>
             </div>
           </div>
@@ -280,20 +254,13 @@ const CinematicHome = () => {
         <section className="scene" id="centro" data-scene="4" data-tint="#D4AF6A" aria-label="Scegli la tua via">
           <div className="pin">
             <div className="moment finale" data-window="0.1,1">
-              <p className="kicker"><span aria-hidden="true">△ &nbsp;</span>Il tuo prossimo passo</p>
-              <h2>Scegli la via<br />che senti tua</h2>
+              <p className="kicker"><span aria-hidden="true">△ &nbsp;</span>{content.final_kicker}</p>
+              <h2>{content.final_title.split("\n").map((line, index) => <span key={line}>{index > 0 && <br />}{line}</span>)}</h2>
               <div className="porte">
-                <button type="button" className="porta" onClick={() => enterPath("arcani")} disabled={Boolean(activeDestination)}>
-                  <span className="porta-glifo" aria-hidden="true">✦</span><span className="porta-nome">La Via degli Arcani</span>
-                </button>
-                <button type="button" className="porta" onClick={() => enterPath("respiro")} disabled={Boolean(activeDestination)}>
-                  <span className="porta-glifo" aria-hidden="true">◯</span><span className="porta-nome">La Via del Respiro</span>
-                </button>
-                <button type="button" className="porta" onClick={() => enterPath("ispirazione")} disabled={Boolean(activeDestination)}>
-                  <span className="porta-glifo" aria-hidden="true">◇</span><span className="porta-nome">La Via dell’Arte</span>
-                </button>
+                <p className="porta-testo"><span aria-hidden="true">✦</span>{content.final_arcani}</p>
+                <p className="porta-testo"><span aria-hidden="true">◯</span>{content.final_respiro}</p>
+                <p className="porta-testo"><span aria-hidden="true">◇</span>{content.final_arte}</p>
               </div>
-              <footer className="colophon">© Jessica Marin<span aria-hidden="true"> &nbsp;·&nbsp; ✦ ◈ ☽ &nbsp;·&nbsp; </span><Link to="/privacy">Privacy</Link></footer>
             </div>
           </div>
         </section>
@@ -301,5 +268,7 @@ const CinematicHome = () => {
     </div>
   );
 };
+
+const CinematicHome = () => <SiteContentBoundary page="home">{content => <CinematicHomeView content={content} />}</SiteContentBoundary>;
 
 export default CinematicHome;

@@ -375,6 +375,30 @@ export type Database = {
           },
         ]
       }
+      site_page_content: {
+        Row: {
+          content: Json
+          page: string
+          revision: number
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          page: string
+          revision?: number
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          page?: string
+          revision?: number
+          state?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -388,6 +412,18 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      save_site_content_draft: {
+        Args: { p_content: Json; p_expected_revision: number; p_page: string }
+        Returns: Json
+      }
+      publish_site_content: {
+        Args: { p_expected_draft_revision: number; p_expected_published_revision: number; p_page: string }
+        Returns: Json
+      }
+      restore_site_content_draft: {
+        Args: { p_expected_draft_revision: number; p_expected_published_revision: number; p_page: string }
+        Returns: Json
+      }
       purge_expired_contact_inquiries: { Args: never; Returns: undefined }
       submit_contact_inquiry: {
         Args: {

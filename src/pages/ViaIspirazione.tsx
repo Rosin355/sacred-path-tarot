@@ -3,29 +3,8 @@ import ViaLayout from "@/components/ViaLayout";
 import { PathInquiryForm } from "@/components/PathInquiryForm";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { InquiryTopic } from "@/config/inquiries";
-
-const sections = [
-  {
-    title: "Articoli e riflessioni",
-    text: "Scritti contemplativi su simbolismo, alchimia interiore e le correnti invisibili che attraversano l'esistenza. Uno spazio di pensiero lento e profondo.",
-    accent: "editoriale",
-  },
-  {
-    title: "Musica e ascolti",
-    text: "Ascolti curati, paesaggi sonori esoterici e musica che risveglia la dimensione sacra del sentire. Un invito a fermarsi e lasciarsi attraversare dal suono.",
-    accent: "sonoro",
-  },
-  {
-    title: "Letteratura esoterica",
-    text: "Una biblioteca vivente di testi sacri, poesia mistica e opere che illuminano il cammino interiore. Letture scelte per nutrire la ricerca personale.",
-    accent: "letterario",
-  },
-  {
-    title: "Eventi culturali e progetti speciali",
-    text: "Incontri, collaborazioni e iniziative che uniscono arte, simbolo e comunità. Progetti che nascono dall'incontro tra visione interiore e creazione condivisa.",
-    accent: "culturale",
-  },
-];
+import { SiteContentBoundary } from "@/content/SiteContentBoundary";
+import type { SitePageContent } from "@/content/siteContent";
 
 const ctas = [
   { label: "Proponi una collaborazione", primary: true, topic: "collaborazioni-progetti" },
@@ -33,9 +12,10 @@ const ctas = [
   { label: "Parliamo di contenuti", primary: false, topic: "contenuti-editoriali" },
 ] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
-const ViaIspirazione = () => {
+export const ViaIspirazioneView = ({ content }: { content: SitePageContent }) => {
   const reducedMotion = useReducedMotion();
   const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+  const sections = Array.from({ length: 4 }, (_, index) => ({ accent: content[`section_${index + 1}_label`], title: content[`section_${index + 1}_title`], text: content[`section_${index + 1}_text`] }));
 
   const openInquiry = (topic: InquiryTopic) => {
     setSelectedTopic(topic);
@@ -78,12 +58,12 @@ const ViaIspirazione = () => {
 
         <div className="relative z-10 max-w-3xl mx-auto animate-fade-in">
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 font-caption">
-            Arte, parola e contemplazione
+            {content.hero_kicker}
           </p>
-          <h1 className="text-foreground mb-8 font-display">La Via dell’Arte</h1>
+          <h1 className="text-foreground mb-8 font-display">{content.hero_title}</h1>
           <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            L’arte dà forma al mondo interiore: trasforma simboli, parole e ascolto in espressione e consapevolezza.
+            {content.hero_text}
           </p>
         </div>
       </section>
@@ -125,7 +105,7 @@ const ViaIspirazione = () => {
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="sacred-divider mb-10" />
           <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
-            L’arte rende visibile ciò che il mondo interiore custodisce ancora senza forma.
+            {content.closing}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -147,5 +127,7 @@ const ViaIspirazione = () => {
     </ViaLayout>
   );
 };
+
+const ViaIspirazione = () => <SiteContentBoundary page="ispirazione">{content => <ViaIspirazioneView content={content} />}</SiteContentBoundary>;
 
 export default ViaIspirazione;

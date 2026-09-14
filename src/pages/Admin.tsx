@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ShieldCheck, LogOut, Sparkles } from 'lucide-react';
 import { AdminKnowledgeManager } from '@/components/admin/AdminKnowledgeManager';
 import { AdminInquiryManager } from '@/components/admin/AdminInquiryManager';
+import { AdminSiteContentManager } from '@/components/admin/AdminSiteContentManager';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const AdminContent = () => {
   const { user, signOut } = useAuth();
@@ -46,9 +48,17 @@ const AdminContent = () => {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-        <AdminInquiryManager />
-        <section>
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <Tabs defaultValue="testi" className="space-y-7">
+          <TabsList className="grid h-auto w-full grid-cols-1 gap-1 sm:grid-cols-3">
+            <TabsTrigger value="testi">Testi del sito</TabsTrigger>
+            <TabsTrigger value="richieste">Richieste</TabsTrigger>
+            <TabsTrigger value="guida">Guida AI</TabsTrigger>
+          </TabsList>
+          <TabsContent value="testi"><AdminSiteContentManager /></TabsContent>
+          <TabsContent value="richieste"><AdminInquiryManager /></TabsContent>
+          <TabsContent value="guida" className="space-y-8">
+          <section>
           <Card className="minimal-border bg-card/80 backdrop-blur-sm">
             <CardHeader className="space-y-3">
               <CardTitle className="font-serif text-2xl text-foreground">Cabina di regia della Guida AI</CardTitle>
@@ -71,9 +81,10 @@ const AdminContent = () => {
               </div>
             </CardContent>
           </Card>
-        </section>
-
-        <AdminKnowledgeManager />
+          </section>
+          <AdminKnowledgeManager />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );

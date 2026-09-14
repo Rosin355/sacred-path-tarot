@@ -3,29 +3,8 @@ import ViaLayout from "@/components/ViaLayout";
 import { PathInquiryForm } from "@/components/PathInquiryForm";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { InquiryTopic } from "@/config/inquiries";
-
-const sections = [
-  {
-    title: "Attività fisica e pratiche dinamiche",
-    text: "Power Yoga e Ginnastica Total Body sviluppano movimento, energia, forza e resistenza attraverso una pratica consapevole e progressiva.",
-    icon: "◯",
-  },
-  {
-    title: "Yoga, tecnica e respiro",
-    text: "Iyengar, Hatha, Yin e Pranayama uniscono precisione, ascolto e respirazione per accompagnare ogni persona verso una pratica più profonda.",
-    icon: "△",
-  },
-  {
-    title: "Ascolto, forza e consapevolezza",
-    text: "La pratica diventa un percorso concreto di relazione con il corpo e la mente, adattabile ai diversi livelli e orientato a una crescita graduale.",
-    icon: "◇",
-  },
-  {
-    title: "Un approccio che unisce forza e presenza",
-    text: "Jessica non guida solo al rilassamento, ma porta la persona verso un equilibrio tra flessibilità, forza, potenza, resistenza, atmosfera e ascolto. Ogni lezione custodisce il ricordo del respiro, una cura per l'ambiente e un momento finale di rilassamento e integrazione.",
-    icon: "☽",
-  },
-];
+import { SiteContentBoundary } from "@/content/SiteContentBoundary";
+import type { SitePageContent } from "@/content/siteContent";
 
 const ctas = [
   { label: "Richiedi una lezione di prova", primary: true, topic: "lezione-prova" },
@@ -33,9 +12,10 @@ const ctas = [
   { label: "Eventi e incontri", primary: false, topic: "eventi-incontri" },
 ] satisfies Array<{ label: string; primary: boolean; topic: InquiryTopic }>;
 
-const ViaRespiro = () => {
+export const ViaRespiroView = ({ content }: { content: SitePageContent }) => {
   const reducedMotion = useReducedMotion();
   const [selectedTopic, setSelectedTopic] = useState<InquiryTopic>();
+  const sections = ["◯", "△", "◇", "☽"].map((icon, index) => ({ icon, title: content[`section_${index + 1}_title`], text: content[`section_${index + 1}_text`] }));
 
   const openInquiry = (topic: InquiryTopic) => {
     setSelectedTopic(topic);
@@ -112,17 +92,16 @@ const ViaRespiro = () => {
 
         <div className="relative z-10 max-w-3xl mx-auto animate-fade-in">
           <p className="text-xs tracking-[0.3em] uppercase mb-6 font-caption" style={{ color: "hsla(175, 35%, 60%, 0.7)" }}>
-            Yoga e attività fisica
+            {content.hero_kicker}
           </p>
-          <h1 className="text-foreground mb-8 font-display">La Via del Respiro</h1>
+          <h1 className="text-foreground mb-8 font-display">{content.hero_title}</h1>
           <div className="mx-auto mb-8" style={{
             width: "3rem",
             height: "1px",
             background: "linear-gradient(90deg, transparent, hsla(175, 40%, 55%, 0.4), transparent)",
           }} />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            La pratica è il luogo in cui il corpo ricorda ciò che la mente dimentica: Yoga e attività fisica
-            si incontrano in un percorso di ascolto, forza e consapevolezza.
+            {content.hero_text}
           </p>
         </div>
       </section>
@@ -173,13 +152,12 @@ const ViaRespiro = () => {
               boxShadow: "0 0 40px -10px hsla(175, 40%, 45%, 0.06), 0 8px 32px -8px hsla(180, 20%, 5%, 0.4)",
             }}
           >
-            <p className="text-[10px] tracking-[0.25em] uppercase font-caption mb-4" style={{ color: "hsla(175, 40%, 55%, 0.55)" }}>Dove e quando</p>
+            <p className="text-[10px] tracking-[0.25em] uppercase font-caption mb-4" style={{ color: "hsla(175, 40%, 55%, 0.55)" }}>{content.practical_label}</p>
             <h2 className="text-foreground text-lg tracking-[0.04em] font-display mb-3">
-              Kairos Spazio Olistico
+              {content.practical_place}
             </h2>
             <p className="text-muted-foreground text-sm md:text-base font-body leading-relaxed">
-              Le lezioni si tengono attualmente presso Kairos Spazio Olistico il mercoledì sera,
-              dalle 20:30 alle 21:45, oltre a eventuali sostituzioni in altre palestre.
+              {content.practical_text}
             </p>
           </div>
         </div>
@@ -205,7 +183,7 @@ const ViaRespiro = () => {
             background: "linear-gradient(90deg, transparent, hsla(175, 40%, 55%, 0.35), transparent)",
           }} />
           <p className="text-muted-foreground text-sm md:text-base font-body mb-10 leading-relaxed max-w-xl mx-auto italic">
-            La pratica è il luogo in cui il corpo ricorda ciò che la mente dimentica.
+            {content.closing}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -262,5 +240,7 @@ const ViaRespiro = () => {
     </ViaLayout>
   );
 };
+
+const ViaRespiro = () => <SiteContentBoundary page="respiro">{content => <ViaRespiroView content={content} />}</SiteContentBoundary>;
 
 export default ViaRespiro;

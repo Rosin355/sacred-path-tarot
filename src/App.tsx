@@ -13,6 +13,7 @@ const ViaRespiro = lazy(() => import("./pages/ViaRespiro"));
 const ViaIspirazione = lazy(() => import("./pages/ViaIspirazione"));
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/Admin"));
+const AdminContentPreview = lazy(() => import("./pages/AdminContentPreview"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/testi/anteprima/:page" element={<AdminContentPreview />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

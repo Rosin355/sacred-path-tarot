@@ -786,3 +786,79 @@ body.cinematic-static .pin { padding-block: 10rem 7rem; }
 }
 
 body.cinematic-active.cinematic-static #vignette { position: absolute; }
+
+/* Indicatori essenziali: nessun pannello, bersaglio ampio e punto sempre leggibile. */
+.cinematic-home #waypoints {
+  right: max(1rem, env(safe-area-inset-right));
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  gap: 0;
+}
+.cinematic-home #waypoints .rail { display: none; }
+.cinematic-home #waypoints ol { gap: .3rem; }
+.cinematic-home #waypoints a {
+  position: relative;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  justify-content: center;
+  color: var(--avorio);
+  text-shadow: none;
+}
+.cinematic-home #waypoints .numeral {
+  display: block;
+  width: 12px;
+  min-width: 12px;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .95);
+  background: transparent;
+  font-size: 0;
+  box-shadow: 0 0 0 1px rgba(8, 9, 16, .95), 0 2px 8px rgba(8, 9, 16, .75);
+  transition: background .25s ease, transform .25s ease;
+}
+.cinematic-home #waypoints a.active .numeral {
+  background: var(--oro);
+  transform: scale(1.18);
+  box-shadow: 0 0 0 1px rgba(8, 9, 16, .95), 0 0 12px rgba(212, 175, 106, .85);
+}
+.cinematic-home #waypoints .wp-label {
+  display: block;
+  position: absolute;
+  right: 42px;
+  width: max-content;
+  padding: .35rem .55rem;
+  border-radius: .35rem;
+  color: var(--avorio);
+  background: rgba(13, 15, 26, .88);
+  font-size: .75rem;
+  letter-spacing: .05em;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(5px);
+}
+.cinematic-home #waypoints a.active .wp-label { opacity: 0; }
+.cinematic-home #waypoints a:hover .wp-label,
+.cinematic-home #waypoints a:focus-visible .wp-label { opacity: 1; transform: none; }
+
+.cinematic-home .porte { align-items: start; gap: clamp(1rem, 4vw, 3.5rem); }
+.cinematic-home .porta-testo {
+  min-width: 0;
+  padding: 0;
+  display: grid;
+  justify-items: center;
+  gap: .75rem;
+  color: var(--avorio);
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  text-align: center;
+}
+.cinematic-home .porta-testo > span { color: var(--oro); font-family: var(--sans); }
+
+@media (max-width: 1100px) {
+  .cinematic-home #waypoints .wp-label { display: block; }
+  .cinematic-home #waypoints { right: max(.15rem, env(safe-area-inset-right)); }
+}
