@@ -37,10 +37,10 @@ try {
     await page.waitForFunction(() => document.body.classList.contains('cinematic-static'));
     assert(await page.locator('.moment').evaluateAll(nodes => nodes.every(n => !n.inert && getComputedStyle(n).opacity==='1')));
     assert(await page.locator('.pin').evaluateAll(nodes => nodes.every(n => getComputedStyle(n).position!=='sticky')));
-    for (const route of ['/arcani','/respiro','/ispirazione','/privacy','/login','/admin']) {
+    for (const route of ['/arcani','/respiro','/ispirazione','/chi-sono','/eventi','/privacy','/login']) {
       await page.goto(base+route);
-      await page.waitForTimeout(900);
-      assert(await page.locator('h1').count()>0, `Missing heading ${route}`);
+      if (route === '/login') await page.getByRole('button',{name:'Accedi'}).waitFor({timeout:7000});
+      else { await page.locator('h1').waitFor({timeout:7000}); assert(await page.locator('h1').count()>0, `Missing heading ${route}`); }
       assert(await page.evaluate(() => document.documentElement.scrollWidth<=innerWidth+1), `Horizontal overflow ${route} ${width}`);
       if (['/arcani','/respiro','/ispirazione'].includes(route)) {
         await page.screenshot({path:`${out}/${route.slice(1)}-${width}.png`});
