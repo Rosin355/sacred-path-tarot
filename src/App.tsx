@@ -16,6 +16,8 @@ const Admin = lazy(() => import("./pages/Admin"));
 const AdminContentPreview = lazy(() => import("./pages/AdminContentPreview"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const ChiSono = lazy(() => import("./pages/ChiSono"));
+const Eventi = lazy(() => import("./pages/Eventi"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const FloatingVoiceGuide = lazy(() => import("./components/voice/FloatingVoiceGuide"));
 
@@ -50,6 +52,8 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/chi-sono" element={<ChiSono />} />
+              <Route path="/eventi" element={<Eventi />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/testi/anteprima/:page" element={<AdminContentPreview />} />
               <Route path="*" element={<NotFound />} />

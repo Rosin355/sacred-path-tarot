@@ -846,17 +846,28 @@ body.cinematic-active.cinematic-static #vignette { position: absolute; }
 
 .cinematic-home .porte { align-items: start; gap: clamp(1rem, 4vw, 3.5rem); }
 .cinematic-home .porta-testo {
-  min-width: 0;
-  padding: 0;
+  min-width: 10rem;
+  min-height: 7rem;
+  padding: 1rem 1.25rem;
   display: grid;
   justify-items: center;
+  align-content: center;
   gap: .75rem;
+  border: 1px solid rgba(212,175,106,.38);
+  border-radius: 999px 999px 1rem 1rem;
+  background: rgba(13,15,26,.55);
+  text-decoration: none;
   color: var(--avorio);
   font-family: var(--serif);
   font-size: clamp(1.15rem, 2vw, 1.45rem);
   text-align: center;
 }
 .cinematic-home .porta-testo > span { color: var(--oro); font-family: var(--sans); }
+.cinematic-home .porta-testo:hover { border-color:var(--oro); background:rgba(212,175,106,.13); }
+.cinematic-home .porta-testo:focus-visible { outline:3px solid var(--oro); outline-offset:4px; }
+.cinematic-home .decorative-brand { margin:.6rem 0 1rem; color:var(--oro); font-size:clamp(1rem,2.1vw,1.65rem); line-height:1.5; overflow-wrap:anywhere; }
+.cinematic-home .cinematic-header-actions { display:flex; align-items:center; gap:.4rem; pointer-events:auto; }
+@media(max-width:760px){.cinematic-home #hud .brand{max-width:6.3rem;line-height:1.5;letter-spacing:.12em}.cinematic-home .cinematic-header-actions{gap:0}.cinematic-home .porta-testo{min-width:8rem;min-height:6rem}}
 
 @media (max-width: 1100px) {
   .cinematic-home #waypoints .wp-label { display: block; }

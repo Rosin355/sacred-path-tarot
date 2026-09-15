@@ -1,0 +1,9 @@
+.editorial-page { background-image:linear-gradient(180deg,rgba(8,6,19,.78),rgba(8,6,19,.9)),url("../assets/cosmic-background.jpg"); background-size:cover; background-position:center; background-attachment:fixed; }
+.editorial-hero { min-height:60vh; display:grid; place-items:center; padding:7rem 1.5rem 3rem; background:radial-gradient(ellipse at center,rgba(101,58,155,.27),transparent 65%); }
+.editorial-hero__copy { width:min(100%,54rem); text-align:center; }
+.editorial-kicker { color:#d4af6a; font-size:.82rem; letter-spacing:.24em; text-transform:uppercase; }
+.editorial-hero h1 { margin:1rem 0; color:#f5efff; font-family:"Cormorant Garamond",serif; font-size:clamp(3.5rem,9vw,7rem); line-height:1; }
+.editorial-intro { color:#f4edf8; font-size:clamp(1.15rem,2vw,1.5rem); line-height:1.65; }
+.editorial-body { width:min(100% - 2rem,46rem); margin:0 auto; padding:2rem 0 6rem; display:grid; gap:1.5rem; color:#f3eaf6; font-size:1.15rem; line-height:1.8; }
+.editorial-body p { padding:1.5rem; border:1px solid rgba(182,144,213,.25); background:rgba(17,11,35,.72); border-radius:1rem; }
+@media (max-width:700px){.editorial-page{background-attachment:scroll}.editorial-hero{min-height:50vh}}

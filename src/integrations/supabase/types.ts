@@ -375,6 +375,12 @@ export type Database = {
           },
         ]
       }
+      site_events: {
+        Row: { id: string; title: string; description: string; start_date: string; end_date: string | null; original_image_path: string; thumbnail_image_path: string; status: string; revision: number; created_at: string; updated_at: string }
+        Insert: { id?: string; title: string; description: string; start_date: string; end_date?: string | null; original_image_path: string; thumbnail_image_path: string; status?: string; revision?: number; created_at?: string; updated_at?: string }
+        Update: { id?: string; title?: string; description?: string; start_date?: string; end_date?: string | null; original_image_path?: string; thumbnail_image_path?: string; status?: string; revision?: number; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
       site_page_content: {
         Row: {
           content: Json
@@ -410,6 +416,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      save_site_event: {
+        Args: { p_id: string | null; p_title: string; p_description: string; p_start_date: string; p_end_date: string | null; p_original_image_path: string; p_thumbnail_image_path: string; p_expected_revision: number; p_status: string }
+        Returns: Database["public"]["Tables"]["site_events"]["Row"]
       }
       is_admin: { Args: never; Returns: boolean }
       save_site_content_draft: {

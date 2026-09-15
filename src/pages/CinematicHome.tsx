@@ -15,6 +15,8 @@ import type { TemplePathId } from "@/config/templePaths";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { SiteContentBoundary } from "@/content/SiteContentBoundary";
 import type { SitePageContent } from "@/content/siteContent";
+import { DecorativeBrand } from "@/components/DecorativeBrand";
+import { PublicHeaderLinks } from "@/components/PublicHeaderLinks";
 
 const destinations = {
   arcani: { route: "/arcani", color: "270 55% 45%" },
@@ -165,14 +167,14 @@ export const CinematicHomeView = ({ content }: { content: SitePageContent }) => 
           TEMPIO DELLE TRE VIE <span className="brand-glyph" aria-hidden="true">☽</span>
         </a>
         <TempleNavigation variant="cinematic" onSelect={enterPath} />
-        <button
+        <div className="cinematic-header-actions"><PublicHeaderLinks variant="cinematic" /><button
           type="button"
           className="cinematic-audio-toggle"
           onClick={toggleMute}
           aria-label={isMuted || !isPlaying ? "Attiva audio" : "Disattiva audio"}
         >
           {isMuted || !isPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
-        </button>
+        </button></div>
       </header>
 
       <nav id="waypoints" aria-label="Tappe del viaggio">
@@ -207,6 +209,7 @@ export const CinematicHomeView = ({ content }: { content: SitePageContent }) => 
             <div className="moment" data-window="0.02,0.46">
               <p className="kicker"><span aria-hidden="true">✦ &nbsp;</span>{content.arcani_kicker}</p>
               <h2>{content.arcani_title}</h2>
+              <DecorativeBrand value={content.arcani_brand} accessibleName="Tarocchi Per Illuminarsi" />
               <p className="manifesto">{content.arcani_intro}</p>
             </div>
             <div className="moment" data-window="0.48,0.99">
@@ -223,6 +226,7 @@ export const CinematicHomeView = ({ content }: { content: SitePageContent }) => 
             <div className="moment" data-window="0.02,0.46" data-theme="ink">
               <p className="kicker"><span aria-hidden="true">◯ &nbsp;</span>{content.respiro_kicker}</p>
               <h2>{content.respiro_title}</h2>
+              <DecorativeBrand value={content.respiro_brand} accessibleName="Yoga Per Illuminarsi" />
               <p className="manifesto">{content.respiro_intro}</p>
             </div>
             <div className="moment" data-window="0.48,0.99">
@@ -257,9 +261,9 @@ export const CinematicHomeView = ({ content }: { content: SitePageContent }) => 
               <p className="kicker"><span aria-hidden="true">△ &nbsp;</span>{content.final_kicker}</p>
               <h2>{content.final_title.split("\n").map((line, index) => <span key={line}>{index > 0 && <br />}{line}</span>)}</h2>
               <div className="porte">
-                <p className="porta-testo"><span aria-hidden="true">✦</span>{content.final_arcani}</p>
-                <p className="porta-testo"><span aria-hidden="true">◯</span>{content.final_respiro}</p>
-                <p className="porta-testo"><span aria-hidden="true">◇</span>{content.final_arte}</p>
+                <a className="porta-testo" href="/arcani" onClick={event => { event.preventDefault(); enterPath("arcani"); }}><span aria-hidden="true">✦</span>{content.final_arcani}</a>
+                <a className="porta-testo" href="/respiro" onClick={event => { event.preventDefault(); enterPath("respiro"); }}><span aria-hidden="true">◯</span>{content.final_respiro}</a>
+                <a className="porta-testo" href="/ispirazione" onClick={event => { event.preventDefault(); enterPath("ispirazione"); }}><span aria-hidden="true">◇</span>{content.final_arte}</a>
               </div>
             </div>
           </div>

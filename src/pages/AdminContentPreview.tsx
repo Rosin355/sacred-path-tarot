@@ -6,11 +6,13 @@ import { CinematicHomeView } from "./CinematicHome";
 import { ViaArcaniView } from "./ViaArcani";
 import { ViaRespiroView } from "./ViaRespiro";
 import { ViaIspirazioneView } from "./ViaIspirazione";
+import { ChiSonoView } from "./ChiSono";
 
 const PreviewPage = ({ page, content }: { page: SitePage; content: SitePageContent }) => {
   if (page === "home") return <CinematicHomeView content={content} />;
   if (page === "arcani") return <ViaArcaniView content={content} />;
   if (page === "respiro") return <ViaRespiroView content={content} />;
+  if (page === "chi_sono") return <ChiSonoView content={content} />;
   return <ViaIspirazioneView content={content} />;
 };
 

@@ -9,6 +9,7 @@ import { ShieldCheck, LogOut, Sparkles } from 'lucide-react';
 import { AdminKnowledgeManager } from '@/components/admin/AdminKnowledgeManager';
 import { AdminInquiryManager } from '@/components/admin/AdminInquiryManager';
 import { AdminSiteContentManager } from '@/components/admin/AdminSiteContentManager';
+import { AdminEventManager } from '@/components/admin/AdminEventManager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const AdminContent = () => {
@@ -50,12 +51,14 @@ const AdminContent = () => {
 
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Tabs defaultValue="testi" className="space-y-7">
-          <TabsList className="grid h-auto w-full grid-cols-1 gap-1 sm:grid-cols-3">
+          <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-4">
             <TabsTrigger value="testi">Testi del sito</TabsTrigger>
+            <TabsTrigger value="eventi">Eventi</TabsTrigger>
             <TabsTrigger value="richieste">Richieste</TabsTrigger>
             <TabsTrigger value="guida">Guida AI</TabsTrigger>
           </TabsList>
           <TabsContent value="testi"><AdminSiteContentManager /></TabsContent>
+          <TabsContent value="eventi"><AdminEventManager /></TabsContent>
           <TabsContent value="richieste"><AdminInquiryManager /></TabsContent>
           <TabsContent value="guida" className="space-y-8">
           <section>

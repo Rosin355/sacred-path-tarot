@@ -1,0 +1,14 @@
+.event-hero { min-height:40vh; }
+.event-sections { width:min(100% - 2rem,78rem); margin:0 auto; padding:2rem 0 7rem; display:grid; gap:4rem; color:#f7efff; }
+.event-sections section { display:grid; gap:1.6rem; }
+.event-sections h2 { font:500 clamp(2.2rem,4vw,3.5rem) "Cormorant Garamond",serif; color:#f6ebff; }
+.event-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr)); gap:clamp(1.5rem,3vw,3rem); }
+.event-card { width:100%; overflow:hidden; border:1px solid rgba(184,145,213,.42); border-radius:1.2rem; background:rgba(23,12,46,.75); text-align:left; color:#f7efff; box-shadow:0 1rem 3rem rgba(6,2,18,.3); }
+.event-card:hover { border-color:#d4af6a; transform:translateY(-3px); }
+.event-card:focus-visible { outline:3px solid #d4af6a; outline-offset:4px; }
+.event-card img { width:100%; aspect-ratio:4/5; object-fit:contain; background:rgba(10,6,24,.8); }
+.event-card__copy { display:grid; gap:.5rem; padding:1.1rem; }
+.event-card__copy strong { font:500 1.4rem "Cormorant Garamond",serif; }
+.event-card__copy time { color:#e9d9f3; font-size:.85rem; }
+.event-dialog__poster { width:100%; max-height:65vh; object-fit:contain; background:#0a0618; }
+@media(prefers-reduced-motion:reduce){.event-card:hover{transform:none}}

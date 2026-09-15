@@ -7,6 +7,7 @@ import { PathInquiryForm } from "@/components/PathInquiryForm";
 import type { InquiryTopic } from "@/config/inquiries";
 import { SiteContentBoundary } from "@/content/SiteContentBoundary";
 import type { SitePageContent } from "@/content/siteContent";
+import { DecorativeBrand } from "@/components/DecorativeBrand";
 
 const tarotImages = [
   "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
@@ -104,6 +105,7 @@ export const ViaArcaniView = ({ content }: { content: SitePageContent }) => {
           >
             {content.hero_title}
           </h1>
+          <DecorativeBrand value={content.hero_brand} accessibleName="Tarocchi Per Illuminarsi" />
           <div className="sacred-divider mb-8" />
           <p className="text-muted-foreground font-body max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             {content.hero_text}

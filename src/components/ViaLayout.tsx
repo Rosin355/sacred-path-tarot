@@ -3,6 +3,7 @@ import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import { TempleNavigation } from "@/components/TempleNavigation";
+import { PublicHeaderLinks } from "@/components/PublicHeaderLinks";
 
 interface ViaLayoutProps {
   children: ReactNode;
@@ -62,7 +63,7 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
       />
 
       {/* Top bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-background/80 backdrop-blur-md border-b border-border/15">
+      <header aria-label={title} className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-2 px-3 sm:px-6 py-2 bg-background/80 backdrop-blur-md border-b border-border/15">
         <button
           aria-label="Torna al Tempio"
           onClick={() => navigate("/#centro")}
@@ -72,19 +73,17 @@ const ViaLayout = ({ children, viaClass, title }: ViaLayoutProps) => {
           <span className="hidden sm:inline">Torna al Tempio</span>
         </button>
         <TempleNavigation variant="page" />
-        <div className="flex items-center gap-4">
-          <span className="text-muted-foreground/50 text-[10px] tracking-[0.25em] uppercase hidden sm:block font-caption">
-            {title}
-          </span>
+        <div className="flex items-center gap-1">
+          <PublicHeaderLinks />
           <button
             onClick={toggleMute}
-            className="p-1.5 text-muted-foreground hover:text-foreground transition-colors duration-300"
+            className="grid min-h-11 min-w-11 place-items-center text-muted-foreground hover:text-foreground transition-colors duration-300"
             aria-label={isMuted || !isPlaying ? "Attiva audio" : "Disattiva audio"}
           >
             {isMuted || !isPlaying ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
         </div>
-      </nav>
+      </header>
 
       {/* Content */}
       <main className="pt-20">{children}</main>

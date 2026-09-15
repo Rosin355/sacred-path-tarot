@@ -5,6 +5,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { InquiryTopic } from "@/config/inquiries";
 import { SiteContentBoundary } from "@/content/SiteContentBoundary";
 import type { SitePageContent } from "@/content/siteContent";
+import { DecorativeBrand } from "@/components/DecorativeBrand";
 
 const ctas = [
   { label: "Richiedi una lezione di prova", primary: true, topic: "lezione-prova" },
@@ -95,6 +96,7 @@ export const ViaRespiroView = ({ content }: { content: SitePageContent }) => {
             {content.hero_kicker}
           </p>
           <h1 className="text-foreground mb-8 font-display">{content.hero_title}</h1>
+          <DecorativeBrand value={content.hero_brand} accessibleName="Yoga Per Illuminarsi" />
           <div className="mx-auto mb-8" style={{
             width: "3rem",
             height: "1px",
